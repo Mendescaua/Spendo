@@ -76,7 +76,7 @@ flutter:
   fonts:
     - family: Poppins
       fonts:
-        - asset: fonts/Poppins-Medium.ttf
+        - asset: assets/fonts/Poppins-Medium.ttf
 
   #
   # For details regarding fonts from package dependencies,
