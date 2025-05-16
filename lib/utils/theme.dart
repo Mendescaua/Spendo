@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 
 class AppTheme {
-  static const Color primaryColor = Color(0xFF003366);
+  static const Color primaryColor = Color(0xFF4678c0);
   static const Color secondaryColor = Color(0xFF222932);
   static const Color textColor = Color(0xFF000000);
-
-
+  static const Color whiteColor = Color(0xFFFFFFFF);
 
   // Tema Claro
   static ThemeData lightTheme = ThemeData(
