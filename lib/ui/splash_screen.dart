@@ -20,7 +20,7 @@ class _SplashScreenState extends State<SplashScreen> {
     {
       'image': 'assets/images/Finance.svg',
       'title': 'Control your spends',
-      'subtitle': 'Manage your spending, save more, live better.',
+      'subtitle': 'Manage your spending, save more money.',
     },
     {
       'image': 'assets/images/FinanceLeaders.svg',
@@ -158,7 +158,10 @@ class _SplashScreenState extends State<SplashScreen> {
                       width: double.infinity,
                       child: ElevatedButton(
                         onPressed: () {
-                          // ação ao clicar
+                          Navigator.pushNamed(
+                            context,
+                            '/login',
+                          );
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppTheme.primaryColor,

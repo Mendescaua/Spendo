@@ -4,27 +4,61 @@ class AppTheme {
   static const Color primaryColor = Color(0xFF4678c0);
   static const Color secondaryColor = Color(0xFF222932);
   static const Color textColor = Color(0xFF000000);
+  static const Color ShadowTextColor = Color.fromARGB(122, 0, 0, 0);
   static const Color whiteColor = Color(0xFFFFFFFF);
 
-  // Tema Claro
-  static ThemeData lightTheme = ThemeData(
-    fontFamily: 'Poppins',
-    brightness: Brightness.light,
-    primaryColor: primaryColor,
-    scaffoldBackgroundColor: Colors.white,
-    textTheme: TextTheme(
-      bodyMedium: TextStyle(color: Colors.black87),
-    ),
-  );
-
-  // Tema Escuro
-  static ThemeData darkTheme = ThemeData(
-    fontFamily: 'Poppins',
-    brightness: Brightness.dark,
-    primaryColor: primaryColor,
-    scaffoldBackgroundColor: secondaryColor,
-    textTheme: TextTheme(
-      bodyMedium: TextStyle(color: Colors.white70),
-    ),
-  );
+  static ThemeData get appTheme {
+    return ThemeData(
+      fontFamily: 'Poppins',
+      primaryColor: primaryColor,
+      focusColor: primaryColor,
+      scaffoldBackgroundColor: whiteColor,
+      secondaryHeaderColor: secondaryColor,
+      appBarTheme: AppBarTheme(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        titleTextStyle: const TextStyle(
+          color: textColor,
+          fontSize: 26,
+          fontWeight: FontWeight.w700,
+        ),
+      ),
+      colorScheme: ColorScheme.fromSeed(
+        seedColor: primaryColor,
+        primary: primaryColor,
+        secondary: secondaryColor,
+        onPrimary: whiteColor,
+        surface: whiteColor,
+        onSurface: textColor,
+        brightness: Brightness.light,
+      ),
+      inputDecorationTheme: InputDecorationTheme(
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: primaryColor, width: 2),
+          borderRadius: BorderRadius.circular(16),
+        ),
+        labelStyle: TextStyle(color: primaryColor),
+      ),
+      elevatedButtonTheme: ElevatedButtonThemeData(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: primaryColor,
+          foregroundColor: whiteColor,
+        ),
+      ),
+      floatingActionButtonTheme: FloatingActionButtonThemeData(
+        backgroundColor: primaryColor,
+        foregroundColor: whiteColor,
+      ),
+      switchTheme: SwitchThemeData(
+        thumbColor: MaterialStateProperty.all(primaryColor),
+        trackColor: MaterialStateProperty.all(primaryColor.withOpacity(0.5)),
+      ),
+      checkboxTheme: CheckboxThemeData(
+        fillColor: MaterialStateProperty.all(primaryColor),
+      ),
+      radioTheme: RadioThemeData(
+        fillColor: MaterialStateProperty.all(primaryColor),
+      ),
+    );
+  }
 }
