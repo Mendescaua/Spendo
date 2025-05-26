@@ -8,7 +8,6 @@ class SaldoGeralCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.all(16),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: AppTheme.whiteColor,
@@ -42,7 +41,7 @@ class SaldoGeralCard extends StatelessWidget {
                 ),
               ),
               Icon(
-                Icons.visibility_off,
+                Iconsax.eye_slash,
               ),
             ],
           ),

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:intl/intl.dart';
 
 class Homebar extends StatelessWidget implements PreferredSizeWidget {
   Homebar({Key? key}) : super(key: key);
@@ -29,7 +28,7 @@ class Homebar extends StatelessWidget implements PreferredSizeWidget {
       ),
       actions: [
         IconButton(
-          icon: Icon(Icons.menu, color: Colors.black),
+          icon: Icon(Iconsax.menu_1, color: Colors.black),
           onPressed: () {
             // Handle settings button press
           },
