@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:spendo/ui/components/SaldoGeralCard.dart';
+import 'package:spendo/ui/components/HomeBar.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -6,26 +8,12 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Spendo'),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'Welcome to Spendo!',
-              style: TextStyle(fontSize: 24),
-            ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                // Navigate to another screen or perform an action
-              },
-              child: const Text('Get Started'),
-            ),
-          ],
-        ),
+      appBar: Homebar(),
+      
+      body: SafeArea(
+        child: Column(children: [
+          SaldoGeralCard(),
+        ],)
       ),
     );
   }

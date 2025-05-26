@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:spendo/ui/home_screen.dart';
 import 'package:spendo/ui/login_screen.dart';
+import 'package:spendo/ui/main_screen.dart';
 import 'package:spendo/ui/register_screen.dart';
 import 'package:spendo/ui/splash_screen.dart';
 import 'package:spendo/utils/theme.dart';
@@ -22,7 +24,9 @@ class MyApp extends StatelessWidget {
         '/splash': (context) => const SplashScreen(),
         '/login': (context) => const LoginScreen(),
         '/register': (context) => const RegisterScreen(),
-        // Add other routes here
+        '/home': (context) => const HomeScreen(),
+        '/menu': (context) => const MainScreen(),
+        
       },
     );
   }

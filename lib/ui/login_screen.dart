@@ -120,7 +120,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ],
                 ),
-                StyleButton(text: 'Login', onClick: () {}),
+                StyleButton(text: 'Login', onClick: () {Navigator.of(context).pushReplacementNamed('/menu');}),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [

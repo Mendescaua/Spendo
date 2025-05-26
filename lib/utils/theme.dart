@@ -3,16 +3,22 @@ import 'package:flutter/material.dart';
 class AppTheme {
   static const Color primaryColor = Color(0xFF4678c0);
   static const Color secondaryColor = Color(0xFF222932);
+  static const Color backgroundColor= Color.fromARGB(255, 242, 247, 250);
   static const Color textColor = Color(0xFF000000);
   static const Color ShadowTextColor = Color.fromARGB(122, 0, 0, 0);
   static const Color whiteColor = Color(0xFFFFFFFF);
+
+  static const Color redColor = Color(0xFFB00020);
+  static const Color greenColor = Color(0xFF22C55E);
+  static const Color softRedColor = Color.fromARGB(255, 253, 232, 232);
+  static const Color softGreenColor = Color(0xFFD1FAE5);
 
   static ThemeData get appTheme {
     return ThemeData(
       fontFamily: 'Poppins',
       primaryColor: primaryColor,
       focusColor: primaryColor,
-      scaffoldBackgroundColor: whiteColor,
+      scaffoldBackgroundColor: backgroundColor,
       secondaryHeaderColor: secondaryColor,
       appBarTheme: AppBarTheme(
         backgroundColor: Colors.transparent,
