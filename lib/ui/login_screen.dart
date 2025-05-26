@@ -3,12 +3,22 @@ import 'package:iconsax/iconsax.dart';
 import 'package:spendo/ui/components/StyleButton.dart';
 import 'package:spendo/utils/theme.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
   @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  bool isObscure = true;
+  void togglePasswordVisibility() {
+    setState(() {
+      isObscure = !isObscure;
+    });
+  }
+  @override
   Widget build(BuildContext context) {
-    bool isLoading = false;
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).unfocus();
@@ -80,10 +90,11 @@ class LoginScreen extends StatelessWidget {
                   ),
                 ),
                 TextField(
+                  obscureText: isObscure,
                   decoration: InputDecoration(
                     prefixIcon: const Icon(Iconsax.security_safe),
                     suffixIcon: IconButton(
-                        onPressed: () {}, icon: const Icon(Iconsax.eye)),
+                        onPressed: () {togglePasswordVisibility();}, icon: isObscure ? const Icon(Iconsax.eye_slash) :  const Icon(Iconsax.eye)),
                     hintText: 'Password',
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(16),

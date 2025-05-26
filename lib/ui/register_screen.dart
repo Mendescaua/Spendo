@@ -3,12 +3,23 @@ import 'package:iconsax/iconsax.dart';
 import 'package:spendo/ui/components/StyleButton.dart';
 import 'package:spendo/utils/theme.dart';
 
-class RegisterScreen extends StatelessWidget {
+class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
 
   @override
+  State<RegisterScreen> createState() => _RegisterScreenState();
+}
+
+class _RegisterScreenState extends State<RegisterScreen> {
+  bool isObscure = true;
+  void togglePasswordVisibility() {
+    setState(() {
+      isObscure = !isObscure;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    bool isLoading = false;
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).unfocus();
@@ -81,10 +92,11 @@ class RegisterScreen extends StatelessWidget {
                     ),
                   ),
                   TextField(
+                    obscureText: isObscure,
                     decoration: InputDecoration(
                       prefixIcon: const Icon(Iconsax.security_safe),
                       suffixIcon: IconButton(
-                          onPressed: () {}, icon: const Icon(Iconsax.eye)),
+                          onPressed: () {togglePasswordVisibility();}, icon: isObscure ? const Icon(Iconsax.eye_slash) :  const Icon(Iconsax.eye)),
                       hintText: 'Password',
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(16),
@@ -102,10 +114,11 @@ class RegisterScreen extends StatelessWidget {
                     ),
                   ),
                   TextField(
+                    obscureText: isObscure,
                     decoration: InputDecoration(
                       prefixIcon: const Icon(Iconsax.security_safe),
                       suffixIcon: IconButton(
-                          onPressed: () {}, icon: const Icon(Iconsax.eye)),
+                          onPressed: () {togglePasswordVisibility();}, icon: isObscure ? const Icon(Iconsax.eye_slash) :  const Icon(Iconsax.eye)),
                       hintText: 'Confirm password',
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(16),
