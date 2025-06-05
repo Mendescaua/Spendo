@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:spendo/utils/theme.dart';
 
 class Homebar extends StatelessWidget implements PreferredSizeWidget {
   Homebar({Key? key}) : super(key: key);
@@ -7,31 +8,34 @@ class Homebar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      automaticallyImplyLeading: false,
+      centerTitle: true,
+      backgroundColor: AppTheme.primaryColor,
       elevation: 0,
-      title: Row(
-        children: [
-          CircleAvatar(
+      automaticallyImplyLeading: false,
+      leading: IconButton(
+        onPressed: () => Scaffold.of(context).openDrawer(),
+        icon: Icon(
+          Iconsax.category,
+          size: 22,
+          color: AppTheme.whiteColor,
+        ),
+      ),
+      title: Text(
+        "Home",
+        style: TextStyle(
+          fontSize: 18,
+          color: AppTheme.whiteColor,
+        ),
+      ),
+      actions: [
+        Padding(
+          padding: const EdgeInsets.only(right: 10),
+          child: CircleAvatar(
             radius: 22,
             backgroundImage: NetworkImage(
               'https://avatars.githubusercontent.com/u/104581895?v=4',
             ),
           ),
-          SizedBox(width: 12),
-          Text(
-            "Cauã",
-            style: TextStyle(
-              fontSize: 16,
-            ),
-          ),
-        ],
-      ),
-      actions: [
-        IconButton(
-          icon: Icon(Iconsax.menu_1, color: Colors.black),
-          onPressed: () {
-            // Handle settings button press
-          },
         ),
       ],
     );
@@ -39,4 +43,53 @@ class Homebar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Size get preferredSize => Size.fromHeight(kToolbarHeight);
+}
+
+class HomeDrawer extends StatelessWidget {
+  const HomeDrawer({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Drawer(
+      child: ListView(
+        padding: EdgeInsets.zero,
+        children: [
+          DrawerHeader(
+            decoration: BoxDecoration(
+              color: AppTheme.primaryColor,
+            ),
+            child: Text(
+              'Menu',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 24,
+              ),
+            ),
+          ),
+          ListTile(
+            leading: Icon(Icons.home),
+            title: Text('Início'),
+            onTap: () {
+              Navigator.pop(context);
+            },
+          ),
+          ListTile(
+            leading: Icon(Icons.settings),
+            title: Text('Configurações'),
+            onTap: () {
+              Navigator.pop(context);
+            },
+          ),
+          ListTile(
+            leading: Icon(Icons.logout),
+            title: Text('Sair'),
+            onTap: () {
+              Navigator.pop(context);
+              // lógica de logout aqui
+            },
+          ),
+        ],
+      ),
+    );
+  }
 }

@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:spendo/ui/home_screen.dart';
@@ -18,44 +17,21 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     List screens = [
       HomeScreen(),
-      Scaffold(),
-      Scaffold(body: Text('3'),),
+      Scaffold(body: Text('Adicionar')),
+      Scaffold(body: Text('Adicionar')),
+      Scaffold(body: Text('Total gasto')),
+      Scaffold(body: Text('Caixinha')),
     ];
 
     final items = <IconData>[
       Iconsax.home,
+      Iconsax.chart_square,
+      Iconsax.empty_wallet,
       Iconsax.user,
     ];
 
     return Scaffold(
       body: screens[currentTab],
-      floatingActionButton: Transform.translate(
-        offset: const Offset(0, 12), // valor positivo desce, negativo sobe
-        child: Container(
-          height: 70,
-          width: 70,
-          decoration: const BoxDecoration(
-            color: AppTheme.primaryColor,
-            shape: BoxShape.circle,
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black26,
-                blurRadius: 10,
-                offset: Offset(0, 4),
-              ),
-            ],
-          ),
-          child: IconButton(
-            icon: const Icon(Iconsax.add,
-                size: 45, color: AppTheme.whiteColor),
-            onPressed: () => setState(() => currentTab = 2),
-          ),
-        ),
-      ),
-
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-
-      // NAVIGATION BAR
       bottomNavigationBar: Container(
         height: 70,
         decoration: BoxDecoration(
@@ -73,28 +49,55 @@ class _MainScreenState extends State<MainScreen> {
           ],
         ),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            ...List.generate(
-              items.length,
-              (index) => GestureDetector(
-                onTap: () => setState(() => currentTab = index),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 60),
-                      child: Icon(
-                        items[index],
-                        size: 32,
-                        color: currentTab == index ? AppTheme.primaryColor : Colors.grey,
-                      ),
+            _buildNavIcon(index: 0, icon: items[0]),
+            _buildNavIcon(index: 1, icon: items[1]),
+            // Botão de adicionar (central)
+            GestureDetector(
+              onTap: () => setState(() => currentTab = 2),
+              child: Container(
+                height: 55,
+                width: 55,
+                decoration: const BoxDecoration(
+                  color: AppTheme.primaryColor,
+                  shape: BoxShape.circle,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black26,
+                      blurRadius: 10,
+                      offset: Offset(0, 4),
                     ),
                   ],
                 ),
+                child: const Icon(Iconsax.add,
+                    color: AppTheme.whiteColor, size: 30),
               ),
             ),
+            _buildNavIcon(index: 3, icon: items[2]),
+            _buildNavIcon(index: 4, icon: items[3]),
           ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildNavIcon({required int index, required IconData icon}) {
+    final isSelected = currentTab == index;
+
+    return GestureDetector(
+      onTap: () => setState(() => currentTab = index),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        curve: Curves.easeOutBack,
+        padding: const EdgeInsets.all(8),
+        child: Transform.scale(
+          scale: isSelected ? 1.2 : 1.0,
+          child: Icon(
+            icon,
+            size: 28,
+            color: isSelected ? AppTheme.primaryColor : Colors.grey,
+          ),
         ),
       ),
     );
