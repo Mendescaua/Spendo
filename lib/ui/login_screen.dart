@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:spendo/controllers/auth_controller.dart';
+import 'package:spendo/ui/components/FloatingMessage.dart';
 import 'package:spendo/ui/components/StyleButton.dart';
 import 'package:spendo/utils/theme.dart';
 
@@ -12,11 +14,24 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   bool isObscure = true;
-  void togglePasswordVisibility() {
-    setState(() {
-      isObscure = !isObscure;
-    });
+  final AuthController _authController = AuthController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+
+  void login() async {
+    final result = await _authController.login(
+      email: emailController.text,
+      password: passwordController.text,
+    );
+
+    if (result == null) {
+      FloatingMessage(context, "Login realizado com sucesso", "success", 2);
+      Navigator.of(context).pop();
+    } else {
+      FloatingMessage(context, result.toString(), "error", 2);
+    }
   }
+  
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -71,6 +86,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
                 TextField(
+                  controller: emailController,
                   decoration: InputDecoration(
                     prefixIcon: const Icon(Iconsax.sms),
                     hintText: 'Enter adress',
@@ -90,11 +106,12 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
                 TextField(
+                  controller: passwordController,
                   obscureText: isObscure,
                   decoration: InputDecoration(
                     prefixIcon: const Icon(Iconsax.security_safe),
                     suffixIcon: IconButton(
-                        onPressed: () {togglePasswordVisibility();}, icon: isObscure ? const Icon(Iconsax.eye_slash) :  const Icon(Iconsax.eye)),
+                        onPressed: () {setState(() {isObscure = !isObscure;});}, icon: isObscure ? const Icon(Iconsax.eye_slash) :  const Icon(Iconsax.eye)),
                     hintText: 'Password',
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(16),
@@ -120,7 +137,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ],
                 ),
-                StyleButton(text: 'Login', onClick: () {Navigator.of(context).pushReplacementNamed('/menu');}),
+                StyleButton(text: 'Login', onClick: () {login();}),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [

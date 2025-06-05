@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:spendo/controllers/auth_controller.dart';
 import 'package:spendo/utils/theme.dart';
 
 class BankCard extends StatelessWidget {
@@ -59,6 +60,7 @@ class BankCard extends StatelessWidget {
 class bankcard extends StatelessWidget {
   final String title;
   final String url;
+  
   const bankcard({
     super.key,
     required this.title,
@@ -67,6 +69,7 @@ class bankcard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final AuthController _authService = AuthController();
     return Padding(
       padding: const EdgeInsets.only(bottom: 20),
       child: Row(
@@ -108,7 +111,7 @@ class bankcard extends StatelessWidget {
               size: 26,
             ),
             onPressed: () {
-              // Handle navigation or action
+              _authService.logout();
             },
           ),
         ],
