@@ -1,37 +1,45 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:spendo/controllers/auth_controller.dart';
-import 'package:spendo/ui/components/FloatingMessage.dart';
-import 'package:spendo/ui/components/StyleButton.dart';
+import 'package:spendo/components/FloatingMessage.dart';
+import 'package:spendo/components/buttons/StyleButton.dart';
 import 'package:spendo/utils/theme.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+class RegisterScreen extends StatefulWidget {
+  const RegisterScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<RegisterScreen> createState() => _RegisterScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
-  bool isObscure = true;
+class _RegisterScreenState extends State<RegisterScreen> {
   final AuthController _authController = AuthController();
+  bool isObscure = true;
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  TextEditingController confirmPasswordController = TextEditingController();
+  TextEditingController nameController = TextEditingController();
 
-  void login() async {
-    final result = await _authController.login(
+  void register() async {
+    if (passwordController.text != confirmPasswordController.text) {
+      FloatingMessage(context, "Senhas diferentes", "error", 2);
+      return;
+    }
+
+    final result = await _authController.register(
       email: emailController.text,
       password: passwordController.text,
+      name: nameController.text,
     );
 
     if (result == null) {
-      FloatingMessage(context, "Login realizado com sucesso", "success", 2);
+      FloatingMessage(context, "Cadastro realizado com sucesso", "success", 2);
       Navigator.of(context).pop();
     } else {
       FloatingMessage(context, result.toString(), "error", 2);
     }
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -68,7 +76,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ),
                       const Text(
-                        'Login',
+                        'Register',
                         style: TextStyle(
                           fontSize: 26,
                           fontWeight: FontWeight.w700,
@@ -78,6 +86,26 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   SizedBox(
                     height: 16,
+                  ),
+                  const Text(
+                    'Name',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  TextField(
+                    controller: nameController,
+                    decoration: InputDecoration(
+                      prefixIcon: const Icon(Iconsax.sms),
+                      hintText: 'Enter name',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(16),
+                        borderSide: const BorderSide(
+                          color: Color(0xFF4678c0),
+                        ),
+                      ),
+                    ),
                   ),
                   const Text(
                     'Email',
@@ -112,7 +140,14 @@ class _LoginScreenState extends State<LoginScreen> {
                     decoration: InputDecoration(
                       prefixIcon: const Icon(Iconsax.security_safe),
                       suffixIcon: IconButton(
-                          onPressed: () {setState(() {isObscure = !isObscure;});}, icon: isObscure ? const Icon(Iconsax.eye_slash) :  const Icon(Iconsax.eye)),
+                          onPressed: () {
+                            setState(() {
+                              isObscure = !isObscure;
+                            });
+                          },
+                          icon: isObscure
+                              ? const Icon(Iconsax.eye_slash)
+                              : const Icon(Iconsax.eye)),
                       hintText: 'Password',
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(16),
@@ -122,28 +157,49 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      TextButton(
-                        onPressed: () {},
-                        child: const Text(
-                          'Forgot Password?',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                            color: AppTheme.ShadowTextColor,
-                          ),
+                  const Text(
+                    'Confirm Password',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  TextField(
+                    controller: confirmPasswordController,
+                    obscureText: isObscure,
+                    decoration: InputDecoration(
+                      prefixIcon: const Icon(Iconsax.security_safe),
+                      suffixIcon: IconButton(
+                          onPressed: () {
+                            setState(() {
+                              isObscure = !isObscure;
+                            });
+                          },
+                          icon: isObscure
+                              ? const Icon(Iconsax.eye_slash)
+                              : const Icon(Iconsax.eye)),
+                      hintText: 'Confirm password',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(16),
+                        borderSide: const BorderSide(
+                          color: Color(0xFF4678c0),
                         ),
                       ),
-                    ],
+                    ),
                   ),
-                  StyleButton(text: 'Login', onClick: () {login();}),
+                  SizedBox(
+                    height: 16,
+                  ),
+                  StyleButton(
+                      text: 'Register',
+                      onClick: () {
+                        register();
+                      }),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       const Text(
-                        'Don\'t have an account?',
+                        'Already have an account?',
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
@@ -152,10 +208,10 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       TextButton(
                         onPressed: () {
-                          Navigator.pushReplacementNamed(context, '/register');
+                          Navigator.pushReplacementNamed(context, '/login');
                         },
                         child: const Text(
-                          'Register',
+                          'Login',
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w600,

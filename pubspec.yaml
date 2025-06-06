@@ -39,6 +39,7 @@ dependencies:
   intl: ^0.20.2
   animated_bottom_navigation_bar: ^1.4.0
   supabase_flutter: ^2.9.0
+  flutter_masked_text2: ^0.9.1
 
 dev_dependencies:
   flutter_test:

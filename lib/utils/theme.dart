@@ -21,11 +21,12 @@ class AppTheme {
       scaffoldBackgroundColor: backgroundColor,
       secondaryHeaderColor: secondaryColor,
       appBarTheme: AppBarTheme(
+        centerTitle: true,
         backgroundColor: Colors.transparent,
         elevation: 0,
         titleTextStyle: const TextStyle(
           color: textColor,
-          fontSize: 26,
+          fontSize: 18,
           fontWeight: FontWeight.w700,
         ),
       ),

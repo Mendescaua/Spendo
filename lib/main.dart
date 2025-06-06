@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:spendo/controllers/auth_gate.dart';
 import 'package:spendo/core/supabse_client.dart';
 import 'package:spendo/ui/home_screen.dart';
-import 'package:spendo/ui/login_screen.dart';
+import 'package:spendo/ui/auth/login_screen.dart';
 import 'package:spendo/ui/main_screen.dart';
-import 'package:spendo/ui/register_screen.dart';
+import 'package:spendo/ui/auth/register_screen.dart';
 import 'package:spendo/ui/splash_screen.dart';
 import 'package:spendo/utils/theme.dart';
 

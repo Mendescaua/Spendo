@@ -1,45 +1,37 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:spendo/controllers/auth_controller.dart';
-import 'package:spendo/ui/components/FloatingMessage.dart';
-import 'package:spendo/ui/components/StyleButton.dart';
+import 'package:spendo/components/FloatingMessage.dart';
+import 'package:spendo/components/buttons/StyleButton.dart';
 import 'package:spendo/utils/theme.dart';
 
-class RegisterScreen extends StatefulWidget {
-  const RegisterScreen({super.key});
+class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
 
   @override
-  State<RegisterScreen> createState() => _RegisterScreenState();
+  State<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _RegisterScreenState extends State<RegisterScreen> {
-  final AuthController _authController = AuthController();
+class _LoginScreenState extends State<LoginScreen> {
   bool isObscure = true;
+  final AuthController _authController = AuthController();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
-  TextEditingController confirmPasswordController = TextEditingController();
-  TextEditingController nameController = TextEditingController();
 
-  void register() async {
-    if (passwordController.text != confirmPasswordController.text) {
-      FloatingMessage(context, "Senhas diferentes", "error", 2);
-      return;
-    }
-
-    final result = await _authController.register(
+  void login() async {
+    final result = await _authController.login(
       email: emailController.text,
       password: passwordController.text,
-      name: nameController.text,
     );
 
     if (result == null) {
-      FloatingMessage(context, "Cadastro realizado com sucesso", "success", 2);
+      FloatingMessage(context, "Login realizado com sucesso", "success", 2);
       Navigator.of(context).pop();
     } else {
       FloatingMessage(context, result.toString(), "error", 2);
     }
   }
-
+  
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -76,7 +68,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         ),
                       ),
                       const Text(
-                        'Register',
+                        'Login',
                         style: TextStyle(
                           fontSize: 26,
                           fontWeight: FontWeight.w700,
@@ -86,26 +78,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                   SizedBox(
                     height: 16,
-                  ),
-                  const Text(
-                    'Name',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  TextField(
-                    controller: nameController,
-                    decoration: InputDecoration(
-                      prefixIcon: const Icon(Iconsax.sms),
-                      hintText: 'Enter name',
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(16),
-                        borderSide: const BorderSide(
-                          color: Color(0xFF4678c0),
-                        ),
-                      ),
-                    ),
                   ),
                   const Text(
                     'Email',
@@ -140,14 +112,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     decoration: InputDecoration(
                       prefixIcon: const Icon(Iconsax.security_safe),
                       suffixIcon: IconButton(
-                          onPressed: () {
-                            setState(() {
-                              isObscure = !isObscure;
-                            });
-                          },
-                          icon: isObscure
-                              ? const Icon(Iconsax.eye_slash)
-                              : const Icon(Iconsax.eye)),
+                          onPressed: () {setState(() {isObscure = !isObscure;});}, icon: isObscure ? const Icon(Iconsax.eye_slash) :  const Icon(Iconsax.eye)),
                       hintText: 'Password',
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(16),
@@ -157,49 +122,28 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       ),
                     ),
                   ),
-                  const Text(
-                    'Confirm Password',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  TextField(
-                    controller: confirmPasswordController,
-                    obscureText: isObscure,
-                    decoration: InputDecoration(
-                      prefixIcon: const Icon(Iconsax.security_safe),
-                      suffixIcon: IconButton(
-                          onPressed: () {
-                            setState(() {
-                              isObscure = !isObscure;
-                            });
-                          },
-                          icon: isObscure
-                              ? const Icon(Iconsax.eye_slash)
-                              : const Icon(Iconsax.eye)),
-                      hintText: 'Confirm password',
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(16),
-                        borderSide: const BorderSide(
-                          color: Color(0xFF4678c0),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      TextButton(
+                        onPressed: () {},
+                        child: const Text(
+                          'Forgot Password?',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                            color: AppTheme.ShadowTextColor,
+                          ),
                         ),
                       ),
-                    ),
+                    ],
                   ),
-                  SizedBox(
-                    height: 16,
-                  ),
-                  StyleButton(
-                      text: 'Register',
-                      onClick: () {
-                        register();
-                      }),
+                  StyleButton(text: 'Login', onClick: () {login();}),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       const Text(
-                        'Already have an account?',
+                        'Don\'t have an account?',
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
@@ -208,10 +152,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       ),
                       TextButton(
                         onPressed: () {
-                          Navigator.pushReplacementNamed(context, '/login');
+                          Navigator.pushReplacementNamed(context, '/register');
                         },
                         child: const Text(
-                          'Login',
+                          'Register',
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w600,

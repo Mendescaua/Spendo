@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:spendo/ui/components/BankCard.dart';
-import 'package:spendo/ui/components/SavingCard.dart';
-import 'package:spendo/ui/components/TotalBalanceCard.dart';
-import 'package:spendo/ui/components/HomeBar.dart';
-import 'package:spendo/ui/components/TransactionCard.dart';
+import 'package:spendo/components/cards/BankCard.dart';
+import 'package:spendo/components/cards/SavingCard.dart';
+import 'package:spendo/components/cards/TotalBalanceCard.dart';
+import 'package:spendo/components/HomeBar.dart';
+import 'package:spendo/components/cards/TransactionCard.dart';
 import 'package:spendo/utils/theme.dart';
 
 class HomeScreen extends StatelessWidget {

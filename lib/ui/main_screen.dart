@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:spendo/components/ModalTransaction.dart';
 import 'package:spendo/ui/home_screen.dart';
 import 'package:spendo/utils/theme.dart';
 
@@ -30,6 +31,16 @@ class _MainScreenState extends State<MainScreen> {
       Iconsax.user,
     ];
 
+    void _openAddTransactionModal(BuildContext context) {
+      showModalBottomSheet(
+          context: context,
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+          ),
+          isScrollControlled: true,
+          builder: (context) => ModalTransaction());
+    }
+
     return Scaffold(
       body: screens[currentTab],
       bottomNavigationBar: Container(
@@ -55,7 +66,7 @@ class _MainScreenState extends State<MainScreen> {
             _buildNavIcon(index: 1, icon: items[1]),
             // Botão de adicionar (central)
             GestureDetector(
-              onTap: () => setState(() => currentTab = 2),
+              onTap: () => _openAddTransactionModal(context),
               child: Container(
                 height: 55,
                 width: 55,
