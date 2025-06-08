@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:spendo/components/buttons/OutlineButton.dart';
-import 'package:spendo/ui/new_income_screen.dart';
+import 'package:spendo/ui/transaction/new_despesa_screen.dart';
+import 'package:spendo/ui/transaction/new_receita_screen.dart';
 
 class ModalTransaction extends StatelessWidget {
   const ModalTransaction({super.key});
@@ -31,11 +32,17 @@ class ModalTransaction extends StatelessWidget {
           const SizedBox(height: 2),
           OutlineButton(
             tipo: 'receita',
-            onClick: () {Navigator.of(context).push(MaterialPageRoute(builder: (context) => const ReceitaValorInput()));},
+            onClick: () {
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => const NewReceitaScreen()));
+            },
           ),
           OutlineButton(
             tipo: 'despesa',
-            onClick: () {},
+            onClick: () {
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => const NewDespesaScreen()));
+            },
           ),
         ],
       ),

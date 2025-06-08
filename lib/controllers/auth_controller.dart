@@ -6,7 +6,8 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 class AuthController {
   final AuthService _authService = AuthService();
 
-  Future<String?> login({required String email, required String password}) async {
+  Future<String?> login(
+      {required String email, required String password}) async {
     if (email.isEmpty || password.isEmpty) {
       return 'Preencha todos os campos.';
     }

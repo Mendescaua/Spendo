@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:spendo/models/transaction_model.dart';
+import 'package:spendo/utils/customText.dart';
+import 'package:spendo/utils/theme.dart';
 
 class TransactionCard extends StatelessWidget {
-  const TransactionCard({Key? key}) : super(key: key);
+  final TransactionModel transaction;
+  const TransactionCard({Key? key, required this.transaction})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -12,14 +17,6 @@ class TransactionCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
-        // boxShadow: [
-        //   BoxShadow(
-        //     color: const Color.fromARGB(10, 0, 0, 0),
-        //     offset: Offset(0, 4),
-        //     blurRadius: 6,
-        //     spreadRadius: 0,
-        //   ),
-        // ],
       ),
       child: Row(
         children: [
@@ -39,9 +36,9 @@ class TransactionCard extends StatelessWidget {
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: const [
+              children: [
                 Text(
-                  "Dribbble",
+                  transaction.title,
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 16,
@@ -49,20 +46,25 @@ class TransactionCard extends StatelessWidget {
                   ),
                 ),
                 SizedBox(height: 4),
-                Text(
-                  "Subscription fee",
-                  style: TextStyle(
-                    color: Colors.grey,
-                    fontSize: 14,
-                  ),
-                ),
+                transaction.description == null ||
+                        transaction.description!.isEmpty
+                    ? const SizedBox.shrink()
+                    : Text(
+                        transaction.description ?? '',
+                        style: TextStyle(
+                          color: Colors.grey,
+                          fontSize: 14,
+                        ),
+                      ),
               ],
             ),
           ),
-          const Text(
-            "-\$15.00",
+          Text(
+            Customtext.formatMoeda(transaction.value),
             style: TextStyle(
-              color: Colors.red,
+              color: transaction.type == 'r'
+                  ? AppTheme.greenColor
+                  : AppTheme.redColor,
               fontWeight: FontWeight.bold,
               fontSize: 16,
             ),

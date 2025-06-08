@@ -26,9 +26,4 @@ class AuthService {
   Future<void> signOut() async {
     await supabase.auth.signOut();
   }
-
-  // Email do usuário atual
-  String? getCurrentUserEmail() {
-    return supabase.auth.currentUser?.email;
-  }
 }

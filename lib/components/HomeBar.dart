@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:spendo/controllers/auth_controller.dart';
 import 'package:spendo/utils/theme.dart';
 
 class Homebar extends StatelessWidget implements PreferredSizeWidget {
@@ -46,9 +47,15 @@ class Homebar extends StatelessWidget implements PreferredSizeWidget {
 }
 
 class HomeDrawer extends StatelessWidget {
-  const HomeDrawer({Key? key}) : super(key: key);
+  HomeDrawer({Key? key}) : super(key: key);
 
   @override
+  final AuthController _authController = AuthController();
+  void logout(BuildContext context) {
+    _authController.logout();
+    Navigator.of(context).pop();
+  }
+
   Widget build(BuildContext context) {
     return Drawer(
       child: ListView(
@@ -84,8 +91,7 @@ class HomeDrawer extends StatelessWidget {
             leading: Icon(Icons.logout),
             title: Text('Sair'),
             onTap: () {
-              Navigator.pop(context);
-              // lógica de logout aqui
+              logout(context);
             },
           ),
         ],
