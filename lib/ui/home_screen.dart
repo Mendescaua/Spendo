@@ -52,9 +52,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           spacing: 16,
           children: [
-            transactions.isNotEmpty
-                ? SaldoGeralCard(transaction: transactions.first)
-                : SaldoGeralCard(),
+            SaldoGeralCard(),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Column(

@@ -99,6 +99,7 @@ class TransactionController extends StateNotifier<List<TransactionModel>> {
         uuid: userId,
         name: transaction.name,
         type: transaction.type,
+        color: transaction.color,
       );
       await _transaction.addCategoryTransaction(newTransaction);
       // Atualiza o estado com a nova transação adicionada

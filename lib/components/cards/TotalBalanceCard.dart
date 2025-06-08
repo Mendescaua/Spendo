@@ -8,8 +8,7 @@ import 'package:spendo/utils/customText.dart';
 import 'package:spendo/utils/theme.dart';
 
 class SaldoGeralCard extends ConsumerStatefulWidget {
-  final TransactionModel? transaction;
-  const SaldoGeralCard({super.key, this.transaction});
+  const SaldoGeralCard({super.key});
 
   @override
   ConsumerState<SaldoGeralCard> createState() => _SaldoGeralCardState();
