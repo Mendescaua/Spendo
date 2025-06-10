@@ -23,8 +23,8 @@ class _NewReceitaScreenState extends ConsumerState<NewReceitaScreen> {
     decimalSeparator: ',',
     thousandSeparator: '.',
   );
-  TextEditingController _titleController = TextEditingController();
-  TextEditingController _descriptionController = TextEditingController();
+  final TextEditingController _titleController = TextEditingController();
+  final TextEditingController _descriptionController = TextEditingController();
   DateTime selectedDate = DateTime.now();
   final DateFormat dateFormat = DateFormat('dd/MM/yyyy');
   String categoria = '';
@@ -240,8 +240,8 @@ class _NewReceitaScreenState extends ConsumerState<NewReceitaScreen> {
                         ),
                         CategoriaComboBox(
                           onCategoriaSelecionada: (nome, tipo) {
-                            categoria = nome;
-                          
+                            categoria = '$nome;$tipo'; // aqui eu recebo o nome da categoria e o tipo serve para pegar o icon escolhido
+                            print('Categoria selecionada: $categoria');
                           },
                         ),
                       ],

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:iconsax/iconsax.dart';
+import 'package:spendo/components/transactionContainer.dart';
 import 'package:spendo/models/transaction_model.dart';
 import 'package:spendo/utils/customText.dart';
 import 'package:spendo/utils/theme.dart';
@@ -20,18 +20,7 @@ class TransactionCard extends StatelessWidget {
       ),
       child: Row(
         children: [
-          Container(
-            padding: const EdgeInsets.all(10),
-            decoration: const BoxDecoration(
-              color: Color(0xFFFFF4E5),
-              borderRadius: BorderRadius.all(Radius.circular(12)),
-            ),
-            child: const Icon(
-              Iconsax.monitor,
-              color: Color(0xFFFFC260),
-              size: 24,
-            ),
-          ),
+          TransactionContainer(tipo: "CF"),
           const SizedBox(width: 16),
           Expanded(
             child: Column(

@@ -240,7 +240,8 @@ class _NewDespesaScreenState extends ConsumerState<NewDespesaScreen> {
                         ),
                         CategoriaComboBox(
                           onCategoriaSelecionada: (nome, tipo) {
-                            categoria = nome;
+                            categoria = '$nome;$tipo'; // aqui eu recebo o nome da categoria e o tipo serve para pegar o icon escolhido
+                            print('Categoria selecionada: $categoria');
                           },
                         ),
                       ],

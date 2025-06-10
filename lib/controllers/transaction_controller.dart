@@ -95,15 +95,15 @@ class TransactionController extends StateNotifier<List<TransactionModel>> {
       return 'Adicione um nome para a categoria.';
     }
     try {
-      final newTransaction = CategoryTransactionModel(
+      final newCategory = CategoryTransactionModel(
         uuid: userId,
         name: transaction.name,
         type: transaction.type,
         color: transaction.color,
       );
-      await _transaction.addCategoryTransaction(newTransaction);
+      await _transaction.addCategoryTransaction(newCategory);
       // Atualiza o estado com a nova transação adicionada
-      categories = [...categories, newTransaction];
+      categories = [...categories, newCategory];
       return null;
     } catch (e) {
       print('Erro ao adicionar categoria: $e');

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
-import 'package:spendo/components/FloatingMessage.dart';
 import 'package:spendo/components/cards/SavingCard.dart';
 import 'package:spendo/components/cards/TotalBalanceCard.dart';
 import 'package:spendo/components/HomeBar.dart';
