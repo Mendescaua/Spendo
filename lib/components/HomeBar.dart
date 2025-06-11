@@ -32,7 +32,7 @@ class Homebar extends StatelessWidget implements PreferredSizeWidget {
         Padding(
           padding: const EdgeInsets.only(right: 10),
           child: CircleAvatar(
-            radius: 22,
+            radius: 18,
             backgroundImage: NetworkImage(
               'https://avatars.githubusercontent.com/u/104581895?v=4',
             ),

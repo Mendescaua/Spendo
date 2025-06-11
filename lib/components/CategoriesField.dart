@@ -8,7 +8,7 @@ import 'package:spendo/models/category_transaction_model.dart';
 import 'package:spendo/utils/theme.dart';
 
 class CategoriaComboBox extends ConsumerStatefulWidget {
-  final Function(String nome, String tipo) onCategoriaSelecionada;
+  final Function(String nome, String tipo, Color cor) onCategoriaSelecionada;
 
   const CategoriaComboBox({
     super.key,
@@ -21,178 +21,77 @@ class CategoriaComboBox extends ConsumerStatefulWidget {
 
 class _CategoriaComboBoxState extends ConsumerState<CategoriaComboBox> {
   List<CategoryTransactionModel> categoriasBanco = [];
-  Map<String, IconData> categoriasFixasComIcones = {
-    'Investimento': Iconsax.chart,
-    'Pix': Iconsax.wallet_2,
-    'Outros': Iconsax.note,
-  };
-  Map<String, Color> coresCategoria = {
-    'Investimento': const Color(0xFF3A86FF),
-    'Pix': const Color(0xFF8338EC),
-    'Outros': Colors.grey.shade600,
-  };
 
   String? categoriaSelecionada;
   String? tipoSelecionado;
 
   final List<Map<String, dynamic>> iconesDisponiveis = [
-    {'icone': Iconsax.activity, 'tipo': 'I00'},
-    {'icone': Iconsax.add, 'tipo': 'I01'},
-    {'icone': Iconsax.add_circle, 'tipo': 'I02'},
-    {'icone': Iconsax.archive, 'tipo': 'I03'},
-    {'icone': Iconsax.archive_add, 'tipo': 'I04'},
-    {'icone': Iconsax.archive_minus, 'tipo': 'I05'},
-    {'icone': Iconsax.award, 'tipo': 'I06'},
-    {'icone': Iconsax.bank, 'tipo': 'I07'},
-    {'icone': Iconsax.barcode, 'tipo': 'I08'},
-    {'icone': Iconsax.book, 'tipo': 'I09'},
-    {'icone': Iconsax.bookmark, 'tipo': 'I10'},
-    {'icone': Iconsax.briefcase, 'tipo': 'I11'},
-    {'icone': Iconsax.calendar, 'tipo': 'I12'},
-    {'icone': Iconsax.camera, 'tipo': 'I13'},
-    {'icone': Iconsax.chart, 'tipo': 'I14'},
-    {'icone': Iconsax.chart_1, 'tipo': 'I15'},
-    {'icone': Iconsax.chart_2, 'tipo': 'I16'},
-    {'icone': Iconsax.chart_3, 'tipo': 'I17'},
-    {'icone': Iconsax.chart_square, 'tipo': 'I18'},
-    {'icone': Iconsax.check, 'tipo': 'I19'},
-    {'icone': Iconsax.cloud, 'tipo': 'I20'},
-    {'icone': Iconsax.code, 'tipo': 'I21'},
-    {'icone': Iconsax.coin, 'tipo': 'I22'},
-    {'icone': Iconsax.convert, 'tipo': 'I23'},
-    {'icone': Iconsax.crown, 'tipo': 'I24'},
-    {'icone': Iconsax.cup, 'tipo': 'I25'},
-    {'icone': Iconsax.danger, 'tipo': 'I26'},
-    {'icone': Iconsax.data, 'tipo': 'I27'},
-    {'icone': Iconsax.document, 'tipo': 'I30'},
-    {'icone': Iconsax.document_text, 'tipo': 'I31'},
-    {'icone': Iconsax.dollar_circle, 'tipo': 'I32'},
-    {'icone': Iconsax.edit, 'tipo': 'I33'},
-    {'icone': Iconsax.emoji_happy, 'tipo': 'I34'},
-    {'icone': Iconsax.export, 'tipo': 'I35'},
-    {'icone': Iconsax.eye, 'tipo': 'I36'},
-    {'icone': Iconsax.filter, 'tipo': 'I37'},
-    {'icone': Iconsax.flag, 'tipo': 'I38'},
-    {'icone': Iconsax.folder, 'tipo': 'I39'},
-    {'icone': Iconsax.game, 'tipo': 'I40'},
-    {'icone': Iconsax.gift, 'tipo': 'I41'},
-    {'icone': Iconsax.global, 'tipo': 'I42'},
-    {'icone': Iconsax.graph, 'tipo': 'I43'},
-    {'icone': Iconsax.heart, 'tipo': 'I45'},
-    {'icone': Iconsax.home, 'tipo': 'I46'},
-    {'icone': Iconsax.image, 'tipo': 'I47'},
-    {'icone': Iconsax.info_circle, 'tipo': 'I48'},
-    {'icone': Iconsax.lamp, 'tipo': 'I49'},
-    {'icone': Iconsax.like, 'tipo': 'I51'},
-    {'icone': Iconsax.link, 'tipo': 'I52'},
-    {'icone': Iconsax.location, 'tipo': 'I53'},
-    {'icone': Iconsax.lock, 'tipo': 'I54'},
-    {'icone': Iconsax.login, 'tipo': 'I55'},
-    {'icone': Iconsax.logout, 'tipo': 'I56'},
-    {'icone': Iconsax.map, 'tipo': 'I57'},
-    {'icone': Iconsax.menu, 'tipo': 'I58'},
-    {'icone': Iconsax.message, 'tipo': 'I59'},
-    {'icone': Iconsax.minus, 'tipo': 'I61'},
-    {'icone': Iconsax.money, 'tipo': 'I62'},
-    {'icone': Iconsax.moon, 'tipo': 'I63'},
-    {'icone': Iconsax.music, 'tipo': 'I64'},
-    {'icone': Iconsax.notification, 'tipo': 'I65'},
-    {'icone': Iconsax.paperclip, 'tipo': 'I66'},
-    {'icone': Iconsax.play, 'tipo': 'I71'},
-    {'icone': Iconsax.profile, 'tipo': 'I73'},
-    {'icone': Iconsax.receipt, 'tipo': 'I75'},
-    {'icone': Iconsax.refresh, 'tipo': 'I76'},
-    {'icone': Iconsax.security, 'tipo': 'I78'},
-    {'icone': Iconsax.send, 'tipo': 'I79'},
-    {'icone': Iconsax.setting, 'tipo': 'I80'},
-    {'icone': Iconsax.shield, 'tipo': 'I81'},
-    {'icone': Iconsax.shop, 'tipo': 'I82'},
-    {'icone': Iconsax.star, 'tipo': 'I83'},
-    {'icone': Iconsax.sun, 'tipo': 'I84'},
-    {'icone': Iconsax.tag, 'tipo': 'I85'},
-    {'icone': Iconsax.timer, 'tipo': 'I86'},
-    {'icone': Iconsax.trash, 'tipo': 'I87'},
-    {'icone': Iconsax.unlock, 'tipo': 'I88'},
+    {'icone': Iconsax.card, 'tipo': 'I00'},
+    {'icone': Iconsax.ticket_star, 'tipo': 'I01'},
+    {'icone': Iconsax.video, 'tipo': 'I02'},
+    {'icone': Iconsax.music, 'tipo': 'I03'},
+    {'icone': Iconsax.video_play, 'tipo': 'I04'},
+    {'icone': Iconsax.bank, 'tipo': 'I05'},
+    {'icone': Iconsax.briefcase, 'tipo': 'I06'},
+    {'icone': Iconsax.calendar, 'tipo': 'I07'},
+    {'icone': Iconsax.chart_1, 'tipo': 'I08'},
+    {'icone': Iconsax.chart_2, 'tipo': 'I09'},
+    {'icone': Iconsax.emoji_happy, 'tipo': 'I10'},
+    {'icone': Iconsax.game, 'tipo': 'I11'},
+    {'icone': Iconsax.gift, 'tipo': 'I12'},
+    {'icone': Iconsax.global, 'tipo': 'I13'},
+    {'icone': Iconsax.heart, 'tipo': 'I14'},
+    {'icone': Iconsax.home, 'tipo': 'I15'},
+    {'icone': Iconsax.security, 'tipo': 'I16'},
+    {'icone': Iconsax.shop, 'tipo': 'I17'},
+    {'icone': Iconsax.star, 'tipo': 'I18'},
+    {'icone': Iconsax.tag, 'tipo': 'I19'},
+    {'icone': Iconsax.trash, 'tipo': 'I20'},
+    {'icone': Iconsax.airplane, 'tipo': 'I21'},
+    {'icone': Iconsax.gas_station, 'tipo': 'I22'},
+    {'icone': Iconsax.shopping_cart, 'tipo': 'I23'},
+    {'icone': Iconsax.book, 'tipo': 'I24'},
+    {'icone': Iconsax.teacher, 'tipo': 'I25'},
+    {'icone': Iconsax.rulerpen, 'tipo': 'I26'},
+    {'icone': Iconsax.cake, 'tipo': 'I27'},
+    {'icone': Iconsax.coffee, 'tipo': 'I28'},
+    {'icone': Iconsax.pet, 'tipo': 'I29'},
+    {'icone': Iconsax.mobile, 'tipo': 'I30'},
+    {'icone': Iconsax.gameboy, 'tipo': 'I31'},
   ];
-
   final Map<String, IconData> iconesPorTipo = {
-    'I00': Iconsax.activity,
-    'I01': Iconsax.add,
-    'I02': Iconsax.add_circle,
-    'I03': Iconsax.archive,
-    'I04': Iconsax.archive_add,
-    'I05': Iconsax.archive_minus,
-    'I06': Iconsax.award,
-    'I07': Iconsax.bank,
-    'I08': Iconsax.barcode,
-    'I09': Iconsax.book,
-    'I10': Iconsax.bookmark,
-    'I11': Iconsax.briefcase,
-    'I12': Iconsax.calendar,
-    'I13': Iconsax.camera,
-    'I14': Iconsax.chart,
-    'I15': Iconsax.chart_1,
-    'I16': Iconsax.chart_2,
-    'I17': Iconsax.chart_3,
-    'I18': Iconsax.chart_square,
-    'I19': Iconsax.check,
-    'I20': Iconsax.cloud,
-    'I21': Iconsax.code,
-    'I22': Iconsax.coin,
-    'I23': Iconsax.convert,
-    'I24': Iconsax.crown,
-    'I25': Iconsax.cup,
-    'I26': Iconsax.danger,
-    'I27': Iconsax.data,
-    'I30': Iconsax.document,
-    'I31': Iconsax.document_text,
-    'I32': Iconsax.dollar_circle,
-    'I33': Iconsax.edit,
-    'I34': Iconsax.emoji_happy,
-    'I35': Iconsax.export,
-    'I36': Iconsax.eye,
-    'I37': Iconsax.filter,
-    'I38': Iconsax.flag,
-    'I39': Iconsax.folder,
-    'I40': Iconsax.game,
-    'I41': Iconsax.gift,
-    'I42': Iconsax.global,
-    'I43': Iconsax.graph,
-    'I45': Iconsax.heart,
-    'I46': Iconsax.home,
-    'I47': Iconsax.image,
-    'I48': Iconsax.info_circle,
-    'I49': Iconsax.lamp,
-    'I51': Iconsax.like,
-    'I52': Iconsax.link,
-    'I53': Iconsax.location,
-    'I54': Iconsax.lock,
-    'I55': Iconsax.login,
-    'I56': Iconsax.logout,
-    'I57': Iconsax.map,
-    'I58': Iconsax.menu,
-    'I59': Iconsax.message,
-    'I61': Iconsax.minus,
-    'I62': Iconsax.money,
-    'I63': Iconsax.moon,
-    'I64': Iconsax.music,
-    'I65': Iconsax.notification,
-    'I66': Iconsax.paperclip,
-    'I71': Iconsax.play,
-    'I73': Iconsax.profile,
-    'I75': Iconsax.receipt,
-    'I76': Iconsax.refresh,
-    'I78': Iconsax.security,
-    'I79': Iconsax.send,
-    'I80': Iconsax.setting,
-    'I81': Iconsax.shield,
-    'I82': Iconsax.shop,
-    'I83': Iconsax.star,
-    'I84': Iconsax.sun,
-    'I85': Iconsax.tag,
-    'I86': Iconsax.timer,
-    'I87': Iconsax.trash,
-    'I88': Iconsax.unlock,
+    'I00': Iconsax.card,
+    'I01': Iconsax.ticket_star,
+    'I02': Iconsax.video,
+    'I03': Iconsax.music,
+    'I04': Iconsax.video_play,
+    'I05': Iconsax.bank,
+    'I06': Iconsax.briefcase,
+    'I07': Iconsax.calendar,
+    'I08': Iconsax.chart_1,
+    'I09': Iconsax.chart_2,
+    'I10': Iconsax.emoji_happy,
+    'I11': Iconsax.game,
+    'I12': Iconsax.gift,
+    'I13': Iconsax.global,
+    'I14': Iconsax.heart,
+    'I15': Iconsax.home,
+    'I16': Iconsax.security,
+    'I17': Iconsax.shop,
+    'I18': Iconsax.star,
+    'I19': Iconsax.tag,
+    'I20': Iconsax.trash,
+    'I21': Iconsax.airplane,
+    'I22': Iconsax.gas_station,
+    'I23': Iconsax.shopping_cart,
+    'I24': Iconsax.book,
+    'I25': Iconsax.teacher,
+    'I26': Iconsax.rulerpen,
+    'I27': Iconsax.cake,
+    'I28': Iconsax.coffee,
+    'I29': Iconsax.pet,
+    'I30': Iconsax.mobile,
+    'I31': Iconsax.gameboy,
   };
 
   @override
@@ -265,7 +164,6 @@ class _CategoriaComboBoxState extends ConsumerState<CategoriaComboBox> {
                     width: 40,
                     height: 5,
                     decoration: BoxDecoration(
-                      color: Colors.grey[300],
                       borderRadius: BorderRadius.circular(8),
                     ),
                   ),
@@ -321,22 +219,32 @@ class _CategoriaComboBoxState extends ConsumerState<CategoriaComboBox> {
                                 ),
                                 builder: (context) => Padding(
                                   padding: const EdgeInsets.all(16),
-                                  child: Wrap(
-                                    spacing: 10,
-                                    runSpacing: 10,
-                                    children: iconesDisponiveis
-                                        .sublist(3)
-                                        .map((item) => _iconeItemDialog(
-                                              item,
-                                              iconeSelecionado,
-                                              (icon, tipo) {
-                                                Navigator.pop(context, {
-                                                  'icone': icon,
-                                                  'tipo': tipo,
-                                                });
-                                              },
-                                            ))
-                                        .toList(),
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      const Text('Selecione um ícone',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 18)),
+                                      const SizedBox(height: 10),
+                                      Wrap(
+                                        spacing: 10,
+                                        runSpacing: 10,
+                                        children: iconesDisponiveis
+                                            .map((item) => _iconeItemDialog(
+                                                  item,
+                                                  iconeSelecionado,
+                                                  (icon, tipo) {
+                                                    Navigator.pop(context, {
+                                                      'icone': icon,
+                                                      'tipo': tipo,
+                                                    });
+                                                  },
+                                                ))
+                                            .toList(),
+                                      ),
+                                      SizedBox(height: 30),
+                                    ],
                                   ),
                                 ),
                               );
@@ -349,14 +257,16 @@ class _CategoriaComboBoxState extends ConsumerState<CategoriaComboBox> {
                               }
                             },
                             child: Container(
-                              width: 50,
-                              height: 50,
+                              width: 46,
+                              height: 46,
                               decoration: BoxDecoration(
-                                color: Colors.grey.shade200,
-                                borderRadius: BorderRadius.circular(8),
-                                border: Border.all(color: Colors.grey.shade400),
+                                color: AppTheme.primaryColor,
+                                borderRadius: BorderRadius.circular(12),
                               ),
-                              child: const Icon(Icons.more_horiz),
+                              child: const Icon(
+                                Iconsax.more,
+                                color: AppTheme.whiteColor,
+                              ),
                             ),
                           ),
                         ],
@@ -364,81 +274,105 @@ class _CategoriaComboBoxState extends ConsumerState<CategoriaComboBox> {
 
                       const SizedBox(height: 20),
                       Row(
-                        children: [
-                          const Text('Cor:'),
-                          const SizedBox(width: 10),
-                          GestureDetector(
-                            onTap: () async {
-                              final corEscolhida = await showDialog<Color>(
-                                context: context,
-                                builder: (context) => AlertDialog(
-                                  title: const Text('Escolher cor'),
-                                  content: Wrap(
-                                    spacing: 8,
-                                    runSpacing:
-                                        8, // espaçamento vertical entre as linhas do wrap
-                                    children: [
-                                      Colors.red,
-                                      Colors.orange,
-                                      Colors.green,
-                                      Colors.blue,
-                                      Colors.purple,
-                                      Colors.teal,
-                                      Colors.brown,
-                                      Colors.pink,
-                                      Colors.indigo,
-                                      Colors.lime,
-                                      Colors.cyan,
-                                      Colors.amber,
-                                      Colors.deepOrange,
-                                      Colors.deepPurple,
-                                      Colors.lightBlue,
-                                      Colors.lightGreen,
-                                      Colors.yellow,
-                                      Colors.grey,
-                                    ].map((cor) {
-                                      return Padding(
-                                        padding: const EdgeInsets.only(
-                                            bottom: 8.0), // espaço inferior
-                                        child: GestureDetector(
-                                          onTap: () =>
-                                              Navigator.pop(context, cor),
-                                          child: Container(
-                                            width: 32,
-                                            height: 32,
-                                            decoration: BoxDecoration(
-                                              color: cor,
-                                              borderRadius:
-                                                  BorderRadius.circular(12),
-                                              border: Border.all(
-                                                  color: Colors.black12,
-                                                  width: 1),
-                                            ),
-                                          ),
-                                        ),
-                                      );
-                                    }).toList(),
-                                  ),
-                                ),
-                              );
-                              if (corEscolhida != null) {
-                                setStateDialog(() {
-                                  corSelecionadaDialog = corEscolhida;
-                                });
-                              }
-                            },
-                            child: Container(
-                              width: 30,
-                              height: 30,
-                              decoration: BoxDecoration(
-                                color: corSelecionadaDialog,
-                                borderRadius: BorderRadius.circular(12),
-                                border: Border.all(color: Colors.grey),
-                              ),
-                            ),
-                          ),
-                        ],
+  children: [
+    const Text('Cor:'),
+    const SizedBox(width: 10),
+    GestureDetector(
+      onTap: () async {
+        final corEscolhida = await showDialog<Color>(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: const Text('Escolher cor'),
+            content: SingleChildScrollView(
+              child: Wrap(
+                spacing: 12,
+                runSpacing: 12,
+                children: [
+                  ...[
+                    // 🔵 Azuis
+                    Color(0xFF2196F3),
+                    Color(0xFF64B5F6),
+                    Color(0xFF0D47A1),
+
+                    // 🟣 Roxos
+                    Color(0xFF9C27B0),
+                    Color(0xFFBA68C8),
+                    Color(0xFF4A148C),
+
+                    // 🟢 Verdes
+                    Color(0xFF4CAF50),
+                    Color(0xFF81C784),
+                    Color(0xFF1B5E20),
+
+                    // 🟠 Laranjas
+                    Color(0xFFFF9800),
+                    Color(0xFFFFB74D),
+                    Color(0xFFE65100),
+
+                    // 🔴 Vermelhos
+                    Color(0xFFF44336),
+                    Color(0xFFE57373),
+                    Color(0xFFB71C1C),
+
+                    // 🎨 Aleatórias
+                    Color(0xFF00BCD4),
+                    Color(0xFF607D8B),
+                    Color(0xFF795548),
+                    Color(0xFF00E5FF),
+                    Color(0xFF8BC34A),
+                    Color(0xFFFF4081),
+                    Color(0xFFFFC107),
+                    Color(0xFF3F51B5),
+                    Color(0xFFCDDC39),
+                    Color(0xFFD4E157),
+                    Color(0xFFAA00FF),
+                    Color(0xFF263238),
+                    Color(0xFFFF1744),
+                    Color(0xFF1DE9B6),
+                    Color(0xFF6200EA),
+                    Color(0xFF009688),
+                    Color(0xFF33691E),
+                    Color(0xFFBF360C),
+                    Color(0xFF3E2723),
+                    Color(0xFF000000),
+                  ].map((cor) {
+                    return GestureDetector(
+                      onTap: () => Navigator.pop(context, cor),
+                      child: Container(
+                        width: 40,
+                        height: 40,
+                        decoration: BoxDecoration(
+                          color: cor,
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(color: Colors.black12),
+                        ),
                       ),
+                    );
+                  }).toList()
+                ],
+              ),
+            ),
+          ),
+        );
+        if (corEscolhida != null) {
+          setStateDialog(() {
+            corSelecionadaDialog = corEscolhida;
+          });
+        }
+      },
+      child: Container(
+        width: 36,
+        height: 36,
+        decoration: BoxDecoration(
+          color: corSelecionadaDialog,
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(color: Colors.grey),
+        ),
+      ),
+    ),
+  ],
+),
+
 
                       const SizedBox(height: 20),
                       Row(
@@ -461,16 +395,12 @@ class _CategoriaComboBoxState extends ConsumerState<CategoriaComboBox> {
                                   corHex);
 
                               setState(() {
-                                categoriasFixasComIcones[nomeNovaCategoria] =
-                                    iconeSelecionado!;
-                                coresCategoria[nomeNovaCategoria] =
-                                    corSelecionadaDialog;
                                 categoriaSelecionada = nomeNovaCategoria;
                                 tipoSelecionado = tipoSelecionadoDialog;
                               });
 
-                              widget.onCategoriaSelecionada(
-                                  nomeNovaCategoria, tipoSelecionadoDialog!);
+                              widget.onCategoriaSelecionada(nomeNovaCategoria,
+                                  tipoSelecionadoDialog!, corSelecionadaDialog);
 
                               Navigator.pop(context);
                             },
@@ -536,15 +466,14 @@ class _CategoriaComboBoxState extends ConsumerState<CategoriaComboBox> {
       try {
         return hexToColor(cat.color);
       } catch (_) {
-        return coresCategoria[nome] ?? AppTheme.primaryColor;
+        return AppTheme.primaryColor;
       }
     }
-    return coresCategoria[nome] ?? AppTheme.primaryColor;
+    return AppTheme.primaryColor;
   }
 
   void _abrirModalCategorias(BuildContext context) {
     final Map<String, IconData> todasCategoriasComIcones = {
-      ...categoriasFixasComIcones,
       for (var cat in categoriasBanco)
         cat.name: iconesPorTipo[cat.type] ?? Iconsax.note,
     };
@@ -571,8 +500,8 @@ class _CategoriaComboBoxState extends ConsumerState<CategoriaComboBox> {
                 width: 40,
                 height: 5,
                 decoration: BoxDecoration(
-                  color: Colors.grey[300],
                   borderRadius: BorderRadius.circular(8),
+                  color: Colors.grey.shade300,
                 ),
               ),
               const SizedBox(height: 16),
@@ -603,7 +532,8 @@ class _CategoriaComboBoxState extends ConsumerState<CategoriaComboBox> {
                             categoriaSelecionada = nome;
                             tipoSelecionado = tipoDaCategoria;
                           });
-                          widget.onCategoriaSelecionada(nome, tipoDaCategoria);
+                          widget.onCategoriaSelecionada(
+                              nome, tipoDaCategoria, cor);
                           Navigator.pop(context);
                         },
                         leading: Container(
@@ -682,11 +612,10 @@ class _CategoriaComboBoxState extends ConsumerState<CategoriaComboBox> {
                     ),
                     child: Icon(
                       categoriaSelecionada != null
-                          ? (categoriasFixasComIcones[categoriaSelecionada!] ??
-                              iconesPorTipo[tipoSelecionado ?? ''] ??
+                          ? (iconesPorTipo[tipoSelecionado ?? ''] ??
                               Iconsax.note)
                           : Iconsax.category,
-                      color: Colors.white,
+                      color: AppTheme.whiteColor,
                       size: 20,
                     ),
                   ),

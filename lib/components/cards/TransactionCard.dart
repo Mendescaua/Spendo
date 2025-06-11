@@ -20,7 +20,7 @@ class TransactionCard extends StatelessWidget {
       ),
       child: Row(
         children: [
-          TransactionContainer(tipo: "CF"),
+          TransactionContainer(type: transaction.categoryType ?? '', color: transaction.categoryColor ?? '',),
           const SizedBox(width: 16),
           Expanded(
             child: Column(

@@ -41,53 +41,55 @@ class _MainScreenState extends State<MainScreen> {
           builder: (context) => ModalTransaction());
     }
 
-    return Scaffold(
-      body: screens[currentTab],
-      bottomNavigationBar: Container(
-        height: 70,
-        decoration: BoxDecoration(
-          color: AppTheme.whiteColor,
-          borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(40),
-            topRight: Radius.circular(40),
-          ),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.05),
-              blurRadius: 10,
-              offset: const Offset(0, -2),
+    return SafeArea(
+      child: Scaffold(
+        body: screens[currentTab],
+        bottomNavigationBar: Container(
+          height: 70,
+          decoration: BoxDecoration(
+            color: AppTheme.whiteColor,
+            borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(40),
+              topRight: Radius.circular(40),
             ),
-          ],
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            _buildNavIcon(index: 0, icon: items[0]),
-            _buildNavIcon(index: 1, icon: items[1]),
-            // Botão de adicionar (central)
-            GestureDetector(
-              onTap: () => _openAddTransactionModal(context),
-              child: Container(
-                height: 55,
-                width: 55,
-                decoration: const BoxDecoration(
-                  color: AppTheme.primaryColor,
-                  shape: BoxShape.circle,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black26,
-                      blurRadius: 10,
-                      offset: Offset(0, 4),
-                    ),
-                  ],
-                ),
-                child: const Icon(Iconsax.add,
-                    color: AppTheme.whiteColor, size: 30),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.05),
+                blurRadius: 10,
+                offset: const Offset(0, -2),
               ),
-            ),
-            _buildNavIcon(index: 3, icon: items[2]),
-            _buildNavIcon(index: 4, icon: items[3]),
-          ],
+            ],
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              _buildNavIcon(index: 0, icon: items[0]),
+              _buildNavIcon(index: 1, icon: items[1]),
+              // Botão de adicionar (central)
+              GestureDetector(
+                onTap: () => _openAddTransactionModal(context),
+                child: Container(
+                  height: 55,
+                  width: 55,
+                  decoration: const BoxDecoration(
+                    color: AppTheme.primaryColor,
+                    shape: BoxShape.circle,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black26,
+                        blurRadius: 10,
+                        offset: Offset(0, 4),
+                      ),
+                    ],
+                  ),
+                  child: const Icon(Iconsax.add,
+                      color: AppTheme.whiteColor, size: 30),
+                ),
+              ),
+              _buildNavIcon(index: 3, icon: items[2]),
+              _buildNavIcon(index: 4, icon: items[3]),
+            ],
+          ),
         ),
       ),
     );

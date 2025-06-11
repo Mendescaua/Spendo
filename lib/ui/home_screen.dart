@@ -33,6 +33,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     final result = await controller.getTransaction();
 
     setState(() => _loading = false);
+    print("Result: $result");
 
     if (result != null) {
       print('Erro: $result');
@@ -41,8 +42,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final transactions = ref.watch(
-        transactionControllerProvider); // basicamente vc usa isso para ver oque a consulta carregou no provider e reconstruir a tela com os dados carregados
+    final transactions = ref.watch(transactionControllerProvider); // basicamente vc usa isso para ver oque a consulta carregou no provider e reconstruir a tela com os dados carregados
     return Scaffold(
       appBar: Homebar(),
       drawer: HomeDrawer(),
@@ -63,7 +63,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       Text(
                         "Transações",
                         style: TextStyle(
-                          fontSize: 24,
+                          fontSize: 20,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -99,7 +99,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       Text(
                         "Cofrinho",
                         style: TextStyle(
-                          fontSize: 24,
+                          fontSize: 20,
                           fontWeight: FontWeight.bold,
                         ),
                       ),

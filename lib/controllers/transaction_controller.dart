@@ -1,13 +1,11 @@
-import 'dart:math';
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:spendo/models/category_transaction_model.dart';
 import 'package:spendo/models/transaction_model.dart';
+
 import 'package:spendo/providers/auth_provider.dart';
 import 'package:spendo/services/transaction.dart';
 
-final transactionControllerProvider =
-    StateNotifierProvider<TransactionController, List<TransactionModel>>((ref) {
+final transactionControllerProvider = StateNotifierProvider<TransactionController, List<TransactionModel>>((ref) {
   return TransactionController(ref);
 });
 
@@ -62,7 +60,7 @@ class TransactionController extends StateNotifier<List<TransactionModel>> {
     if (userId == null) return 'Usuário não autenticado';
 
     try {
-      final transacoes = await _transaction.getTransacoesByUser(userId);
+      final transacoes = await _transaction.getTransactions(userId);
       state = transacoes; // Atualiza a lista com as transações do usuário
       return null;
     } catch (e) {
@@ -71,7 +69,7 @@ class TransactionController extends StateNotifier<List<TransactionModel>> {
     }
   }
 
-  // CATEGORIAS DE TRANSAÇÃO
+  // Aqui eu uso apenas no categoriesField para carregar as categorias do banco
   Future<String?> getCategoryTransaction() async {
     final userId = ref.read(currentUserId);
     if (userId == null) return 'Usuário não autenticado';

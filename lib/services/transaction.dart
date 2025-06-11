@@ -17,6 +17,18 @@ class TransactionService {
         .toList();
   }
 
+  Future<List<TransactionModel>> getTransactions(
+      String userId) async {
+    final response =
+        await supabase.rpc('get_transactions_with_category', params: {
+      'p_uuid': userId,
+    });
+
+    return (response as List)
+        .map((item) => TransactionModel.fromJson(item))
+        .toList();
+  }
+
   Future<void> addTransacao(TransactionModel model) async {
     await supabase.from(table).insert(model.toJson());
   }
@@ -25,6 +37,7 @@ class TransactionService {
     await supabase.from(table).delete().eq('id', id);
   }
 
+  // Aqui eu uso apenas no categoriesField para carregar as categorias do banco
   Future<List<CategoryTransactionModel>> getCategoryTransaction(
       String userId) async {
     final response = await supabase

@@ -182,66 +182,70 @@ class _NewDespesaScreenState extends ConsumerState<NewDespesaScreen> {
                           ),
                         ),
                         Row(
-                          children: [
-                            ChoiceChip(
-                              label: Text('Hoje'),
-                              selected:
-                                  isSameDate(selectedDate, DateTime.now()),
-                              onSelected: (selected) {
-                                if (selected) {
-                                  setState(() {
-                                    selectedDate = DateTime.now();
-                                  });
-                                }
-                              },
-                            ),
-                            SizedBox(width: 8),
-                            ChoiceChip(
-                              label: Text('Ontem'),
-                              selected: isSameDate(selectedDate,
-                                  DateTime.now().subtract(Duration(days: 1))),
-                              onSelected: (selected) {
-                                if (selected) {
-                                  setState(() {
-                                    selectedDate = DateTime.now()
-                                        .subtract(Duration(days: 1));
-                                  });
-                                }
-                              },
-                            ),
-                            SizedBox(width: 8),
-                            ChoiceChip(
-                              label: Text(selectedDate.isAfter(DateTime.now()
-                                          .subtract(Duration(days: 1))) &&
-                                      !isSameDate(selectedDate, DateTime.now())
-                                  ? '${dateFormat.format(selectedDate)}'
-                                  : 'Selecionar data'),
-                              selected:
-                                  !(isSameDate(selectedDate, DateTime.now()) ||
-                                      isSameDate(
-                                          selectedDate,
-                                          DateTime.now()
-                                              .subtract(Duration(days: 1)))),
-                              onSelected: (selected) async {
-                                final pickedDate = await showDatePicker(
-                                  context: context,
-                                  initialDate: selectedDate,
-                                  firstDate: DateTime(2025),
-                                  lastDate: DateTime(2100),
-                                );
-                                if (pickedDate != null) {
-                                  setState(() {
-                                    selectedDate = pickedDate;
-                                  });
-                                }
-                              },
-                            ),
-                          ],
-                        ),
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              ChoiceChip(
+                                label: Text('Hoje'),
+                                selected:
+                                    isSameDate(selectedDate, DateTime.now()),
+                                onSelected: (selected) {
+                                  if (selected) {
+                                    setState(() {
+                                      selectedDate = DateTime.now();
+                                    });
+                                  }
+                                },
+                              ),
+                              SizedBox(width: 8),
+                              ChoiceChip(
+                                label: Text('Ontem'),
+                                selected: isSameDate(
+                                    selectedDate,
+                                    DateTime.now()
+                                        .subtract(Duration(days: 1))),
+                                onSelected: (selected) {
+                                  if (selected) {
+                                    setState(() {
+                                      selectedDate = DateTime.now()
+                                          .subtract(Duration(days: 1));
+                                    });
+                                  }
+                                },
+                              ),
+                              SizedBox(width: 8),
+                              ChoiceChip(
+                                label: Text(selectedDate.isAfter(
+                                            DateTime.now().subtract(
+                                                Duration(days: 1))) &&
+                                        !isSameDate(
+                                            selectedDate, DateTime.now())
+                                    ? '${dateFormat.format(selectedDate)}'
+                                    : 'Outro dia'),
+                                selected: !(isSameDate(
+                                        selectedDate, DateTime.now()) ||
+                                    isSameDate(
+                                        selectedDate,
+                                        DateTime.now()
+                                            .subtract(Duration(days: 1)))),
+                                onSelected: (selected) async {
+                                  final pickedDate = await showDatePicker(
+                                    context: context,
+                                    initialDate: selectedDate,
+                                    firstDate: DateTime(2025),
+                                    lastDate: DateTime(2100),
+                                  );
+                                  if (pickedDate != null) {
+                                    setState(() {
+                                      selectedDate = pickedDate;
+                                    });
+                                  }
+                                },
+                              ),
+                            ],
+                          ),
                         CategoriaComboBox(
-                          onCategoriaSelecionada: (nome, tipo) {
-                            categoria = '$nome;$tipo'; // aqui eu recebo o nome da categoria e o tipo serve para pegar o icon escolhido
-                            print('Categoria selecionada: $categoria');
+                          onCategoriaSelecionada: (nome, tipo, cor) {
+                            categoria = nome;
                           },
                         ),
                       ],
