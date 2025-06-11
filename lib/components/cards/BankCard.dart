@@ -60,7 +60,7 @@ class BankCard extends StatelessWidget {
 class bankcard extends StatelessWidget {
   final String title;
   final String url;
-  
+
   const bankcard({
     super.key,
     required this.title,
@@ -110,9 +110,7 @@ class bankcard extends StatelessWidget {
               color: AppTheme.primaryColor,
               size: 26,
             ),
-            onPressed: () {
-              _authService.logout();
-            },
+            onPressed: () {},
           ),
         ],
       ),

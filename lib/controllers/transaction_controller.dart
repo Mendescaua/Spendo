@@ -55,9 +55,9 @@ class TransactionController extends StateNotifier<List<TransactionModel>> {
     }
   }
 
-  Future<String?> getTransaction() async {
-    final userId = ref.read(currentUserId);
-    if (userId == null) return 'Usuário não autenticado';
+  Future<String?> getTransaction(String userId) async {
+    // final userId = ref.read(currentUserId);
+    // if (userId == null) return 'Usuário não autenticado';
 
     try {
       final transacoes = await _transaction.getTransactions(userId);
@@ -68,6 +68,9 @@ class TransactionController extends StateNotifier<List<TransactionModel>> {
       return 'Erro inesperado: $e';
     }
   }
+
+
+
 
   // Aqui eu uso apenas no categoriesField para carregar as categorias do banco
   Future<String?> getCategoryTransaction() async {

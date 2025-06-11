@@ -15,12 +15,21 @@ class RegisterScreen extends StatefulWidget {
 class _RegisterScreenState extends State<RegisterScreen> {
   final AuthController _authController = AuthController();
   bool isObscure = true;
+  bool isLoading = false;
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController confirmPasswordController = TextEditingController();
   TextEditingController nameController = TextEditingController();
 
   void register() async {
+    if (isLoading) return; // Impede múltiplos cliques
+
+    setState(() {
+      isLoading = true;
+    });
+
+    await Future.delayed(Duration(seconds: 2));
+
     if (passwordController.text != confirmPasswordController.text) {
       FloatingMessage(context, "Senhas diferentes", "error", 2);
       return;
@@ -31,6 +40,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
       password: passwordController.text,
       name: nameController.text,
     );
+
+    setState(() {
+      isLoading = false;
+    });
 
     if (result == null) {
       FloatingMessage(context, "Cadastro realizado com sucesso", "success", 2);
@@ -191,10 +204,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     height: 16,
                   ),
                   StyleButton(
-                      text: 'Register',
-                      onClick: () {
-                        register();
-                      }),
+                    text: 'Register',
+                    onClick: isLoading ? null : register,
+                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [

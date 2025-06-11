@@ -60,128 +60,131 @@ class _NewDespesaScreenState extends ConsumerState<NewDespesaScreen> {
           date1.day == date2.day;
     }
 
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'Nova despesa',
-          style: TextStyle(color: AppTheme.whiteColor),
-        ),
-        leading: IconButton(
-          icon: const Icon(
-            Iconsax.arrow_left,
-            color: AppTheme.whiteColor,
+    return SafeArea(
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text(
+            'Nova despesa',
+            style: TextStyle(color: AppTheme.whiteColor),
           ),
-          onPressed: () => Navigator.of(context).pushReplacementNamed('/menu'),
+          leading: IconButton(
+            icon: const Icon(
+              Iconsax.arrow_left,
+              color: AppTheme.whiteColor,
+            ),
+            onPressed: () =>
+                Navigator.of(context).pushReplacementNamed('/menu'),
+          ),
         ),
-      ),
-      backgroundColor: AppTheme.redColor,
-      body: GestureDetector(
-        child: SafeArea(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 24),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Valor',
-                      style: TextStyle(color: Colors.white70),
+        backgroundColor: AppTheme.redColor,
+        body: GestureDetector(
+          child: SafeArea(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 24),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Valor',
+                        style: TextStyle(color: Colors.white70),
+                      ),
+                      SizedBox(height: 8),
+                    ],
+                  ),
+                ),
+
+                // TextField sem borda nenhuma
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 24),
+                  child: TextField(
+                    controller: _moneyController,
+                    keyboardType:
+                        TextInputType.numberWithOptions(decimal: true),
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 28,
+                      fontWeight: FontWeight.bold,
                     ),
-                    SizedBox(height: 8),
-                  ],
-                ),
-              ),
-
-              // TextField sem borda nenhuma
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24),
-                child: TextField(
-                  controller: _moneyController,
-                  keyboardType: TextInputType.numberWithOptions(decimal: true),
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 28,
-                    fontWeight: FontWeight.bold,
-                  ),
-                  cursorColor: Colors.white,
-                  decoration: const InputDecoration(
-                    border: InputBorder.none,
-                    enabledBorder: InputBorder.none,
-                    focusedBorder: InputBorder.none,
-                    disabledBorder: InputBorder.none,
-                    isDense: true,
-                    contentPadding: EdgeInsets.zero,
+                    cursorColor: Colors.white,
+                    decoration: const InputDecoration(
+                      border: InputBorder.none,
+                      enabledBorder: InputBorder.none,
+                      focusedBorder: InputBorder.none,
+                      disabledBorder: InputBorder.none,
+                      isDense: true,
+                      contentPadding: EdgeInsets.zero,
+                    ),
                   ),
                 ),
-              ),
 
-              const SizedBox(height: 32),
+                const SizedBox(height: 32),
 
-              // Container branco ocupando toda a largura
-              Expanded(
-                child: Container(
-                  padding: EdgeInsets.all(24),
-                  width: double.infinity,
-                  decoration: const BoxDecoration(
-                    color: Colors.white,
-                    borderRadius:
-                        BorderRadius.vertical(top: Radius.circular(24)),
-                  ),
-                  child: SingleChildScrollView(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      spacing: 16,
-                      children: [
-                        const Text(
-                          'Título',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
+                // Container branco ocupando toda a largura
+                Expanded(
+                  child: Container(
+                    padding: EdgeInsets.all(24),
+                    width: double.infinity,
+                    decoration: const BoxDecoration(
+                      color: Colors.white,
+                      borderRadius:
+                          BorderRadius.vertical(top: Radius.circular(24)),
+                    ),
+                    child: SingleChildScrollView(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        spacing: 16,
+                        children: [
+                          const Text(
+                            'Título',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                            ),
                           ),
-                        ),
-                        TextField(
-                          controller: _titleController,
-                          decoration: InputDecoration(
-                            prefixIcon: const Icon(Iconsax.text_block),
-                            hintText: 'Digite um titulo',
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(16),
-                              borderSide: const BorderSide(
-                                color: AppTheme.greenColor,
+                          TextField(
+                            controller: _titleController,
+                            decoration: InputDecoration(
+                              prefixIcon: const Icon(Iconsax.text_block),
+                              hintText: 'Digite um titulo',
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(16),
+                                borderSide: const BorderSide(
+                                  color: AppTheme.greenColor,
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                        const Text(
-                          'Descrição',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
+                          const Text(
+                            'Descrição',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                            ),
                           ),
-                        ),
-                        TextField(
-                          controller: _descriptionController,
-                          decoration: InputDecoration(
-                            prefixIcon: const Icon(Iconsax.attach_square),
-                            hintText: 'Digite um descrição',
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(16),
-                              borderSide: const BorderSide(
-                                color: AppTheme.redColor,
+                          TextField(
+                            controller: _descriptionController,
+                            decoration: InputDecoration(
+                              prefixIcon: const Icon(Iconsax.attach_square),
+                              hintText: 'Digite um descrição',
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(16),
+                                borderSide: const BorderSide(
+                                  color: AppTheme.redColor,
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                        const Text(
-                          'Data',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
+                          const Text(
+                            'Data',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                            ),
                           ),
-                        ),
-                        Row(
+                          Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               ChoiceChip(
@@ -199,10 +202,8 @@ class _NewDespesaScreenState extends ConsumerState<NewDespesaScreen> {
                               SizedBox(width: 8),
                               ChoiceChip(
                                 label: Text('Ontem'),
-                                selected: isSameDate(
-                                    selectedDate,
-                                    DateTime.now()
-                                        .subtract(Duration(days: 1))),
+                                selected: isSameDate(selectedDate,
+                                    DateTime.now().subtract(Duration(days: 1))),
                                 onSelected: (selected) {
                                   if (selected) {
                                     setState(() {
@@ -214,9 +215,8 @@ class _NewDespesaScreenState extends ConsumerState<NewDespesaScreen> {
                               ),
                               SizedBox(width: 8),
                               ChoiceChip(
-                                label: Text(selectedDate.isAfter(
-                                            DateTime.now().subtract(
-                                                Duration(days: 1))) &&
+                                label: Text(selectedDate.isAfter(DateTime.now()
+                                            .subtract(Duration(days: 1))) &&
                                         !isSameDate(
                                             selectedDate, DateTime.now())
                                     ? '${dateFormat.format(selectedDate)}'
@@ -243,35 +243,36 @@ class _NewDespesaScreenState extends ConsumerState<NewDespesaScreen> {
                               ),
                             ],
                           ),
-                        CategoriaComboBox(
-                          onCategoriaSelecionada: (nome, tipo, cor) {
-                            categoria = nome;
-                          },
-                        ),
-                      ],
+                          CategoriaComboBox(
+                            onCategoriaSelecionada: (nome, tipo, cor) {
+                              categoria = nome;
+                            },
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              )
-            ],
+                )
+              ],
+            ),
           ),
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          onSave();
-        },
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(30),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            onSave();
+          },
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(30),
+          ),
+          backgroundColor: AppTheme.redColor,
+          child: const Icon(
+            Iconsax.add,
+            color: Colors.white,
+            size: 32,
+          ),
         ),
-        backgroundColor: AppTheme.redColor,
-        child: const Icon(
-          Iconsax.add,
-          color: Colors.white,
-          size: 32,
-        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 }

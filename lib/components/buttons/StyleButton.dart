@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:spendo/utils/theme.dart';
 
 Widget StyleButton({
   required String text,
-  required Function() onClick,
+  final VoidCallback? onClick,
   bool isLoading = false,
 }) {
   return Container(
@@ -16,12 +17,12 @@ Widget StyleButton({
     child: TextButton(
       onPressed: isLoading ? null : onClick,
       child: isLoading
-          ? const SizedBox(
+          ? SizedBox(
               height: 24,
               width: 24,
-              child: CircularProgressIndicator(
-                color: Colors.white,
-                strokeWidth: 3,
+              child: LoadingAnimationWidget.threeRotatingDots(
+                color: AppTheme.whiteColor,
+                size: 24,
               ),
             )
           : Text(

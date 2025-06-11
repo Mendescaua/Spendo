@@ -51,9 +51,8 @@ class HomeDrawer extends StatelessWidget {
 
   @override
   final AuthController _authController = AuthController();
-  void logout(BuildContext context) {
-    _authController.logout();
-    Navigator.of(context).pop();
+  void logout(BuildContext context) async {
+    await _authController.signOut();
   }
 
   Widget build(BuildContext context) {

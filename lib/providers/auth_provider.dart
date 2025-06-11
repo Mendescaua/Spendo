@@ -2,12 +2,15 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:spendo/core/supabse_client.dart';
 
-// Provider que escuta o estado de autenticação via Stream
-final authUserStreamProvider = StreamProvider<User?>((ref) {
-  return supabase.auth.onAuthStateChange.map((event) => event.session?.user);
+// Stream do usuário autenticado
+final authUserStreamProvider = StreamProvider<User?>((ref) async* {
+  yield supabase.auth.currentUser;
+  await for (final event in supabase.auth.onAuthStateChange) {
+    yield event.session?.user;
+  }
 });
 
-// Provider que retorna o ID do usuário logado, baseado no Stream acima
+// ID do usuário autenticado
 final currentUserId = Provider<String?>((ref) {
   final userAsync = ref.watch(authUserStreamProvider);
   return userAsync.when(

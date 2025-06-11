@@ -14,15 +14,28 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   bool isObscure = true;
+  bool isLoading = false;
   final AuthController _authController = AuthController();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
   void login() async {
+    if (isLoading) return; // Impede múltiplos cliques
+
+    setState(() {
+      isLoading = true;
+    });
+
+    await Future.delayed(Duration(seconds: 2));
+
     final result = await _authController.login(
       email: emailController.text,
       password: passwordController.text,
     );
+
+    setState(() {
+      isLoading = false;
+    });
 
     if (result == null) {
       FloatingMessage(context, "Login realizado com sucesso", "success", 2);
@@ -31,7 +44,7 @@ class _LoginScreenState extends State<LoginScreen> {
       FloatingMessage(context, result.toString(), "error", 2);
     }
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -112,7 +125,14 @@ class _LoginScreenState extends State<LoginScreen> {
                     decoration: InputDecoration(
                       prefixIcon: const Icon(Iconsax.security_safe),
                       suffixIcon: IconButton(
-                          onPressed: () {setState(() {isObscure = !isObscure;});}, icon: isObscure ? const Icon(Iconsax.eye_slash) :  const Icon(Iconsax.eye)),
+                          onPressed: () {
+                            setState(() {
+                              isObscure = !isObscure;
+                            });
+                          },
+                          icon: isObscure
+                              ? const Icon(Iconsax.eye_slash)
+                              : const Icon(Iconsax.eye)),
                       hintText: 'Password',
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(16),
@@ -138,7 +158,11 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ],
                   ),
-                  StyleButton(text: 'Login', onClick: () {login();}),
+                  StyleButton(
+                    isLoading: isLoading,
+                    text: 'Login',
+                    onClick: isLoading ? null : login,
+                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [

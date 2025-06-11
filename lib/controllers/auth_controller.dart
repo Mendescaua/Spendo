@@ -60,7 +60,11 @@ class AuthController {
     }
   }
 
-  Future<void> logout() async {
-    await _authService.signOut();
+  Future<void> signOut() async {
+    try {
+      await supabase.auth.signOut();
+    } catch (e) {
+      print('Erro ao deslogar: $e');
+    }
   }
 }

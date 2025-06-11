@@ -7,6 +7,7 @@ import 'package:spendo/components/cards/TotalBalanceCard.dart';
 import 'package:spendo/components/HomeBar.dart';
 import 'package:spendo/components/cards/TransactionCard.dart';
 import 'package:spendo/controllers/transaction_controller.dart';
+import 'package:spendo/providers/auth_provider.dart';
 import 'package:spendo/utils/theme.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
@@ -18,44 +19,41 @@ class HomeScreen extends ConsumerStatefulWidget {
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
   bool _loading = false;
-  @override
-  void initState() {
-    super.initState();
-    loadTransactions();
-  }
-
-  Future<void> loadTransactions() async {
-    if (_loading) return;
-
-    setState(() => _loading = true);
-
-    final controller = ref.read(transactionControllerProvider.notifier);
-    final result = await controller.getTransaction();
-
-    setState(() => _loading = false);
-    print("Result: $result");
-
-    if (result != null) {
-      print('Erro: $result');
-    }
-  }
+  bool _loadedOnce = false; // controla se já carregou
 
   @override
   Widget build(BuildContext context) {
-    final transactions = ref.watch(transactionControllerProvider); // basicamente vc usa isso para ver oque a consulta carregou no provider e reconstruir a tela com os dados carregados
+    final userId = ref.watch(currentUserId);
+    final transactions = ref.watch(transactionControllerProvider);
+
+    // Escuta mudanças no userId e só executa uma vez
+    ref.listen<String?>(currentUserId, (previous, next) {
+      if (!_loadedOnce && next != null) {
+        _loadedOnce = true;
+        loadTransactions(next);
+      }
+    });
+
+    // Mostra loading até o UUID estar disponível
+    if (userId == null) {
+      return Scaffold(
+        body: Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+    }
+
     return Scaffold(
       appBar: Homebar(),
       drawer: HomeDrawer(),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          spacing: 16,
           children: [
             SaldoGeralCard(),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Column(
-                spacing: 16,
                 children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -68,13 +66,16 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         ),
                       ),
                       IconButton(
-                          onPressed: () {}, icon: Icon(Iconsax.setting_4))
+                        onPressed: () {},
+                        icon: Icon(Iconsax.setting_4),
+                      )
                     ],
                   ),
                   _loading
                       ? Center(
-                          child: (LoadingAnimationWidget.staggeredDotsWave(
-                              color: AppTheme.primaryColor, size: 64)))
+                          child: LoadingAnimationWidget.staggeredDotsWave(
+                              color: AppTheme.primaryColor, size: 64),
+                        )
                       : transactions.isEmpty
                           ? Center(
                               child: Text(
@@ -84,15 +85,17 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                             )
                           : ListView.builder(
                               shrinkWrap: true,
-                              physics: const NeverScrollableScrollPhysics(),
+                              physics: NeverScrollableScrollPhysics(),
                               itemCount: transactions.length >= 3
                                   ? 3
                                   : transactions.length,
                               itemBuilder: (context, index) {
                                 return TransactionCard(
-                                    transaction: transactions[index]);
+                                  transaction: transactions[index],
+                                );
                               },
                             ),
+                  SizedBox(height: 16),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -104,12 +107,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         ),
                       ),
                       IconButton(
-                          onPressed: () {}, icon: Icon(Iconsax.setting_4))
+                        onPressed: () {},
+                        icon: Icon(Iconsax.setting_4),
+                      )
                     ],
                   ),
                   ListView.builder(
                     shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
+                    physics: NeverScrollableScrollPhysics(),
                     itemCount: 2,
                     itemBuilder: (context, index) => SavingCard(),
                   ),
@@ -120,5 +125,21 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         ),
       ),
     );
+  }
+
+  Future<void> loadTransactions(String userId) async {
+    if (_loading) return;
+
+    setState(() => _loading = true);
+
+    final controller = ref.read(transactionControllerProvider.notifier);
+    final result = await controller.getTransaction(userId);
+
+    setState(() => _loading = false);
+    print("Result: $result");
+
+    if (result != null) {
+      print('Erro: $result');
+    }
   }
 }

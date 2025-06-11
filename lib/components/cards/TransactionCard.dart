@@ -20,7 +20,10 @@ class TransactionCard extends StatelessWidget {
       ),
       child: Row(
         children: [
-          TransactionContainer(type: transaction.categoryType ?? '', color: transaction.categoryColor ?? '',),
+          TransactionContainer(
+            type: transaction.categoryType ?? '',
+            color: transaction.categoryColor ?? '',
+          ),
           const SizedBox(width: 16),
           Expanded(
             child: Column(
@@ -29,8 +32,10 @@ class TransactionCard extends StatelessWidget {
                 Text(
                   transaction.title,
                   style: TextStyle(
+                    overflow: TextOverflow.ellipsis,
+                    
                     fontWeight: FontWeight.bold,
-                    fontSize: 16,
+                    fontSize: 14,
                     color: Colors.black,
                   ),
                 ),
@@ -55,7 +60,7 @@ class TransactionCard extends StatelessWidget {
                   ? AppTheme.greenColor
                   : AppTheme.redColor,
               fontWeight: FontWeight.bold,
-              fontSize: 16,
+              fontSize: 14,
             ),
           ),
         ],
