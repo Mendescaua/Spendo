@@ -21,19 +21,10 @@ class TransactionController extends StateNotifier<List<TransactionModel>> {
     final userId = ref.read(currentUserId);
     if (userId == null) return 'Usuário não autenticado';
 
-    if (transaction.value <= 0) {
-      return 'Adicione um valor.';
-    }
-
-    if (transaction.title.isEmpty) {
-      return 'Adicione um título.';
-    } else if (transaction.title.length < 3) {
-      return 'Adicione um titulo maior.';
-    }
-
-    if (transaction.category.isEmpty) {
-      return 'Selecione uma categoria.';
-    }
+    if (transaction.value <= 0) return 'Adicione um valor.';
+    if (transaction.title.isEmpty) return 'Adicione um título.';
+    if (transaction.title.length < 3) return 'Adicione um título maior.';
+    if (transaction.category.isEmpty) return 'Selecione uma categoria.';
 
     try {
       final newTransaction = TransactionModel(
@@ -55,20 +46,27 @@ class TransactionController extends StateNotifier<List<TransactionModel>> {
     }
   }
 
-  Future<String?> getTransaction(String userId) async {
-    // final userId = ref.read(currentUserId);
-    // if (userId == null) return 'Usuário não autenticado';
+  Future<String?> getTransaction() async {
+    String? userId;
+    int tentativas = 0;
+
+    // Tenta pegar o userId até 10 vezes (com 100ms de delay entre cada uma)
+    while ((userId = ref.read(currentUserId)) == null && tentativas < 10) {
+      await Future.delayed(const Duration(milliseconds: 100));
+      tentativas++;
+    }
+
+    if (userId == null) return 'Usuário não autenticado';
 
     try {
       final transacoes = await _transaction.getTransactions(userId);
-      state = transacoes; // Atualiza a lista com as transações do usuário
+      state = transacoes;
       return null;
     } catch (e) {
       print('Erro ao obter transação: $e');
       return 'Erro inesperado: $e';
     }
   }
-
 
 
 

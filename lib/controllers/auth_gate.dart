@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:spendo/ui/main_screen.dart';
 import 'package:spendo/ui/splash_screen.dart';
+import 'package:spendo/utils/theme.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-
 
 class AuthGate extends StatelessWidget {
   @override
@@ -12,9 +13,10 @@ class AuthGate extends StatelessWidget {
       builder: (context, snapshot) {
         // Loading...
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Scaffold(
+          return Scaffold(
             body: Center(
-              child: CircularProgressIndicator(),
+              child: LoadingAnimationWidget.staggeredDotsWave(
+                  color: AppTheme.whiteColor, size: 60),
             ),
           );
         }

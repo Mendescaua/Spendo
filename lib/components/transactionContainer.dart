@@ -174,6 +174,11 @@ class TransactionContainer extends StatelessWidget {
     IconColor = AppTheme.whiteColor;
     iconData = Iconsax.mobile;
     break;
+  case 'I31':
+    backgroundColor;
+    IconColor = AppTheme.whiteColor;
+    iconData = Iconsax.gameboy;
+    break;
   default:
     backgroundColor = Colors.grey;
     IconColor = Colors.white;

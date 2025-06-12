@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:spendo/components/ModalTransaction.dart';
 import 'package:spendo/ui/home_screen.dart';
+import 'package:spendo/ui/perfil_screen.dart';
 import 'package:spendo/utils/theme.dart';
 
 class MainScreen extends StatefulWidget {
@@ -21,7 +22,7 @@ class _MainScreenState extends State<MainScreen> {
       Scaffold(body: Text('Adicionar')),
       Scaffold(body: Text('Adicionar')),
       Scaffold(body: Text('Total gasto')),
-      Scaffold(body: Text('Caixinha')),
+      PerfilScreen(),
     ];
 
     final items = <IconData>[

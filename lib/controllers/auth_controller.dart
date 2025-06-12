@@ -61,10 +61,16 @@ class AuthController {
   }
 
   Future<void> signOut() async {
-    try {
-      await supabase.auth.signOut();
-    } catch (e) {
-      print('Erro ao deslogar: $e');
-    }
+  try {
+    await supabase.auth.signOut();
+
+    // Garante que a sessão foi realmente encerrada e limpa do cache local
+    await supabase.auth.refreshSession(); // opcional
+
+    print('Logout concluído com sucesso');
+  } catch (e) {
+    print('Erro ao deslogar: $e');
   }
+}
+
 }

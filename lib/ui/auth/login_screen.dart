@@ -26,8 +26,6 @@ class _LoginScreenState extends State<LoginScreen> {
       isLoading = true;
     });
 
-    await Future.delayed(Duration(seconds: 2));
-
     final result = await _authController.login(
       email: emailController.text,
       password: passwordController.text,

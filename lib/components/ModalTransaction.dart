@@ -34,14 +34,14 @@ class ModalTransaction extends StatelessWidget {
             OutlineButton(
               tipo: 'receita',
               onClick: () {
-                Navigator.of(context).push(MaterialPageRoute(
+                Navigator.of(context).pushReplacement(MaterialPageRoute(
                     builder: (context) => const NewReceitaScreen()));
               },
             ),
             OutlineButton(
               tipo: 'despesa',
               onClick: () {
-                Navigator.of(context).push(MaterialPageRoute(
+                Navigator.of(context).pushReplacement(MaterialPageRoute(
                     builder: (context) => const NewDespesaScreen()));
               },
             ),
