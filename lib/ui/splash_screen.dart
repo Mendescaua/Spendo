@@ -17,27 +17,28 @@ class _SplashScreenState extends State<SplashScreen> {
   Timer? _timer;
 
   final List<Map<String, String>> pages = [
-    {
-      'image': 'assets/images/Finance.svg',
-      'title': 'Control your spends',
-      'subtitle': 'Manage your spending, save more money.',
-    },
-    {
-      'image': 'assets/images/FinanceLeaders.svg',
-      'title': 'Grow your savings',
-      'subtitle': 'Visualize your goals and reach them faster.',
-    },
-    {
-      'image': 'assets/images/MoneyMotivation.svg',
-      'title': 'Be money-wise',
-      'subtitle': 'Make smarter choices every day.',
-    },
-  ];
+  {
+    'image': 'assets/images/FinanceLeaders.svg',
+    // 'title': 'Organize sua vida financeira',
+    // 'subtitle': 'Crie metas, acompanhe e evolua com clareza.',
+  },
+  {
+    'image': 'assets/images/SpendoApp.svg',
+    // 'title': 'Controle seus gastos',
+    // 'subtitle': 'Gerencie seus gastos e economize mais dinheiro.',
+  },
+  {
+    'image': 'assets/images/MoneyMotivation.svg',
+    // 'title': 'Transforme hábitos em conquistas',
+    // 'subtitle': 'Gaste melhor e conquiste mais com disciplina.',
+  },
+];
+
 
   @override
   void initState() {
     super.initState();
-    _timer = Timer.periodic(const Duration(seconds: 3), (Timer timer) {
+    _timer = Timer.periodic(const Duration(seconds: 8), (Timer timer) {
       if (_currentIndex < pages.length - 1) {
         _currentIndex++;
       } else {
@@ -45,7 +46,7 @@ class _SplashScreenState extends State<SplashScreen> {
       }
       _pageController.animateToPage(
         _currentIndex,
-        duration: const Duration(milliseconds: 300),
+        duration: const Duration(milliseconds: 600),
         curve: Curves.easeInOut,
       );
     });
@@ -75,7 +76,7 @@ class _SplashScreenState extends State<SplashScreen> {
                     spacing: 16,
                     children: [
                       SvgPicture.asset(
-                        'assets/images/Icon.svg',
+                        'assets/images/IconSpendo.svg',
                         width: 50,
                         height: 50,
                       ),
@@ -136,12 +137,12 @@ class _SplashScreenState extends State<SplashScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      pages[_currentIndex]['title']!,
+                      "Controle seus gastos",
                       textAlign: TextAlign.center,
                       style: const TextStyle(
-                        fontSize: 30,
+                        fontSize: 26,
                         fontWeight: FontWeight.bold,
-                        color: Colors.black87,
+                        color: AppTheme.textColor,
                       ),
                     ),
                     const SizedBox(height: 12),
@@ -150,10 +151,10 @@ class _SplashScreenState extends State<SplashScreen> {
                       textAlign: TextAlign.center,
                       style: const TextStyle(
                         fontSize: 14,
-                        color: Colors.black54,
+                        color: AppTheme.shadowTextColor,
                       ),
                     ),
-                    const SizedBox(height: 40),
+                    const SizedBox(height: 20),
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(

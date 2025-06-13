@@ -145,12 +145,12 @@ class _LoginScreenState extends State<LoginScreen> {
                     children: [
                       TextButton(
                         onPressed: () {},
-                        child: const Text(
+                        child: Text(
                           'Forgot Password?',
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w600,
-                            color: AppTheme.ShadowTextColor,
+                            color: AppTheme.shadowTextColor,
                           ),
                         ),
                       ),
@@ -164,12 +164,12 @@ class _LoginScreenState extends State<LoginScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Text(
+                      Text(
                         'Don\'t have an account?',
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
-                          color: AppTheme.ShadowTextColor,
+                          color: AppTheme.shadowTextColor,
                         ),
                       ),
                       TextButton(

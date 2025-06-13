@@ -18,7 +18,7 @@ flutter_native_splash:
   #background_image: "assets/background.png"
 
   # png file and should be sized for 4x pixel density.
-  image: assets\images\IconSpendo.png
+  image: assets\images\IconSplash.png
 
   # The branding property allows you to specify an image used as branding in the splash screen.
   # It must be a png file. It is supported for Android, iOS and the Web.  For Android 12,
@@ -36,10 +36,10 @@ flutter_native_splash:
   # and image when the device is in dark mode. If they are not specified, the app will use the
   # parameters from above.  If there is no parameter above, the app will use the light mode values.
   # If the image_dark parameter is specified, color_dark or background_image_dark must be specified.  
-  # color_dark and background_image_dark cannot both be set.
-  #color_dark: "#042a49"
+  # color_dark and background_image_dark cannot both be set.  
+  color_dark: "#252627"
   #background_image_dark: "assets/dark-background.png"
-  #image_dark: assets/splash-invert.png
+  image_dark: assets\images\IconSplashDark.png
   #branding_dark: assets/dart_dark.png
 
   # From Android 12 onwards, the splash screen is handled differently than in previous versions.
@@ -55,7 +55,7 @@ flutter_native_splash:
     # 768 pixels in diameter.  To fit a 1152x1152 image within a circle with a 768 diameter, simply 
     # ensure that the most important design elements of your image are placed within a circular area
     # with a 768 diameter at the center of the 1152x1152 canvas.
-    image: assets\images\IconSpendo.png
+    image: assets\images\IconSplash.png
 
     # Splash screen background color.
     color: "#4678c0"
@@ -66,8 +66,8 @@ flutter_native_splash:
     # The image_dark, color_dark, icon_background_color_dark, and branding_dark set values that
     # apply when the device is in dark mode. If they are not specified, the app will use the
     # parameters from above.  If there is no parameter above, the app will use the light mode values.
-    #image_dark: assets/android12splash-invert.png
-    #color_dark: "#042a49"
+    image_dark: assets\images\IconSplashDark.png
+    color_dark: "#252627"
     #icon_background_color_dark: "#eeeeee"
 
   # The android, ios and web parameters can be used to disable generating a splash screen on a given
