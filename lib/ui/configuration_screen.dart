@@ -24,10 +24,9 @@ class _ConfiguracoesScreenState extends State<ConfiguracoesScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        centerTitle: true,
+        automaticallyImplyLeading: false,
         title: const Text(
           'Configurações',
-          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
         ),
         iconTheme: const IconThemeData(color: Colors.black),
       ),

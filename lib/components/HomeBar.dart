@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:spendo/ui/main_screen.dart';
+import 'package:spendo/ui/subscription_screen.dart';
 import 'package:spendo/utils/theme.dart';
 
 class Homebar extends StatelessWidget implements PreferredSizeWidget {
@@ -112,6 +113,17 @@ class HomeDrawer extends StatelessWidget {
                           style: const TextStyle(fontSize: 16)),
                       onTap: () {
                        Navigator.of(context).pop();
+                        onItemSelected?.call(2);
+                      },
+                    ),
+                    ListTile(
+                      contentPadding: const EdgeInsets.symmetric(vertical: 4),
+                      leading: Icon(Iconsax.card,
+                          size: 28, color: AppTheme.primaryColor),
+                      title: Text("Assinaturas",
+                          style: const TextStyle(fontSize: 16)),
+                      onTap: () {
+                        Navigator.of(context).pop();
                         onItemSelected?.call(3);
                       },
                     ),
@@ -134,11 +146,8 @@ class HomeDrawer extends StatelessWidget {
                       title: Text("Configurações",
                           style: const TextStyle(fontSize: 16)),
                       onTap: () {
-                        Navigator.of(context).pushAndRemoveUntil(
-                          MaterialPageRoute(
-                              builder: (_) => MainScreen(initialIndex: 4)),
-                          (route) => false, // remove tudo antes
-                        );
+                        Navigator.of(context).pop();
+                        onItemSelected?.call(4);
                       },
                     ),
                     const SizedBox(height: 40),

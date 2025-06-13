@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_masked_text2/flutter_masked_text2.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:intl/intl.dart';
-import 'package:spendo/components/CategoriesField.dart';
+import 'package:spendo/components/CategoriesComboBox.dart';
 import 'package:spendo/components/FloatingMessage.dart';
 import 'package:spendo/controllers/transaction_controller.dart';
 import 'package:spendo/models/transaction_model.dart';
@@ -128,7 +128,7 @@ class _NewReceitaScreenState extends ConsumerState<NewReceitaScreen> {
                     padding: EdgeInsets.all(24),
                     width: double.infinity,
                     decoration: const BoxDecoration(
-                      color: Colors.white,
+                      color: AppTheme.backgroundColor,
                       borderRadius:
                           BorderRadius.vertical(top: Radius.circular(24)),
                     ),
@@ -148,7 +148,7 @@ class _NewReceitaScreenState extends ConsumerState<NewReceitaScreen> {
                             controller: _titleController,
                             decoration: InputDecoration(
                               prefixIcon: const Icon(Iconsax.text_block),
-                              hintText: 'Digite um titulo',
+                              hintText: 'Digite um título',
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(16),
                                 borderSide: const BorderSide(
@@ -202,10 +202,8 @@ class _NewReceitaScreenState extends ConsumerState<NewReceitaScreen> {
                               SizedBox(width: 8),
                               ChoiceChip(
                                 label: Text('Ontem'),
-                                selected: isSameDate(
-                                    selectedDate,
-                                    DateTime.now()
-                                        .subtract(Duration(days: 1))),
+                                selected: isSameDate(selectedDate,
+                                    DateTime.now().subtract(Duration(days: 1))),
                                 onSelected: (selected) {
                                   if (selected) {
                                     setState(() {
@@ -217,9 +215,8 @@ class _NewReceitaScreenState extends ConsumerState<NewReceitaScreen> {
                               ),
                               SizedBox(width: 8),
                               ChoiceChip(
-                                label: Text(selectedDate.isAfter(
-                                            DateTime.now().subtract(
-                                                Duration(days: 1))) &&
+                                label: Text(selectedDate.isAfter(DateTime.now()
+                                            .subtract(Duration(days: 1))) &&
                                         !isSameDate(
                                             selectedDate, DateTime.now())
                                     ? '${dateFormat.format(selectedDate)}'
@@ -234,8 +231,9 @@ class _NewReceitaScreenState extends ConsumerState<NewReceitaScreen> {
                                   final pickedDate = await showDatePicker(
                                     context: context,
                                     initialDate: selectedDate,
-                                    firstDate: DateTime(2025),
-                                    lastDate: DateTime(2100),
+                                    firstDate: DateTime(2000),
+                                    lastDate: DateTime(2101),
+                                    locale: const Locale('pt', 'BR'),
                                   );
                                   if (pickedDate != null) {
                                     setState(() {

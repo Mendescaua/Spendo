@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:spendo/components/HomeBar.dart';
-import 'package:spendo/components/ModalTransaction.dart';
+import 'package:spendo/components/modals/ModalTransaction.dart';
 import 'package:spendo/ui/configuration_screen.dart';
 import 'package:spendo/ui/home_screen.dart';
+import 'package:spendo/ui/subscription_screen.dart';
 import 'package:spendo/utils/theme.dart';
 
 class MainScreen extends StatefulWidget {
@@ -30,7 +31,7 @@ class _MainScreenState extends State<MainScreen> {
       const HomeScreen(),
       const Center(child: Text('Tela 2')),
       const Center(child: Text('Tela 3')),
-      const Center(child: Text('Tela 4')),
+      const SubscriptionScreen(),
       const ConfiguracoesScreen(),
     ];
 
@@ -104,7 +105,7 @@ class _MainScreenState extends State<MainScreen> {
                       color: AppTheme.whiteColor, size: 30),
                 ),
               ),
-              _buildNavIcon(index: 3, icon: items[2]),
+              _buildNavIcon(index: 2, icon: items[2]),
               _buildNavIcon(index: 4, icon: items[3]),
             ],
           ),

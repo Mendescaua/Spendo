@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_masked_text2/flutter_masked_text2.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:intl/intl.dart';
-import 'package:spendo/components/CategoriesField.dart';
+import 'package:spendo/components/CategoriesComboBox.dart';
 import 'package:spendo/components/FloatingMessage.dart';
 import 'package:spendo/controllers/transaction_controller.dart';
 import 'package:spendo/models/transaction_model.dart';
@@ -77,184 +77,183 @@ class _NewDespesaScreenState extends ConsumerState<NewDespesaScreen> {
           ),
         ),
         backgroundColor: AppTheme.redColor,
-        body: GestureDetector(
-          child: SafeArea(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 24),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Valor',
-                        style: TextStyle(color: Colors.white70),
-                      ),
-                      SizedBox(height: 8),
-                    ],
+        body: SafeArea(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 24),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Valor',
+                      style: TextStyle(color: Colors.white70),
+                    ),
+                    SizedBox(height: 8),
+                  ],
+                ),
+              ),
+        
+              // TextField sem borda nenhuma
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24),
+                child: TextField(
+                  controller: _moneyController,
+                  keyboardType:
+                      TextInputType.numberWithOptions(decimal: true),
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 28,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  cursorColor: Colors.white,
+                  decoration: const InputDecoration(
+                    border: InputBorder.none,
+                    enabledBorder: InputBorder.none,
+                    focusedBorder: InputBorder.none,
+                    disabledBorder: InputBorder.none,
+                    isDense: true,
+                    contentPadding: EdgeInsets.zero,
                   ),
                 ),
-
-                // TextField sem borda nenhuma
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24),
-                  child: TextField(
-                    controller: _moneyController,
-                    keyboardType:
-                        TextInputType.numberWithOptions(decimal: true),
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 28,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    cursorColor: Colors.white,
-                    decoration: const InputDecoration(
-                      border: InputBorder.none,
-                      enabledBorder: InputBorder.none,
-                      focusedBorder: InputBorder.none,
-                      disabledBorder: InputBorder.none,
-                      isDense: true,
-                      contentPadding: EdgeInsets.zero,
-                    ),
+              ),
+        
+              const SizedBox(height: 32),
+        
+              // Container branco ocupando toda a largura
+              Expanded(
+                child: Container(
+                  padding: EdgeInsets.all(24),
+                  width: double.infinity,
+                  decoration: const BoxDecoration(
+                    color: AppTheme.backgroundColor,
+                    borderRadius:
+                        BorderRadius.vertical(top: Radius.circular(24)),
                   ),
-                ),
-
-                const SizedBox(height: 32),
-
-                // Container branco ocupando toda a largura
-                Expanded(
-                  child: Container(
-                    padding: EdgeInsets.all(24),
-                    width: double.infinity,
-                    decoration: const BoxDecoration(
-                      color: Colors.white,
-                      borderRadius:
-                          BorderRadius.vertical(top: Radius.circular(24)),
-                    ),
-                    child: SingleChildScrollView(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        spacing: 16,
-                        children: [
-                          const Text(
-                            'Título',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                            ),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      spacing: 16,
+                      children: [
+                        const Text(
+                          'Título',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
                           ),
-                          TextField(
-                            controller: _titleController,
-                            decoration: InputDecoration(
-                              prefixIcon: const Icon(Iconsax.text_block),
-                              hintText: 'Digite um titulo',
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(16),
-                                borderSide: const BorderSide(
-                                  color: AppTheme.greenColor,
-                                ),
+                        ),
+                        TextField(
+                          controller: _titleController,
+                          decoration: InputDecoration(
+                            prefixIcon: const Icon(Iconsax.text_block),
+                            hintText: 'Digite um título',
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(16),
+                              borderSide: const BorderSide(
+                                color: AppTheme.greenColor,
                               ),
                             ),
                           ),
-                          const Text(
-                            'Descrição',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                            ),
+                        ),
+                        const Text(
+                          'Descrição',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
                           ),
-                          TextField(
-                            controller: _descriptionController,
-                            decoration: InputDecoration(
-                              prefixIcon: const Icon(Iconsax.attach_square),
-                              hintText: 'Digite um descrição',
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(16),
-                                borderSide: const BorderSide(
-                                  color: AppTheme.redColor,
-                                ),
+                        ),
+                        TextField(
+                          controller: _descriptionController,
+                          decoration: InputDecoration(
+                            prefixIcon: const Icon(Iconsax.attach_square),
+                            hintText: 'Digite um descrição',
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(16),
+                              borderSide: const BorderSide(
+                                color: AppTheme.redColor,
                               ),
                             ),
                           ),
-                          const Text(
-                            'Data',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                            ),
+                        ),
+                        const Text(
+                          'Data',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
                           ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              ChoiceChip(
-                                label: Text('Hoje'),
-                                selected:
-                                    isSameDate(selectedDate, DateTime.now()),
-                                onSelected: (selected) {
-                                  if (selected) {
-                                    setState(() {
-                                      selectedDate = DateTime.now();
-                                    });
-                                  }
-                                },
-                              ),
-                              SizedBox(width: 8),
-                              ChoiceChip(
-                                label: Text('Ontem'),
-                                selected: isSameDate(selectedDate,
-                                    DateTime.now().subtract(Duration(days: 1))),
-                                onSelected: (selected) {
-                                  if (selected) {
-                                    setState(() {
-                                      selectedDate = DateTime.now()
-                                          .subtract(Duration(days: 1));
-                                    });
-                                  }
-                                },
-                              ),
-                              SizedBox(width: 8),
-                              ChoiceChip(
-                                label: Text(selectedDate.isAfter(DateTime.now()
-                                            .subtract(Duration(days: 1))) &&
-                                        !isSameDate(
-                                            selectedDate, DateTime.now())
-                                    ? '${dateFormat.format(selectedDate)}'
-                                    : 'Outro dia'),
-                                selected: !(isSameDate(
-                                        selectedDate, DateTime.now()) ||
-                                    isSameDate(
-                                        selectedDate,
-                                        DateTime.now()
-                                            .subtract(Duration(days: 1)))),
-                                onSelected: (selected) async {
-                                  final pickedDate = await showDatePicker(
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            ChoiceChip(
+                              label: Text('Hoje'),
+                              selected:
+                                  isSameDate(selectedDate, DateTime.now()),
+                              onSelected: (selected) {
+                                if (selected) {
+                                  setState(() {
+                                    selectedDate = DateTime.now();
+                                  });
+                                }
+                              },
+                            ),
+                            SizedBox(width: 8),
+                            ChoiceChip(
+                              label: Text('Ontem'),
+                              selected: isSameDate(selectedDate,
+                                  DateTime.now().subtract(Duration(days: 1))),
+                              onSelected: (selected) {
+                                if (selected) {
+                                  setState(() {
+                                    selectedDate = DateTime.now()
+                                        .subtract(Duration(days: 1));
+                                  });
+                                }
+                              },
+                            ),
+                            SizedBox(width: 8),
+                            ChoiceChip(
+                              label: Text(selectedDate.isAfter(DateTime.now()
+                                          .subtract(Duration(days: 1))) &&
+                                      !isSameDate(
+                                          selectedDate, DateTime.now())
+                                  ? '${dateFormat.format(selectedDate)}'
+                                  : 'Outro dia'),
+                              selected: !(isSameDate(
+                                      selectedDate, DateTime.now()) ||
+                                  isSameDate(
+                                      selectedDate,
+                                      DateTime.now()
+                                          .subtract(Duration(days: 1)))),
+                              onSelected: (selected) async {
+                                final pickedDate = await showDatePicker(
                                     context: context,
                                     initialDate: selectedDate,
-                                    firstDate: DateTime(2025),
-                                    lastDate: DateTime(2100),
+                                    firstDate: DateTime(2000),
+                                    lastDate: DateTime(2101),
+                                    locale: const Locale('pt', 'BR'),
                                   );
-                                  if (pickedDate != null) {
-                                    setState(() {
-                                      selectedDate = pickedDate;
-                                    });
-                                  }
-                                },
-                              ),
-                            ],
-                          ),
-                          CategoriaComboBox(
-                            onCategoriaSelecionada: (nome, tipo, cor) {
-                              categoria = nome;
-                            },
-                          ),
-                        ],
-                      ),
+                                if (pickedDate != null) {
+                                  setState(() {
+                                    selectedDate = pickedDate;
+                                  });
+                                }
+                              },
+                            ),
+                          ],
+                        ),
+                        CategoriaComboBox(
+                          onCategoriaSelecionada: (nome, tipo, cor) {
+                            categoria = nome;
+                          },
+                        ),
+                      ],
                     ),
                   ),
-                )
-              ],
-            ),
+                ),
+              )
+            ],
           ),
         ),
         floatingActionButton: FloatingActionButton(
