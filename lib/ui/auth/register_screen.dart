@@ -89,7 +89,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         ),
                       ),
                       const Text(
-                        'Register',
+                        'Cadastro',
                         style: TextStyle(
                           fontSize: 26,
                           fontWeight: FontWeight.w700,
@@ -101,7 +101,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     height: 16,
                   ),
                   const Text(
-                    'Name',
+                    'Nome',
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
@@ -110,8 +110,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   TextField(
                     controller: nameController,
                     decoration: InputDecoration(
-                      prefixIcon: const Icon(Iconsax.sms),
-                      hintText: 'Enter name',
+                      prefixIcon: const Icon(Iconsax.user),
+                      hintText: 'Seu nome',
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(16),
                         borderSide: const BorderSide(
@@ -131,7 +131,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     controller: emailController,
                     decoration: InputDecoration(
                       prefixIcon: const Icon(Iconsax.sms),
-                      hintText: 'Enter adress',
+                      hintText: 'Email',
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(16),
                         borderSide: const BorderSide(
@@ -141,7 +141,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ),
                   ),
                   const Text(
-                    'Password',
+                    'Senha',
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
@@ -161,7 +161,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           icon: isObscure
                               ? const Icon(Iconsax.eye_slash)
                               : const Icon(Iconsax.eye)),
-                      hintText: 'Password',
+                      hintText: 'Senha',
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(16),
                         borderSide: const BorderSide(
@@ -171,7 +171,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ),
                   ),
                   const Text(
-                    'Confirm Password',
+                    'Confirmar senha',
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
@@ -191,7 +191,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           icon: isObscure
                               ? const Icon(Iconsax.eye_slash)
                               : const Icon(Iconsax.eye)),
-                      hintText: 'Confirm password',
+                      hintText: 'Confirmar senha',
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(16),
                         borderSide: const BorderSide(
@@ -204,14 +204,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     height: 16,
                   ),
                   StyleButton(
-                    text: 'Register',
+                    text: 'Cadastrar',
                     onClick: isLoading ? null : register,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       const Text(
-                        'Already have an account?',
+                        'Já possui uma conta?',
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
@@ -223,7 +223,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           Navigator.pushReplacementNamed(context, '/login');
                         },
                         child: const Text(
-                          'Login',
+                          'Entrar',
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w600,

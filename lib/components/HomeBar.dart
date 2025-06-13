@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:spendo/controllers/auth_controller.dart';
+import 'package:spendo/ui/main_screen.dart';
 import 'package:spendo/utils/theme.dart';
 
 class Homebar extends StatelessWidget implements PreferredSizeWidget {
@@ -47,54 +47,115 @@ class Homebar extends StatelessWidget implements PreferredSizeWidget {
 }
 
 class HomeDrawer extends StatelessWidget {
-  HomeDrawer({Key? key}) : super(key: key);
+  final void Function(int)? onItemSelected;
+  const HomeDrawer({super.key, this.onItemSelected});
 
   @override
-  final AuthController _authController = AuthController();
-  void logout(BuildContext context) async {
-    await _authController.signOut();
-  }
-
   Widget build(BuildContext context) {
     return Drawer(
-      child: ListView(
-        padding: EdgeInsets.zero,
-        children: [
-          DrawerHeader(
-            decoration: BoxDecoration(
-              color: AppTheme.primaryColor,
-            ),
-            child: Text(
-              'Menu',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 24,
+      backgroundColor: Colors.white,
+      child: SafeArea(
+        child: Column(
+          children: [
+            // HEADER
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              child: Row(
+                children: const [
+                  Expanded(
+                    child: Text(
+                      'Menu',
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  // Removido ToggleButtons
+                ],
               ),
             ),
-          ),
-          ListTile(
-            leading: Icon(Icons.home),
-            title: Text('Início'),
-            onTap: () {
-              Navigator.pop(context);
-            },
-          ),
-          ListTile(
-            leading: Icon(Icons.settings),
-            title: Text('Configurações'),
-            onTap: () {
-              Navigator.pop(context);
-            },
-          ),
-          ListTile(
-            leading: Icon(Icons.logout),
-            title: Text('Sair'),
-            onTap: () {
-              logout(context);
-            },
-          ),
-        ],
+            const Divider(),
+            // CONTENT
+            Expanded(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _buildSectionTitle('Categorias'),
+                    const SizedBox(height: 12),
+                    ListTile(
+                      contentPadding: const EdgeInsets.symmetric(vertical: 4),
+                      leading: Icon(Iconsax.home,
+                          size: 28, color: AppTheme.primaryColor),
+                      title:
+                          Text("Inicio", style: const TextStyle(fontSize: 16)),
+                      onTap: () {
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                    ListTile(
+                      contentPadding: const EdgeInsets.symmetric(vertical: 4),
+                      leading: Icon(Iconsax.chart_square,
+                          size: 28, color: AppTheme.primaryColor),
+                      title: Text("Gráficos",
+                          style: const TextStyle(fontSize: 16)),
+                      onTap: () {
+                        Navigator.of(context).pop();
+                        onItemSelected?.call(1);
+                      },
+                    ),
+                    ListTile(
+                      contentPadding: const EdgeInsets.symmetric(vertical: 4),
+                      leading: Icon(Iconsax.empty_wallet,
+                          size: 28, color: AppTheme.primaryColor),
+                      title: Text("Carteira",
+                          style: const TextStyle(fontSize: 16)),
+                      onTap: () {
+                       Navigator.of(context).pop();
+                        onItemSelected?.call(3);
+                      },
+                    ),
+                    ListTile(
+                      contentPadding: const EdgeInsets.symmetric(vertical: 4),
+                      leading: Icon(Iconsax.wallet_2,
+                          size: 28, color: AppTheme.primaryColor),
+                      title: Text("Cofrinho",
+                          style: const TextStyle(fontSize: 16)),
+                      onTap: () {
+                        // Navigator.of(context).push(MaterialPageRoute(
+                        //   builder: (context) => MainScreen(initialIndex: 3,),
+                        // ));
+                      },
+                    ),
+                    ListTile(
+                      contentPadding: const EdgeInsets.symmetric(vertical: 4),
+                      leading: Icon(Iconsax.setting,
+                          size: 28, color: AppTheme.primaryColor),
+                      title: Text("Configurações",
+                          style: const TextStyle(fontSize: 16)),
+                      onTap: () {
+                        Navigator.of(context).pushAndRemoveUntil(
+                          MaterialPageRoute(
+                              builder: (_) => MainScreen(initialIndex: 4)),
+                          (route) => false, // remove tudo antes
+                        );
+                      },
+                    ),
+                    const SizedBox(height: 40),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
+    );
+  }
+
+  Widget _buildSectionTitle(String title) {
+    return Text(
+      title,
+      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
     );
   }
 }

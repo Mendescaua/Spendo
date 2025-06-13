@@ -45,8 +45,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     final transactions = ref.watch(
         transactionControllerProvider); // basicamente vc usa isso para ver oque a consulta carregou no provider e reconstruir a tela com os dados carregados
     return Scaffold(
-      appBar: Homebar(),
-      drawer: HomeDrawer(),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

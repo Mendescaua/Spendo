@@ -20,17 +20,17 @@ class _SplashScreenState extends State<SplashScreen> {
   {
     'image': 'assets/images/FinanceLeaders.svg',
     // 'title': 'Organize sua vida financeira',
-    // 'subtitle': 'Crie metas, acompanhe e evolua com clareza.',
+    'subtitle': 'Crie metas, acompanhe e evolua com clareza.',
   },
   {
     'image': 'assets/images/SpendoApp.svg',
     // 'title': 'Controle seus gastos',
-    // 'subtitle': 'Gerencie seus gastos e economize mais dinheiro.',
+    'subtitle': 'Gerencie seus gastos e economize mais dinheiro.',
   },
   {
     'image': 'assets/images/MoneyMotivation.svg',
     // 'title': 'Transforme hábitos em conquistas',
-    // 'subtitle': 'Gaste melhor e conquiste mais com disciplina.',
+    'subtitle': 'Gaste melhor e conquiste mais com disciplina.',
   },
 ];
 

@@ -101,7 +101,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     controller: emailController,
                     decoration: InputDecoration(
                       prefixIcon: const Icon(Iconsax.sms),
-                      hintText: 'Enter adress',
+                      hintText: 'Email',
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(16),
                         borderSide: const BorderSide(
@@ -111,7 +111,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
                   const Text(
-                    'Password',
+                    'Senha',
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
@@ -131,7 +131,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           icon: isObscure
                               ? const Icon(Iconsax.eye_slash)
                               : const Icon(Iconsax.eye)),
-                      hintText: 'Password',
+                      hintText: 'Senha',
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(16),
                         borderSide: const BorderSide(
@@ -146,7 +146,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       TextButton(
                         onPressed: () {},
                         child: Text(
-                          'Forgot Password?',
+                          'Esqueceu sua senha?',
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w600,
@@ -158,14 +158,14 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   StyleButton(
                     isLoading: isLoading,
-                    text: 'Login',
+                    text: 'Entrar',
                     onClick: isLoading ? null : login,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        'Don\'t have an account?',
+                        'Não possui uma conta?',
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
@@ -177,7 +177,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           Navigator.pushReplacementNamed(context, '/register');
                         },
                         child: const Text(
-                          'Register',
+                          'Cadastrar',
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w600,

@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:spendo/components/HomeBar.dart';
 import 'package:spendo/components/ModalTransaction.dart';
+import 'package:spendo/ui/configuration_screen.dart';
 import 'package:spendo/ui/home_screen.dart';
-import 'package:spendo/ui/perfil_screen.dart';
 import 'package:spendo/utils/theme.dart';
 
 class MainScreen extends StatefulWidget {
-  const MainScreen({super.key});
+  final int initialIndex;
+
+  const MainScreen({super.key, this.initialIndex = 0});
 
   @override
   State<MainScreen> createState() => _MainScreenState();
@@ -16,34 +19,49 @@ class _MainScreenState extends State<MainScreen> {
   int currentTab = 0;
 
   @override
+  void initState() {
+    super.initState();
+    currentTab = widget.initialIndex;
+  }
+
+  @override
   Widget build(BuildContext context) {
-    List screens = [
-      HomeScreen(),
-      Scaffold(body: Text('Adicionar')),
-      Scaffold(body: Text('Adicionar')),
-      Scaffold(body: Text('Total gasto')),
-      PerfilScreen(),
+    List<Widget> screens = [
+      const HomeScreen(),
+      const Center(child: Text('Tela 2')),
+      const Center(child: Text('Tela 3')),
+      const Center(child: Text('Tela 4')),
+      const ConfiguracoesScreen(),
     ];
 
     final items = <IconData>[
       Iconsax.home,
       Iconsax.chart_square,
       Iconsax.empty_wallet,
-      Iconsax.user,
+      Iconsax.setting,
     ];
 
     void _openAddTransactionModal(BuildContext context) {
       showModalBottomSheet(
-          context: context,
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-          ),
-          isScrollControlled: true,
-          builder: (context) => ModalTransaction());
+        context: context,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+        ),
+        isScrollControlled: true,
+        builder: (context) => const ModalTransaction(),
+      );
     }
 
     return SafeArea(
       child: Scaffold(
+        appBar: currentTab == 0 ? Homebar() : null,
+        drawer: HomeDrawer(
+          onItemSelected: (index) {
+            setState(() {
+              currentTab = index;
+            });
+          },
+        ),
         body: screens[currentTab],
         bottomNavigationBar: Container(
           height: 70,
@@ -66,7 +84,6 @@ class _MainScreenState extends State<MainScreen> {
             children: [
               _buildNavIcon(index: 0, icon: items[0]),
               _buildNavIcon(index: 1, icon: items[1]),
-              // Botão de adicionar (central)
               GestureDetector(
                 onTap: () => _openAddTransactionModal(context),
                 child: Container(
