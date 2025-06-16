@@ -10,6 +10,11 @@ class SubscriptionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+final time = subscription.time == "1"
+    ? '1 mês'
+    : subscription.time == "5"
+        ? '5 meses'
+        : '1 ano';
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(16),
@@ -46,11 +51,20 @@ class SubscriptionCard extends StatelessWidget {
                   ),
                 ),
                 SizedBox(height: 4),
+                Text(
+                  time ?? "Sem informação",
+                  style: TextStyle(
+                    overflow: TextOverflow.ellipsis,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 14,
+                    color: Colors.grey,
+                  ),
+                ),
               ],
             ),
           ),
           Text(
-            Customtext.formatMoeda(10),
+            Customtext.formatMoeda(subscription.value),
             style: TextStyle(
               color: AppTheme.primaryColor,
               fontWeight: FontWeight.bold,

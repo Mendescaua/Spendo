@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:month_year_picker/month_year_picker.dart';
 import 'package:spendo/controllers/auth_gate.dart';
 import 'package:spendo/core/supabse_client.dart';
 import 'package:spendo/ui/home_screen.dart';
@@ -31,8 +32,16 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       home: AuthGate(),
       locale: const Locale('pt', 'BR'), // para funcionar a localização
-      supportedLocales: const [Locale('pt', 'BR')],
-      localizationsDelegates: GlobalMaterialLocalizations.delegates,
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+        MonthYearPickerLocalizations.delegate, // <<< importante
+      ],
+      supportedLocales: const [
+        Locale('pt'), // Português
+        Locale('en'), // Inglês (ou outras línguas que você queira)
+      ],
       routes: {
         '/splash': (context) => const SplashScreen(),
         '/login': (context) => const LoginScreen(),

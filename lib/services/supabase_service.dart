@@ -55,6 +55,10 @@ class SupabaseService {
   Future<void> addSubscription(SubscriptionModel model) async {
     await supabase.from('SUBSCRIPTION').insert(model.toJson());
   }
+
+  Future<void> deleteSubscription(int id) async {
+    await supabase.from('SUBSCRIPTION').delete().eq('id', id);
+  }
   // Aqui eu uso apenas no categoriesField para carregar as categorias do banco
   Future<List<CategoryTransactionModel>> getCategoryTransaction(
       String userId) async {

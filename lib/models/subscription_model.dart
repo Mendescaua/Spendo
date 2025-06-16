@@ -1,33 +1,36 @@
 class SubscriptionModel {
+  final int? id;
   final String? uuid;
   final String name;
-  final String? description;
   final double value;
   final String time;
+  final DateTime? createdAt;
 
   SubscriptionModel({
+    this.id,
     this.uuid,
     required this.name,
     required this.value,
     required this.time,
-    this.description
+    this.createdAt,
   });
 
   factory SubscriptionModel.fromJson(Map<String, dynamic> json) {
     return SubscriptionModel(
+      id: json['id'],
       uuid: json['uuid'],
       name: json['name'],
-      description: json['description'],
-      value: json['value'],
+      value: (json['value'] as num).toDouble(),
       time: json['time'],
+      createdAt: json['created_at'] != null ? DateTime.parse(json['created_at']) : null,
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
+      'id': id,
       'uuid': uuid,
       'name': name,
-      'description': description,
       'value': value,
       'time': time,
     };

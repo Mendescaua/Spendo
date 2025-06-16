@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:intl/intl.dart';
 import 'package:spendo/components/FloatingMessage.dart';
 import 'package:spendo/components/buttons/StyleButton.dart';
 import 'package:spendo/controllers/subscription_controller.dart';
@@ -18,7 +17,6 @@ class ModalSubscription extends ConsumerStatefulWidget {
 class _ModalSubscriptionState extends ConsumerState<ModalSubscription> {
   final TextEditingController _titulo = TextEditingController();
   final TextEditingController _valor = TextEditingController();
-  final TextEditingController _description = TextEditingController();
 
   int selectedDuration = 1; // padrão 1 mês
 
@@ -38,9 +36,8 @@ class _ModalSubscriptionState extends ConsumerState<ModalSubscription> {
       final response = await subscriptionController.addSubscription(
         subscription: SubscriptionModel(
           name: _titulo.text,
-          value: _valor.text.isEmpty ? 0 : double.parse(_valor.text),
+          value: _valor.text.isEmpty ? 0.0 : double.parse(_valor.text),
           time: selectedDuration.toString(),
-          description: '',
         ),
       );
       if (response != null) {
@@ -56,7 +53,7 @@ class _ModalSubscriptionState extends ConsumerState<ModalSubscription> {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 24),
         width: double.infinity,
-        height: size.height * 0.65,
+        height: size.height * 0.55,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
@@ -94,27 +91,6 @@ class _ModalSubscriptionState extends ConsumerState<ModalSubscription> {
               decoration: InputDecoration(
                 prefixIcon: const Icon(Iconsax.text_block),
                 hintText: 'Título',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(16),
-                  borderSide: const BorderSide(
-                    color: Color(0xFF4678c0),
-                  ),
-                ),
-              ),
-            ),
-            SizedBox(height: 16),
-            const Text(
-              'Descrição',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-            TextField(
-              controller: _description,
-              decoration: InputDecoration(
-                prefixIcon: const Icon(Iconsax.text_block),
-                hintText: 'Descrição',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(16),
                   borderSide: const BorderSide(

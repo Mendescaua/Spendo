@@ -37,6 +37,10 @@ class SubscriptionController extends StateNotifier<List<SubscriptionModel>> {
     }
   }
 
+  double get totalValue {
+    return state.fold(0.0, (total, item) => total + item.value);
+  }
+
   Future<String?> addSubscription(
       {required SubscriptionModel subscription}) async {
     final userId = ref.read(currentUserId);
@@ -47,11 +51,11 @@ class SubscriptionController extends StateNotifier<List<SubscriptionModel>> {
 
     try {
       final newSubscription = SubscriptionModel(
-          uuid: userId,
-          name: subscription.name,
-          description: subscription.description,
-          value: subscription.value,
-          time: subscription.time,);
+        uuid: userId,
+        name: subscription.name,
+        value: subscription.value,
+        time: subscription.time,
+      );
       await _subscription.addSubscription(newSubscription);
       // Atualiza o estado com a nova transação adicionada
       state = [...state, newSubscription];
@@ -61,6 +65,20 @@ class SubscriptionController extends StateNotifier<List<SubscriptionModel>> {
       return 'Erro inesperado: $e';
     }
   }
+
+  Future<String?> deleteSubscription({required int id}) async {
+  try {
+    await _subscription.deleteSubscription(id);
+
+    // Remove do estado
+    state = state.where((item) => item.id != id).toList();
+
+    return null;
+  } catch (e) {
+    print('Erro ao deletar assinatura: $e');
+    return 'Erro inesperado: $e';
+  }
+}
 
   void clear() {
     state = [];
