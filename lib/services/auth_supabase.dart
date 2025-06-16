@@ -1,4 +1,5 @@
 import 'package:spendo/core/supabse_client.dart';
+import 'package:spendo/models/users_model.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class AuthService {
@@ -25,5 +26,17 @@ class AuthService {
   // Logout
   Future<void> signOut() async {
     await supabase.auth.signOut();
+  }
+
+  //get user for configuration
+  Future<List<UsersModel>> getUser(String userId) async {
+    final response = await supabase
+        .from("USERS")
+        .select()
+        .eq('uuid', userId);
+
+    return (response as List)
+        .map((item) => UsersModel.fromJson(item))
+        .toList();
   }
 }

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:spendo/components/cards/SubscriptionCard.dart';
 import 'package:spendo/components/modals/ModalSubscription.dart';
+import 'package:spendo/controllers/subscription_controller.dart';
 import 'package:spendo/utils/theme.dart';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -14,21 +16,67 @@ class SubscriptionScreen extends ConsumerStatefulWidget {
 }
 
 class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
+  bool _loading = false;
+
+  @override
+  void initState() {
+    super.initState();
+    Future.microtask(() => loadTransactions());
+  }
+
+  Future<void> loadTransactions() async {
+    if (_loading) return;
+
+    setState(() => _loading = true);
+
+    final controller = ref.read(subscriptionControllerProvider.notifier);
+    final result = await controller.getSubscription();
+
+    setState(() => _loading = false);
+    print("Result: $result");
+
+    if (result != null) {
+      print('Erro: $result');
+    }
+  }
+
   void _openAddTransactionModal(BuildContext context) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
-      builder: (context) => Material(
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
-        clipBehavior: Clip.antiAlias,
-        child: ModalSubscription(),
+      useRootNavigator: true,
+      builder: (context) => ScaffoldMessenger(
+        child: Scaffold(
+          backgroundColor: Colors.transparent,
+          body: GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onTap: () => Navigator.of(context).pop(), // toca fora = fecha
+            child: SafeArea(
+              top: false,
+              child: Align(
+                alignment: Alignment.bottomCenter,
+                child: GestureDetector(
+                  // impede que toques dentro do modal fechem
+                  onTap: () {},
+                  child: Material(
+                    borderRadius:
+                        const BorderRadius.vertical(top: Radius.circular(20)),
+                    clipBehavior: Clip.antiAlias,
+                    child: const ModalSubscription(),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
       ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    final subscription = ref.watch(subscriptionControllerProvider);
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -100,14 +148,31 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         spacing: 16,
                         children: [
-                          ListView.builder(
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
-                            itemCount: 3,
-                            itemBuilder: (context, index) {
-                              return const SubscriptionCard();
-                            },
-                          ),
+                          _loading
+                              ? Center(
+                                  child:
+                                      (LoadingAnimationWidget.staggeredDotsWave(
+                                          color: AppTheme.primaryColor,
+                                          size: 64)))
+                              : subscription.isEmpty
+                                  ? Center(
+                                      child: Text(
+                                        "Nenhuma assinatura encontrada",
+                                        style: TextStyle(fontSize: 16),
+                                      ),
+                                    )
+                                  : ListView.builder(
+                                      shrinkWrap: true,
+                                      physics:
+                                          const NeverScrollableScrollPhysics(),
+                                      itemCount: subscription.length >= 3
+                                          ? 3
+                                          : subscription.length,
+                                      itemBuilder: (context, index) {
+                                        return SubscriptionCard(
+                                            subscription: subscription[index]);
+                                      },
+                                    ),
                         ],
                       ),
                     ),

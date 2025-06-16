@@ -7,6 +7,11 @@ class Customtext {
     return formatter.format(value);
   }
 
+  static String capitalizeFirstLetter(String text) {
+  if (text.isEmpty) return text;
+  return text[0].toUpperCase() + text.substring(1);
+  }
+
   static Color stringToColor(String colorString) {
   // Remove o "#" se existir
   colorString = colorString.replaceAll("#", "");

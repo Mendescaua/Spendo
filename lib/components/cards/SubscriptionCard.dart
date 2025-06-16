@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:spendo/models/subscription_model.dart';
 import 'package:spendo/utils/customText.dart';
 import 'package:spendo/utils/theme.dart';
 
 class SubscriptionCard extends StatelessWidget {
-  const SubscriptionCard({Key? key}) : super(key: key);
+  final SubscriptionModel subscription;
+  const SubscriptionCard({Key? key, required this.subscription}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +37,7 @@ class SubscriptionCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Disney",
+                  subscription.name ?? "Sem título",
                   style: TextStyle(
                     overflow: TextOverflow.ellipsis,
                     fontWeight: FontWeight.bold,

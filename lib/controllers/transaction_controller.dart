@@ -3,14 +3,14 @@ import 'package:spendo/models/category_transaction_model.dart';
 import 'package:spendo/models/transaction_model.dart';
 
 import 'package:spendo/providers/auth_provider.dart';
-import 'package:spendo/services/transaction.dart';
+import 'package:spendo/services/supabase_service.dart';
 
 final transactionControllerProvider = StateNotifierProvider<TransactionController, List<TransactionModel>>((ref) {
   return TransactionController(ref);
 });
 
 class TransactionController extends StateNotifier<List<TransactionModel>> {
-  final TransactionService _transaction = TransactionService();
+  final SupabaseService _transaction = SupabaseService();
   final Ref ref;
   List<CategoryTransactionModel> categories = [];
 

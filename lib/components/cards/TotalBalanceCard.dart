@@ -2,7 +2,6 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:spendo/models/transaction_model.dart';
 import 'package:spendo/providers/transactions_provider.dart';
 import 'package:spendo/utils/customText.dart';
 import 'package:spendo/utils/theme.dart';
@@ -120,7 +119,7 @@ class Count extends ConsumerWidget {
         type == 'receita' ? AppTheme.greenColor : AppTheme.redColor;
 
     return Container(
-      width: 160,
+      width: size.width * 0.4,
       padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
         color: Colors.transparent,

@@ -1,29 +1,35 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:spendo/components/HomeBar.dart';
 import 'package:spendo/components/modals/ModalTransaction.dart';
+import 'package:spendo/controllers/user_controller.dart';
 import 'package:spendo/ui/configuration_screen.dart';
 import 'package:spendo/ui/home_screen.dart';
 import 'package:spendo/ui/subscription_screen.dart';
 import 'package:spendo/utils/theme.dart';
 
-class MainScreen extends StatefulWidget {
+class MainScreen extends ConsumerStatefulWidget {
   final int initialIndex;
 
   const MainScreen({super.key, this.initialIndex = 0});
 
   @override
-  State<MainScreen> createState() => _MainScreenState();
+  ConsumerState<MainScreen> createState() => _MainScreenState();
 }
 
-class _MainScreenState extends State<MainScreen> {
+class _MainScreenState extends ConsumerState<MainScreen> {
   int currentTab = 0;
 
   @override
   void initState() {
     super.initState();
     currentTab = widget.initialIndex;
+    Future.microtask(() {
+      ref.read(userControllerProvider.notifier).getUser();
+    });
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +61,15 @@ class _MainScreenState extends State<MainScreen> {
 
     return SafeArea(
       child: Scaffold(
-        appBar: currentTab == 0 ? Homebar() : null,
+        appBar: currentTab == 0
+            ? Homebar(
+                onItemSelected: (index) {
+                  setState(() {
+                    currentTab = index;
+                  });
+                },
+              )
+            : null,
         drawer: HomeDrawer(
           onItemSelected: (index) {
             setState(() {

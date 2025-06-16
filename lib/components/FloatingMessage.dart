@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 
 void FloatingMessage(BuildContext context, String message, String type, int duration) {
+  final messenger = ScaffoldMessenger.maybeOf(context) ?? ScaffoldMessenger.of(
+    Navigator.of(context, rootNavigator: true).context,
+  );
+
   Color backgroundColor;
   Color textColor;
   IconData iconData;
@@ -8,7 +12,7 @@ void FloatingMessage(BuildContext context, String message, String type, int dura
   switch (type) {
     case 'error':
       backgroundColor = Color(0xFFFFCDCD);
-      textColor =  Color(0xFF580707);
+      textColor = Color(0xFF580707);
       iconData = Icons.error_outline_rounded;
       break;
     case 'info':
@@ -17,7 +21,7 @@ void FloatingMessage(BuildContext context, String message, String type, int dura
       iconData = Icons.info_outline_rounded;
       break;
     case 'success':
-      backgroundColor =  Color(0xFFCCECDA);
+      backgroundColor = Color(0xFFCCECDA);
       textColor = Color(0xFF0B7B2D);
       iconData = Icons.check_circle_outline_rounded;
       break;
@@ -27,7 +31,7 @@ void FloatingMessage(BuildContext context, String message, String type, int dura
       iconData = Icons.notifications;
   }
 
-  ScaffoldMessenger.of(context).showSnackBar(
+  messenger.showSnackBar(
     SnackBar(
       content: Row(
         children: [
@@ -53,7 +57,7 @@ void FloatingMessage(BuildContext context, String message, String type, int dura
       behavior: SnackBarBehavior.floating,
       margin: EdgeInsets.all(20),
       elevation: 0,
-      duration: Duration(seconds: duration ?? 2),
+      duration: Duration(seconds: duration),
     ),
   );
 }

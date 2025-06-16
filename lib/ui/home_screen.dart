@@ -4,7 +4,6 @@ import 'package:iconsax/iconsax.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:spendo/components/cards/SavingCard.dart';
 import 'package:spendo/components/cards/TotalBalanceCard.dart';
-import 'package:spendo/components/HomeBar.dart';
 import 'package:spendo/components/cards/TransactionCard.dart';
 import 'package:spendo/controllers/transaction_controller.dart';
 import 'package:spendo/utils/theme.dart';
@@ -42,8 +41,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final transactions = ref.watch(
-        transactionControllerProvider); // basicamente vc usa isso para ver oque a consulta carregou no provider e reconstruir a tela com os dados carregados
+    final transactions = ref.watch(transactionControllerProvider); // basicamente vc usa isso para ver oque a consulta carregou no provider e reconstruir a tela com os dados carregados
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(

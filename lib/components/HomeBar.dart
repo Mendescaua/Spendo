@@ -1,14 +1,19 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:spendo/ui/main_screen.dart';
-import 'package:spendo/ui/subscription_screen.dart';
+import 'package:spendo/controllers/user_controller.dart';
+import 'package:spendo/utils/base64.dart';
 import 'package:spendo/utils/theme.dart';
 
-class Homebar extends StatelessWidget implements PreferredSizeWidget {
-  Homebar({Key? key}) : super(key: key);
+class Homebar extends ConsumerWidget implements PreferredSizeWidget {
+  final void Function(int)? onItemSelected;
+  Homebar({Key? key, this.onItemSelected}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final users = ref.watch(userControllerProvider).firstOrNull;
     return AppBar(
       centerTitle: true,
       backgroundColor: AppTheme.primaryColor,
@@ -32,10 +37,28 @@ class Homebar extends StatelessWidget implements PreferredSizeWidget {
       actions: [
         Padding(
           padding: const EdgeInsets.only(right: 10),
-          child: CircleAvatar(
-            radius: 18,
-            backgroundImage: NetworkImage(
-              'https://avatars.githubusercontent.com/u/104581895?v=4',
+          child: GestureDetector(
+            onTap: () {
+              onItemSelected?.call(4);
+            },
+            child: CircleAvatar(
+              radius: 22,
+              backgroundColor: Colors.grey.shade200,
+              backgroundImage:
+                  users?.picture != null && users!.picture!.isNotEmpty
+                      ? base64ToImage(users!.picture!)
+                      : null,
+              child: users?.picture == null || users!.picture!.isEmpty
+                  ? Text(
+                      (users?.name?.isNotEmpty ?? false)
+                          ? users!.name![0].toUpperCase()
+                          : '',
+                      style: const TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    )
+                  : null,
             ),
           ),
         ),
@@ -112,7 +135,7 @@ class HomeDrawer extends StatelessWidget {
                       title: Text("Carteira",
                           style: const TextStyle(fontSize: 16)),
                       onTap: () {
-                       Navigator.of(context).pop();
+                        Navigator.of(context).pop();
                         onItemSelected?.call(2);
                       },
                     ),
