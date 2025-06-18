@@ -155,9 +155,8 @@ class HomeDrawer extends StatelessWidget {
                       title: Text("Cofrinho",
                           style: const TextStyle(fontSize: 16)),
                       onTap: () {
-                        // Navigator.of(context).push(MaterialPageRoute(
-                        //   builder: (context) => MainScreen(initialIndex: 3,),
-                        // ));
+                        Navigator.of(context).pop();
+                        onItemSelected?.call(4);
                       },
                     ),
                     ListTile(
@@ -168,7 +167,7 @@ class HomeDrawer extends StatelessWidget {
                           style: const TextStyle(fontSize: 16)),
                       onTap: () {
                         Navigator.of(context).pop();
-                        onItemSelected?.call(4);
+                        onItemSelected?.call(5);
                       },
                     ),
                     const SizedBox(height: 40),

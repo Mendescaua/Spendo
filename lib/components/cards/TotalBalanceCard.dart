@@ -119,8 +119,8 @@ class Count extends ConsumerWidget {
         type == 'receita' ? AppTheme.greenColor : AppTheme.redColor;
 
     return Container(
-      width: size.width * 0.4,
-      padding: const EdgeInsets.all(10),
+      width: size.width * 0.42,
+      padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
         color: Colors.transparent,
         borderRadius: BorderRadius.circular(16),
@@ -132,7 +132,7 @@ class Count extends ConsumerWidget {
       child: Row(
         children: [
           Container(
-            padding: const EdgeInsets.all(8),
+            padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
               color: iconBgColor,
               borderRadius: BorderRadius.circular(12),

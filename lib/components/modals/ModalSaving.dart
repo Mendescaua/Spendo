@@ -7,24 +7,17 @@ import 'package:spendo/controllers/subscription_controller.dart';
 import 'package:spendo/models/subscription_model.dart';
 import 'package:spendo/utils/theme.dart';
 
-class ModalSubscription extends ConsumerStatefulWidget {
-  const ModalSubscription({super.key});
+class Modalsaving extends ConsumerStatefulWidget {
+  const Modalsaving({super.key});
 
   @override
-  ConsumerState<ModalSubscription> createState() => _ModalSubscriptionState();
+  ConsumerState<Modalsaving> createState() => _ModalsavingState();
 }
 
-class _ModalSubscriptionState extends ConsumerState<ModalSubscription> {
+class _ModalsavingState extends ConsumerState<Modalsaving> {
   final TextEditingController _titulo = TextEditingController();
   final TextEditingController _valor = TextEditingController();
 
-  int selectedDuration = 1; // padrão 1 mês
-
-  final List<Map<String, dynamic>> durations = [
-    {'label': '1 mês', 'value': 1},
-    {'label': '5 meses', 'value': 5},
-    {'label': '1 ano', 'value': 12},
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -32,28 +25,28 @@ class _ModalSubscriptionState extends ConsumerState<ModalSubscription> {
     final subscriptionController =
         ref.read(subscriptionControllerProvider.notifier);
 
-    void onSave() async {
-      final response = await subscriptionController.addSubscription(
-        subscription: SubscriptionModel(
-          name: _titulo.text,
-          value: _valor.text.isEmpty ? 0.0 : double.parse(_valor.text),
-          time: selectedDuration.toString(),
-        ),
-      );
-      if (response != null) {
-        FloatingMessage(context, response, 'error', 2);
-      } else {
-        FloatingMessage(
-            context, 'Assinatura adicionada com sucesso', 'success', 2);
-        Navigator.of(context).pop();
-      }
-    }
+    // void onSave() async {
+    //   final response = await subscriptionController.addSubscription(
+    //     subscription: SubscriptionModel(
+    //       name: _titulo.text,
+    //       value: _valor.text.isEmpty ? 0.0 : double.parse(_valor.text),
+    //       time: selectedDuration.toString(),
+    //     ),
+    //   );
+    //   if (response != null) {
+    //     FloatingMessage(context, response, 'error', 2);
+    //   } else {
+    //     FloatingMessage(
+    //         context, 'Assinatura adicionada com sucesso', 'success', 2);
+    //     Navigator.of(context).pop();
+    //   }
+    // }
 
     return SafeArea(
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 24),
         width: double.infinity,
-        height: size.height * 0.60,
+        height: size.height * 0.50,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
@@ -71,7 +64,7 @@ class _ModalSubscriptionState extends ConsumerState<ModalSubscription> {
             SizedBox(height: 16),
             Center(
               child: const Text(
-                'Adicionar nova assinatura',
+                'Adicionar novo cofrinho',
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
@@ -120,42 +113,11 @@ class _ModalSubscriptionState extends ConsumerState<ModalSubscription> {
                 ),
               ),
             ),
-            SizedBox(height: 16),
-            const Text(
-              'Duração',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-            const SizedBox(height: 8),
-            Wrap(
-              spacing: 12,
-              children: durations.map((duration) {
-                final isSelected = selectedDuration == duration['value'];
-                return ChoiceChip(
-                  label: Text(duration['label']),
-                  selected: isSelected,
-                  onSelected: (_) {
-                    setState(() {
-                      selectedDuration = duration['value'];
-                    });
-                  },
-                  selectedColor: AppTheme.primaryColor,
-                  backgroundColor: AppTheme.whiteColor,
-              
-                  labelStyle: TextStyle(
-                    color: isSelected ? Colors.white : Colors.black,
-                    fontWeight: FontWeight.w600,
-                  ),
-                );
-              }).toList(),
-            ),
             SizedBox(height: 32),
             StyleButton(
                 text: 'Adicionar',
                 onClick: () {
-                  onSave();
+                  // onSave();
                 }),
           ],
         ),

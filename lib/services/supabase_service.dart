@@ -1,5 +1,6 @@
 import 'package:spendo/core/supabse_client.dart';
 import 'package:spendo/models/category_transaction_model.dart';
+import 'package:spendo/models/saving_model.dart';
 import 'package:spendo/models/subscription_model.dart';
 import 'package:spendo/models/transaction_model.dart';
 
@@ -59,6 +60,29 @@ class SupabaseService {
   Future<void> deleteSubscription(int id) async {
     await supabase.from('SUBSCRIPTION').delete().eq('id', id);
   }
+
+  // Saving services
+  Future<List<SavingModel>> getSaving(String userId) async {
+    final response = await supabase
+        .from("SAVING")
+        .select()
+        .eq('uuid', userId)
+        .order('created_at', ascending: false);
+
+    return (response as List)
+        .map((item) => SavingModel.fromJson(item))
+        .toList();
+  }
+
+  Future<void> addSaving(SavingModel model) async {
+    await supabase.from('SAVING').insert(model.toJson());
+  }
+
+  Future<void> deleteSaving(int id) async {
+    await supabase.from('SAVING').delete().eq('id', id);
+  }
+
+
   // Aqui eu uso apenas no categoriesField para carregar as categorias do banco
   Future<List<CategoryTransactionModel>> getCategoryTransaction(
       String userId) async {

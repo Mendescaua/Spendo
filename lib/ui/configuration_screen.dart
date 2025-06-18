@@ -85,8 +85,7 @@ class _ConfiguracoesScreenState extends ConsumerState<ConfiguracoesScreen> {
                             fontSize: 18, fontWeight: FontWeight.bold),
                       ),
                       Text(
-                        Customtext.capitalizeFirstLetter(
-                            users?.email ?? 'Sem email'),
+                        users?.email ?? 'Sem email',
                         style: const TextStyle(color: Colors.grey),
                       ),
                     ],

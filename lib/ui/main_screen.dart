@@ -6,6 +6,7 @@ import 'package:spendo/components/modals/ModalTransaction.dart';
 import 'package:spendo/controllers/user_controller.dart';
 import 'package:spendo/ui/configuration_screen.dart';
 import 'package:spendo/ui/home_screen.dart';
+import 'package:spendo/ui/saving_screen.dart';
 import 'package:spendo/ui/subscription_screen.dart';
 import 'package:spendo/utils/theme.dart';
 
@@ -30,7 +31,6 @@ class _MainScreenState extends ConsumerState<MainScreen> {
     });
   }
 
-
   @override
   Widget build(BuildContext context) {
     List<Widget> screens = [
@@ -38,6 +38,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
       const Center(child: Text('Tela 2')),
       const Center(child: Text('Tela 3')),
       const SubscriptionScreen(),
+      const SavingScreen(),
       const ConfiguracoesScreen(),
     ];
 
@@ -78,52 +79,54 @@ class _MainScreenState extends ConsumerState<MainScreen> {
           },
         ),
         body: screens[currentTab],
-        bottomNavigationBar: Container(
-          height: 70,
-          decoration: BoxDecoration(
-            color: AppTheme.whiteColor,
-            borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(40),
-              topRight: Radius.circular(40),
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.05),
-                blurRadius: 10,
-                offset: const Offset(0, -2),
-              ),
-            ],
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              _buildNavIcon(index: 0, icon: items[0]),
-              _buildNavIcon(index: 1, icon: items[1]),
-              GestureDetector(
-                onTap: () => _openAddTransactionModal(context),
-                child: Container(
-                  height: 55,
-                  width: 55,
-                  decoration: const BoxDecoration(
-                    color: AppTheme.primaryColor,
-                    shape: BoxShape.circle,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black26,
-                        blurRadius: 10,
-                        offset: Offset(0, 4),
-                      ),
-                    ],
+        bottomNavigationBar: currentTab == 3
+            ? null
+            : Container(
+                height: 70,
+                decoration: BoxDecoration(
+                  color: AppTheme.whiteColor,
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(40),
+                    topRight: Radius.circular(40),
                   ),
-                  child: const Icon(Iconsax.add,
-                      color: AppTheme.whiteColor, size: 30),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.05),
+                      blurRadius: 10,
+                      offset: const Offset(0, -2),
+                    ),
+                  ],
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    _buildNavIcon(index: 0, icon: items[0]),
+                    _buildNavIcon(index: 1, icon: items[1]),
+                    GestureDetector(
+                      onTap: () => _openAddTransactionModal(context),
+                      child: Container(
+                        height: 55,
+                        width: 55,
+                        decoration: const BoxDecoration(
+                          color: AppTheme.primaryColor,
+                          shape: BoxShape.circle,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black26,
+                              blurRadius: 10,
+                              offset: Offset(0, 4),
+                            ),
+                          ],
+                        ),
+                        child: const Icon(Iconsax.add,
+                            color: AppTheme.whiteColor, size: 30),
+                      ),
+                    ),
+                    _buildNavIcon(index: 2, icon: items[2]),
+                    _buildNavIcon(index: 5, icon: items[3]),
+                  ],
                 ),
               ),
-              _buildNavIcon(index: 2, icon: items[2]),
-              _buildNavIcon(index: 4, icon: items[3]),
-            ],
-          ),
-        ),
       ),
     );
   }

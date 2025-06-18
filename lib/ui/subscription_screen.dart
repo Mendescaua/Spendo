@@ -25,10 +25,10 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
   @override
   void initState() {
     super.initState();
-    Future.microtask(() => loadTransactions());
+    Future.microtask(() => loadSubscription());
   }
 
-  Future<void> loadTransactions() async {
+  Future<void> loadSubscription() async {
     if (_loading) return;
 
     setState(() => _loading = true);
@@ -42,6 +42,18 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
       print('Erro: $result');
     }
   }
+
+  void onDelete(int id) async {
+      final controller = ref.read(subscriptionControllerProvider.notifier);
+      final response = await controller.deleteSubscription(id: id);
+
+      if (response != null) {
+        FloatingMessage(context, response, 'error', 2);
+      } else {
+        FloatingMessage(
+            context, 'Assinatura deletada com sucesso', 'success', 2);
+      }
+    }
 
   void _openAddTransactionModal(BuildContext context) {
     showModalBottomSheet(
@@ -97,18 +109,6 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
     final totalValue =
         ref.watch(subscriptionControllerProvider.notifier).totalValue;
 
-    void onDelete(int id) async {
-      final controller = ref.read(subscriptionControllerProvider.notifier);
-      final response = await controller.deleteSubscription(id: id);
-
-      if (response != null) {
-        FloatingMessage(context, response, 'error', 2);
-      } else {
-        FloatingMessage(
-            context, 'Assinatura deletada com sucesso', 'success', 2);
-      }
-    }
-
     final subscription = subscriptions.where((s) {
       final createdAt = s.createdAt;
       return createdAt?.month == _selectedMonth.month &&
@@ -122,14 +122,20 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
             'Assinaturas',
             style: TextStyle(color: AppTheme.whiteColor),
           ),
-          automaticallyImplyLeading: false,
+          leading: IconButton(
+            icon: const Icon(
+              Iconsax.arrow_left,
+              color: AppTheme.whiteColor,
+            ),
+            onPressed: () => Navigator.of(context).pushReplacementNamed('/menu'),
+          ),
         ),
         backgroundColor: AppTheme.primaryColor,
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 24),
+              padding: EdgeInsets.symmetric(horizontal: 16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -142,36 +148,21 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    Customtext.formatMoeda(totalValue),
-                    style: const TextStyle(
-                      color: AppTheme.whiteColor,
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  IconButton(
-                    onPressed: () {
-                      _openAddTransactionModal(context);
-                    },
-                    icon: const Icon(
-                      Iconsax.add,
-                      color: Colors.white,
-                      size: 32,
-                    ),
-                  )
-                ],
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Text(
+                Customtext.formatMoeda(totalValue),
+                style: const TextStyle(
+                  color: AppTheme.whiteColor,
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
             const SizedBox(height: 32),
             Expanded(
               child: Container(
                 width: double.infinity,
-                padding: const EdgeInsets.all(24),
+                padding: const EdgeInsets.all(16),
                 decoration: const BoxDecoration(
                   color: AppTheme.backgroundColor,
                   borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
@@ -251,6 +242,20 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
               ),
             )
           ],
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            _openAddTransactionModal(context);
+          },
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(30),
+          ),
+          backgroundColor: AppTheme.primaryColor,
+          child: const Icon(
+            Iconsax.add,
+            color: Colors.white,
+            size: 32,
+          ),
         ),
       ),
     );
