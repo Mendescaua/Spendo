@@ -19,8 +19,7 @@ class SupabaseService {
         .toList();
   }
 
-  Future<List<TransactionModel>> getTransactions(
-      String userId) async {
+  Future<List<TransactionModel>> getTransactions(String userId) async {
     final response =
         await supabase.rpc('get_transactions_with_category', params: {
       'p_uuid': userId,
@@ -78,10 +77,13 @@ class SupabaseService {
     await supabase.from('SAVING').insert(model.toJson());
   }
 
+  Future<void> updateSaving(SavingModel model) async {
+    await supabase.from('SAVING').update(model.toJson()).eq('id', model.id!);
+  }
+
   Future<void> deleteSaving(int id) async {
     await supabase.from('SAVING').delete().eq('id', id);
   }
-
 
   // Aqui eu uso apenas no categoriesField para carregar as categorias do banco
   Future<List<CategoryTransactionModel>> getCategoryTransaction(

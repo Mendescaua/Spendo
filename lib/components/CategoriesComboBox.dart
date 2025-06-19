@@ -139,7 +139,7 @@ class _CategoriaComboBoxState extends ConsumerState<CategoriaComboBox> {
     String nomeNovaCategoria = '';
     IconData? iconeSelecionado;
     String? tipoSelecionadoDialog;
-    Color corSelecionadaDialog = Colors.blue;
+    Color corSelecionadaDialog = AppTheme.primaryColor;
 
     await showModalBottomSheet(
       context: context,

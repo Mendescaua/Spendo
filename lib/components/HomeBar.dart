@@ -37,7 +37,7 @@ class Homebar extends ConsumerWidget implements PreferredSizeWidget {
           padding: const EdgeInsets.only(right: 10),
           child: GestureDetector(
             onTap: () {
-              onItemSelected?.call(4);
+              onItemSelected?.call(5);
             },
             child: CircleAvatar(
               radius: 22,

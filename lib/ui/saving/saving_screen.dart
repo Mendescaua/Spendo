@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:spendo/components/FloatingMessage.dart';
 import 'package:spendo/components/cards/SavingBigCard.dart';
 import 'package:spendo/components/modals/ModalSaving.dart';
 import 'package:spendo/controllers/saving_controller.dart';
@@ -38,6 +39,17 @@ class _SavingScreenState extends ConsumerState<SavingScreen> {
     }
   }
 
+  void onDelete(int id) async {
+    final controller = ref.read(savingControllerProvider.notifier);
+    final response = await controller.deleteSaving(id: id);
+
+    if (response != null) {
+      FloatingMessage(context, response, 'error', 2);
+    } else {
+      FloatingMessage(context, 'Cofrinho deletada com sucesso', 'success', 2);
+    }
+  }
+
   void _openAddTransactionModal(BuildContext context) {
     showModalBottomSheet(
       context: context,
@@ -60,7 +72,9 @@ class _SavingScreenState extends ConsumerState<SavingScreen> {
                     borderRadius:
                         const BorderRadius.vertical(top: Radius.circular(20)),
                     clipBehavior: Clip.antiAlias,
-                    child: const Modalsaving(),
+                    child: const Modalsaving(
+                      type: 'add saving',
+                    ),
                   ),
                 ),
               ),
@@ -73,10 +87,11 @@ class _SavingScreenState extends ConsumerState<SavingScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final savings = ref.watch(savingControllerProvider); // Usando o provider para obter os cofrinhos, sem precisar carregar a tela novamente
+    final savings = ref.watch(
+        savingControllerProvider); // Usando o provider para obter os cofrinhos, sem precisar carregar a tela novamente
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Cofrinho"),
+        title: const Text("Cofrinhos"),
       ),
       body: Container(
           padding: const EdgeInsets.all(16),
@@ -100,14 +115,36 @@ class _SavingScreenState extends ConsumerState<SavingScreen> {
                         : ListView.builder(
                             itemCount: savings.length,
                             itemBuilder: (context, index) {
-                              return Savingbigcard(saving: savings[index]);
+                              return Dismissible(
+                                  key: Key(savings[index].id.toString()),
+                                  direction: DismissDirection.endToStart,
+                                  background: Container(
+                                    margin: const EdgeInsets.only(
+                                        bottom: 16, right: 16),
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 20),
+                                    decoration: BoxDecoration(
+                                      color: Colors.red,
+                                      borderRadius: BorderRadius.circular(
+                                          16), // igual ao do seu SubscriptionCard
+                                    ),
+                                    alignment: Alignment.centerRight,
+                                    child: const Icon(Icons.delete,
+                                        color: Colors.white),
+                                  ),
+                                  onDismissed: (direction) {
+                                    onDelete(savings[index].id!);
+                                  },
+                                  child: Savingbigcard(saving: savings[index]));
                             },
                           ),
               ),
             ],
           )),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {_openAddTransactionModal(context);},
+        onPressed: () {
+          _openAddTransactionModal(context);
+        },
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(30),
         ),

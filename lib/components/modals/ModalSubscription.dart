@@ -15,8 +15,8 @@ class ModalSubscription extends ConsumerStatefulWidget {
 }
 
 class _ModalSubscriptionState extends ConsumerState<ModalSubscription> {
-  final TextEditingController _titulo = TextEditingController();
-  final TextEditingController _valor = TextEditingController();
+  final TextEditingController _titlecontroller = TextEditingController();
+  final TextEditingController _valuecontroller = TextEditingController();
 
   int selectedDuration = 1; // padrão 1 mês
 
@@ -35,8 +35,10 @@ class _ModalSubscriptionState extends ConsumerState<ModalSubscription> {
     void onSave() async {
       final response = await subscriptionController.addSubscription(
         subscription: SubscriptionModel(
-          name: _titulo.text,
-          value: _valor.text.isEmpty ? 0.0 : double.parse(_valor.text),
+          name: _titlecontroller.text,
+          value: _valuecontroller.text.isEmpty
+              ? 0.0
+              : double.parse(_valuecontroller.text),
           time: selectedDuration.toString(),
         ),
       );
@@ -87,7 +89,7 @@ class _ModalSubscriptionState extends ConsumerState<ModalSubscription> {
               ),
             ),
             TextField(
-              controller: _titulo,
+              controller: _titlecontroller,
               decoration: InputDecoration(
                 prefixIcon: const Icon(Iconsax.text_block),
                 hintText: 'Título',
@@ -108,7 +110,7 @@ class _ModalSubscriptionState extends ConsumerState<ModalSubscription> {
               ),
             ),
             TextField(
-              controller: _valor,
+              controller: _valuecontroller,
               decoration: InputDecoration(
                 prefixIcon: const Icon(Iconsax.dollar_circle),
                 hintText: 'Valor',
@@ -143,7 +145,6 @@ class _ModalSubscriptionState extends ConsumerState<ModalSubscription> {
                   },
                   selectedColor: AppTheme.primaryColor,
                   backgroundColor: AppTheme.whiteColor,
-              
                   labelStyle: TextStyle(
                     color: isSelected ? Colors.white : Colors.black,
                     fontWeight: FontWeight.w600,

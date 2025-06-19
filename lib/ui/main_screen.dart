@@ -6,7 +6,7 @@ import 'package:spendo/components/modals/ModalTransaction.dart';
 import 'package:spendo/controllers/user_controller.dart';
 import 'package:spendo/ui/configuration_screen.dart';
 import 'package:spendo/ui/home_screen.dart';
-import 'package:spendo/ui/saving_screen.dart';
+import 'package:spendo/ui/saving/saving_screen.dart';
 import 'package:spendo/ui/subscription_screen.dart';
 import 'package:spendo/utils/theme.dart';
 

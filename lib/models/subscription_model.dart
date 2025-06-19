@@ -22,13 +22,14 @@ class SubscriptionModel {
       name: json['name'],
       value: (json['value'] as num).toDouble(),
       time: json['time'],
-      createdAt: json['created_at'] != null ? DateTime.parse(json['created_at']) : null,
+      createdAt: json['created_at'] != null
+          ? DateTime.parse(json['created_at'])
+          : null,
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      'id': id,
       'uuid': uuid,
       'name': name,
       'value': value,

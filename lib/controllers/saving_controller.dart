@@ -4,8 +4,7 @@ import 'package:spendo/providers/auth_provider.dart';
 import 'package:spendo/services/supabase_service.dart';
 
 final savingControllerProvider =
-    StateNotifierProvider<SavingController, List<SavingModel>>(
-        (ref) {
+    StateNotifierProvider<SavingController, List<SavingModel>>((ref) {
   return SavingController(ref);
 });
 
@@ -37,18 +36,17 @@ class SavingController extends StateNotifier<List<SavingModel>> {
     }
   }
 
-  Future<String?> addSaving(
-      {required SavingModel subscription}) async {
+  Future<String?> addSaving({required SavingModel subscription}) async {
     final userId = ref.read(currentUserId);
     if (userId == null) return 'Usuário não autenticado';
 
-    if (subscription.title.isEmpty) return 'Adicione um título.';
-    if (subscription.value <= 0) return 'Adicione um valor.';
+    if (subscription.title!.isEmpty) return 'Adicione um título.';
+    if (subscription.goalValue! <= 0) return 'Adicione um valor de meta.';
 
     try {
       final newSaving = SavingModel(
+        uuid: userId,
         title: subscription.title,
-        value: subscription.value,
         goalValue: subscription.goalValue,
         colorCard: subscription.colorCard,
       );
@@ -61,19 +59,40 @@ class SavingController extends StateNotifier<List<SavingModel>> {
     }
   }
 
-  Future<String?> deleteSaving({required int id}) async {
-  try {
-    await _saving.deleteSaving(id);
+  Future<String?> updateSaving({required SavingModel saving}) async {
+    if (saving.id == null) return 'ID do cofrinho é obrigatório para atualizar';
 
-    // Remove do estado
-    state = state.where((item) => item.id != id).toList();
+    try {
+      await _saving.updateSaving(saving);
 
-    return null;
-  } catch (e) {
-    print('Erro ao deletar cofrinho: $e');
-    return 'Erro inesperado: $e';
+      // Atualiza o estado localmente
+      state = state.map((item) {
+        if (item.id == saving.id) {
+          return saving;
+        }
+        return item;
+      }).toList();
+
+      return null;
+    } catch (e) {
+      print('Erro ao atualizar cofrinho: $e');
+      return 'Erro inesperado: $e';
+    }
   }
-}
+
+  Future<String?> deleteSaving({required int id}) async {
+    try {
+      await _saving.deleteSaving(id);
+
+      // Remove do estado
+      state = state.where((item) => item.id != id).toList();
+
+      return null;
+    } catch (e) {
+      print('Erro ao deletar cofrinho: $e');
+      return 'Erro inesperado: $e';
+    }
+  }
 
   void clear() {
     state = [];
