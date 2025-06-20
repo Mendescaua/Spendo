@@ -5,6 +5,7 @@ import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:spendo/components/cards/SavingCard.dart';
 import 'package:spendo/components/cards/TotalBalanceCard.dart';
 import 'package:spendo/components/cards/TransactionCard.dart';
+import 'package:spendo/controllers/saving_controller.dart';
 import 'package:spendo/controllers/transaction_controller.dart';
 import 'package:spendo/utils/theme.dart';
 
@@ -20,40 +21,59 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    Future.microtask(() => loadTransactions());
+    Future.microtask(() => loadAllData());
   }
 
-  Future<void> loadTransactions() async {
-    if (_loading) return;
-
+  Future<void> loadAllData() async {
     setState(() => _loading = true);
 
-    final controller = ref.read(transactionControllerProvider.notifier);
-    final result = await controller.getTransaction();
+    await Future.delayed(Duration(seconds: 8));
+
+
+    final transactionController =
+        ref.read(transactionControllerProvider.notifier);
+    final savingController = ref.read(savingControllerProvider.notifier);
+
+    final transactionResult = await transactionController.getTransaction();
+    final savingResult = await savingController.getSaving();
 
     setState(() => _loading = false);
-    print("Result: $result");
 
-    if (result != null) {
-      print('Erro: $result');
+    if (transactionResult != null) {
+      print('Erro transações: $transactionResult');
+    }
+
+    if (savingResult != null) {
+      print('Erro cofrinho: $savingResult');
     }
   }
+@override
+Widget build(BuildContext context) {
+  final transactions = ref.watch(transactionControllerProvider);
+  final savings = ref.watch(savingControllerProvider);
 
-  @override
-  Widget build(BuildContext context) {
-    final transactions = ref.watch(transactionControllerProvider); // basicamente vc usa isso para ver oque a consulta carregou no provider e reconstruir a tela com os dados carregados
-    return Scaffold(
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          spacing: 16,
-          children: [
-            SaldoGeralCard(),
-            Container(
+  return Scaffold(
+    body: SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SaldoGeralCard(),
+          const SizedBox(height: 16),
+
+          // Se estiver carregando, mostra o loader abaixo do saldo
+          if (_loading)
+            Center(
+              child: LoadingAnimationWidget.staggeredDotsWave(
+                color: AppTheme.primaryColor,
+                size: 64,
+              ),
+            )
+          else
+            Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Column(
-                spacing: 16,
                 children: [
+                  /// Transações
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -65,31 +85,33 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         ),
                       ),
                       IconButton(
-                          onPressed: () {}, icon: Icon(Iconsax.setting_4))
+                        onPressed: () {},
+                        icon: Icon(Iconsax.setting_4),
+                      ),
                     ],
                   ),
-                  _loading
+                  transactions.isEmpty
                       ? Center(
-                          child: (LoadingAnimationWidget.staggeredDotsWave(
-                              color: AppTheme.primaryColor, size: 64)))
-                      : transactions.isEmpty
-                          ? Center(
-                              child: Text(
-                                "Nenhuma transação encontrada",
-                                style: TextStyle(fontSize: 16),
-                              ),
-                            )
-                          : ListView.builder(
-                              shrinkWrap: true,
-                              physics: const NeverScrollableScrollPhysics(),
-                              itemCount: transactions.length >= 3
-                                  ? 3
-                                  : transactions.length,
-                              itemBuilder: (context, index) {
-                                return TransactionCard(
-                                    transaction: transactions[index]);
-                              },
-                            ),
+                          child: Text(
+                            "Nenhuma transação encontrada",
+                            style: TextStyle(fontSize: 16),
+                          ),
+                        )
+                      : ListView.builder(
+                          shrinkWrap: true,
+                          physics: NeverScrollableScrollPhysics(),
+                          itemCount:
+                              transactions.length >= 3 ? 3 : transactions.length,
+                          itemBuilder: (context, index) {
+                            return TransactionCard(
+                              transaction: transactions[index],
+                            );
+                          },
+                        ),
+
+                  const SizedBox(height: 16),
+
+                  /// Cofrinho
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -101,21 +123,40 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         ),
                       ),
                       IconButton(
-                          onPressed: () {}, icon: Icon(Iconsax.setting_4))
+                        onPressed: () {},
+                        icon: Icon(Iconsax.setting_4),
+                      ),
                     ],
                   ),
-                  ListView.builder(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: 2,
-                    itemBuilder: (context, index) => SavingCard(),
-                  ),
+                  savings.isEmpty
+                      ? Center(
+                          child: Text(
+                            "Nenhum cofrinho encontrado",
+                            style: TextStyle(fontSize: 16),
+                          ),
+                        )
+                      : ListView.builder(
+                          shrinkWrap: true,
+                          physics: NeverScrollableScrollPhysics(),
+                          itemCount:
+                              savings.length >= 3 ? 3 : savings.length,
+                          itemBuilder: (context, index) {
+                            return GestureDetector(
+                              onTap: () {
+                                Navigator.of(context).pushNamed('/saving');
+                              },
+                              child: SavingCard(
+                                saving: savings[index],
+                              ),
+                            );
+                          },
+                        ),
                 ],
               ),
-            )
-          ],
-        ),
+            ),
+        ],
       ),
-    );
-  }
+    ),
+  );
+}
 }

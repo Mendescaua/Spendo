@@ -44,16 +44,15 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
   }
 
   void onDelete(int id) async {
-      final controller = ref.read(subscriptionControllerProvider.notifier);
-      final response = await controller.deleteSubscription(id: id);
+    final controller = ref.read(subscriptionControllerProvider.notifier);
+    final response = await controller.deleteSubscription(id: id);
 
-      if (response != null) {
-        FloatingMessage(context, response, 'error', 2);
-      } else {
-        FloatingMessage(
-            context, 'Assinatura deletada com sucesso', 'success', 2);
-      }
+    if (response != null) {
+      FloatingMessage(context, response, 'error', 2);
+    } else {
+      FloatingMessage(context, 'Assinatura deletada com sucesso', 'success', 2);
     }
+  }
 
   void _openAddTransactionModal(BuildContext context) {
     showModalBottomSheet(
@@ -127,7 +126,8 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
               Iconsax.arrow_left,
               color: AppTheme.whiteColor,
             ),
-            onPressed: () => Navigator.of(context).pushReplacementNamed('/menu'),
+            onPressed: () =>
+                Navigator.of(context).pushReplacementNamed('/menu'),
           ),
         ),
         backgroundColor: AppTheme.primaryColor,
@@ -213,12 +213,11 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
                                       key: Key(
                                           subscription[index].id.toString()),
                                       direction: DismissDirection.endToStart,
-                                      background: Container(
-                                        margin: const EdgeInsets.symmetric(
-                                            vertical:
-                                                8), // mesmo espaçamento do card
+                                      background: Container( // mesmo espaçamento do card
+                                      margin: const EdgeInsets.only(
+                                        bottom: 14, right: 16, top: 2),
                                         padding: const EdgeInsets.symmetric(
-                                            horizontal: 20),
+                                            horizontal: 10),
                                         decoration: BoxDecoration(
                                           color: Colors.red,
                                           borderRadius: BorderRadius.circular(

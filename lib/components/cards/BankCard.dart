@@ -69,7 +69,6 @@ class bankcard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final AuthController _authService = AuthController();
     return Padding(
       padding: const EdgeInsets.only(bottom: 20),
       child: Row(

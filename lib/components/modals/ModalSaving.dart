@@ -8,8 +8,9 @@ import 'package:spendo/controllers/saving_controller.dart';
 import 'package:spendo/models/saving_model.dart';
 
 class Modalsaving extends ConsumerStatefulWidget {
+  SavingModel? saving;
   final String type;
-  const Modalsaving({super.key, required this.type});
+  Modalsaving({super.key, required this.type, this.saving});
 
   @override
   ConsumerState<Modalsaving> createState() => _ModalsavingState();
@@ -28,7 +29,7 @@ class _ModalsavingState extends ConsumerState<Modalsaving> {
 
     void onSave() async {
       final response = await savingController.addSaving(
-        subscription: SavingModel(
+        saving: SavingModel(
           title: _titlecontroller.text,
           goalValue: double.tryParse(_goalvaluecontroller.text) ?? 0.0,
           colorCard: _color,
@@ -43,11 +44,13 @@ class _ModalsavingState extends ConsumerState<Modalsaving> {
       }
     }
 
-    void onAddValue() async {
-      final response = await savingController.addSaving(
-        subscription: SavingModel(
+    void onUpdateValue() async {
+      final response = await savingController.updateSavingValue(
+        saving: SavingModel(
+          id: widget.saving!.id,
           value: double.tryParse(_valuecontroller.text) ?? 0.0,
         ),
+        type: widget.type,
       );
       if (response != null) {
         FloatingMessage(context, response, 'error', 2);
@@ -58,7 +61,7 @@ class _ModalsavingState extends ConsumerState<Modalsaving> {
     }
 
     return SafeArea(
-      child: widget.type == 'add value'
+      child: widget.type == 'resgatar' || widget.type == 'guardar'
           ? Container(
               padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 24),
               width: double.infinity,
@@ -66,6 +69,7 @@ class _ModalsavingState extends ConsumerState<Modalsaving> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
+                spacing: 16,
                 children: [
                   Center(
                     child: Container(
@@ -77,17 +81,15 @@ class _ModalsavingState extends ConsumerState<Modalsaving> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 16),
                   Center(
-                    child: const Text(
-                      'Adicionar novo valor ao cofrinho',
+                    child: Text(
+                      widget.type == 'resgatar' ? 'Resgatar valor do cofrinho' : 'Guardar novo valor ao cofrinho',
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
-                  SizedBox(height: 16),
                   const Text(
                     'Valor',
                     style: TextStyle(
@@ -106,11 +108,11 @@ class _ModalsavingState extends ConsumerState<Modalsaving> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 32),
+                  SizedBox(height: 4),
                   StyleButton(
-                      text: 'Adicionar',
+                      text: widget.type == 'resgatar' ? 'Resgatar' : 'Guardar',
                       onClick: () {
-                        onAddValue();
+                        onUpdateValue();
                       }),
                 ],
               ),

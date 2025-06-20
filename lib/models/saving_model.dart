@@ -41,4 +41,25 @@ class SavingModel {
       'color_card': colorCard,
     };
   }
+
+  SavingModel copyWith({
+  int? id,
+  String? uuid,
+  String? title,
+  double? value,
+  double? goalValue,
+  String? colorCard,
+  DateTime? createdAt,
+}) {
+  return SavingModel(
+    id: id ?? this.id,
+    uuid: uuid ?? this.uuid,
+    title: title ?? this.title,
+    value: value ?? this.value,
+    goalValue: goalValue ?? this.goalValue,
+    colorCard: colorCard ?? this.colorCard,
+    createdAt: createdAt ?? this.createdAt,
+  );
+}
+
 }

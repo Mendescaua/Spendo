@@ -77,8 +77,11 @@ class SupabaseService {
     await supabase.from('SAVING').insert(model.toJson());
   }
 
-  Future<void> updateSaving(SavingModel model) async {
-    await supabase.from('SAVING').update(model.toJson()).eq('id', model.id!);
+  Future<void> updateSavingValue({
+    required int id,
+    required double value,
+  }) async {
+    await supabase.from('SAVING').update({'value': value}).eq('id', id);
   }
 
   Future<void> deleteSaving(int id) async {

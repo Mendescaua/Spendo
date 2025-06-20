@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:spendo/models/saving_model.dart';
+import 'package:spendo/utils/customText.dart';
 
 class SavingCard extends StatelessWidget {
-  const SavingCard({Key? key}) : super(key: key);
+  SavingModel saving;
+  SavingCard({super.key, required this.saving});
 
   @override
   Widget build(BuildContext context) {
@@ -41,16 +44,16 @@ class SavingCard extends StatelessWidget {
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: const [
+                  children: [
                     Text(
-                      "Iphone 13 Mini",
+                      saving.title!,
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: Colors.black,
                       ),
                     ),
                     Text(
-                      "\$699.00",
+                      Customtext.formatMoeda(saving.goalValue!) ??  Customtext.formatMoeda(0),
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: Colors.black,

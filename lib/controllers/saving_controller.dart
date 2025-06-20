@@ -18,8 +18,8 @@ class SavingController extends StateNotifier<List<SavingModel>> {
     String? userId;
     int tentativas = 0;
 
-    // Tenta pegar o userId até 5 vezes (com 100ms de delay entre cada uma)
-    while ((userId = ref.read(currentUserId)) == null && tentativas < 5) {
+    // Tenta pegar o userId até 10 vezes (com 100ms de delay entre cada uma)
+    while ((userId = ref.read(currentUserId)) == null && tentativas < 10) {
       await Future.delayed(const Duration(milliseconds: 100));
       tentativas++;
     }
@@ -36,19 +36,19 @@ class SavingController extends StateNotifier<List<SavingModel>> {
     }
   }
 
-  Future<String?> addSaving({required SavingModel subscription}) async {
+  Future<String?> addSaving({required SavingModel saving}) async {
     final userId = ref.read(currentUserId);
     if (userId == null) return 'Usuário não autenticado';
 
-    if (subscription.title!.isEmpty) return 'Adicione um título.';
-    if (subscription.goalValue! <= 0) return 'Adicione um valor de meta.';
+    if (saving.title!.isEmpty) return 'Adicione um título.';
+    if (saving.goalValue! <= 0) return 'Adicione um valor de meta.';
 
     try {
       final newSaving = SavingModel(
         uuid: userId,
-        title: subscription.title,
-        goalValue: subscription.goalValue,
-        colorCard: subscription.colorCard,
+        title: saving.title,
+        goalValue: saving.goalValue,
+        colorCard: saving.colorCard,
       );
       await _saving.addSaving(newSaving);
       state = [...state, newSaving];
@@ -59,16 +59,36 @@ class SavingController extends StateNotifier<List<SavingModel>> {
     }
   }
 
-  Future<String?> updateSaving({required SavingModel saving}) async {
-    if (saving.id == null) return 'ID do cofrinho é obrigatório para atualizar';
+  Future<String?> updateSavingValue(
+      {required SavingModel saving, required String type}) async {
+    if (saving.id == null || saving.value == null) {
+      return 'ID e valor do cofrinho são obrigatórios para atualizar';
+    }
 
     try {
-      await _saving.updateSaving(saving);
+      // Pega o valor atual do cofrinho no estado local
+      final current = state.firstWhere((item) => item.id == saving.id);
+      final newValue;
 
-      // Atualiza o estado localmente
+      if (type == 'resgatar') {
+        if (saving.value! > (current.value ?? 0)) {
+          return 'Você não pode resgatar um valor maior que o acumulado.';
+        }
+        newValue = (current.value ?? 0) - saving.value!;
+      } else {
+        if (saving.value! > (current.goalValue ?? 0)) {
+          return ' Vocé nao pode adicionar um valor maior que a meta.';
+        }
+        newValue = (current.value ?? 0) + saving.value!;
+      }
+
+      // Atualiza no banco
+      await _saving.updateSavingValue(id: saving.id!, value: newValue);
+
+      // Atualiza no estado local
       state = state.map((item) {
         if (item.id == saving.id) {
-          return saving;
+          return item.copyWith(value: newValue);
         }
         return item;
       }).toList();

@@ -59,12 +59,12 @@ class _ConfiguracoesScreenState extends ConsumerState<ConfiguracoesScreen> {
                   backgroundColor: Colors.grey.shade200,
                   backgroundImage:
                       users?.picture != null && users!.picture!.isNotEmpty
-                          ? base64ToImage(users!.picture!)
+                          ? base64ToImage(users.picture!)
                           : null,
                   child: users?.picture == null || users!.picture!.isEmpty
                       ? Text(
-                          (users?.name?.isNotEmpty ?? false)
-                              ? users!.name![0].toUpperCase()
+                          (users?.name.isNotEmpty ?? false)
+                              ? users!.name[0].toUpperCase()
                               : '?',
                           style: const TextStyle(
                             fontSize: 24,
@@ -172,17 +172,6 @@ class _ConfiguracoesScreenState extends ConsumerState<ConfiguracoesScreen> {
           style: TextStyle(
               color: color ?? Colors.black, fontWeight: FontWeight.w500)),
       onTap: onTap,
-      contentPadding: const EdgeInsets.symmetric(horizontal: 0),
-    );
-  }
-
-  Widget _buildSwitchTile(
-      IconData icon, String title, bool value, Function(bool) onChanged) {
-    return SwitchListTile(
-      secondary: Icon(icon),
-      title: Text(title, style: const TextStyle(fontWeight: FontWeight.w500)),
-      value: value,
-      onChanged: onChanged,
       contentPadding: const EdgeInsets.symmetric(horizontal: 0),
     );
   }

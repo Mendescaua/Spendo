@@ -79,7 +79,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
           },
         ),
         body: screens[currentTab],
-        bottomNavigationBar: currentTab == 3
+        bottomNavigationBar: currentTab == 3 || currentTab == 4
             ? null
             : Container(
                 height: 70,

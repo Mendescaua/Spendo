@@ -5,16 +5,20 @@ import 'package:spendo/utils/theme.dart';
 Widget StyleButton({
   required String text,
   final VoidCallback? onClick,
+  final Color? color,
+  final IconData? icon,
   bool isLoading = false,
 }) {
   return Container(
     width: double.infinity,
     height: 60,
-    decoration: BoxDecoration(
-      color: AppTheme.primaryColor,
-      borderRadius: BorderRadius.circular(16),
-    ),
-    child: TextButton(
+    child: ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: color ?? AppTheme.primaryColor,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+        ),
+      ),
       onPressed: isLoading ? null : onClick,
       child: isLoading
           ? SizedBox(
@@ -25,13 +29,27 @@ Widget StyleButton({
                 size: 24,
               ),
             )
-          : Text(
-              text,
-              style: const TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.w600,
-                color: AppTheme.whiteColor,
-              ),
+          : Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (icon != null) ...[
+                  Icon(
+                    icon,
+                    color: AppTheme.whiteColor,
+                    size: 24,
+                  ),
+                  const SizedBox(width: 8),
+                ],
+                Text(
+                  text,
+                  style: const TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.w600,
+                    color: AppTheme.whiteColor,
+                  ),
+                ),
+              ],
             ),
     ),
   );

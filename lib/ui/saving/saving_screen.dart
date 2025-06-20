@@ -72,7 +72,7 @@ class _SavingScreenState extends ConsumerState<SavingScreen> {
                     borderRadius:
                         const BorderRadius.vertical(top: Radius.circular(20)),
                     clipBehavior: Clip.antiAlias,
-                    child: const Modalsaving(
+                    child: Modalsaving(
                       type: 'add saving',
                     ),
                   ),
@@ -84,67 +84,90 @@ class _SavingScreenState extends ConsumerState<SavingScreen> {
       ),
     );
   }
-
-  @override
-  Widget build(BuildContext context) {
-    final savings = ref.watch(
-        savingControllerProvider); // Usando o provider para obter os cofrinhos, sem precisar carregar a tela novamente
-    return Scaffold(
+@override
+Widget build(BuildContext context) {
+  final savings = ref.watch(savingControllerProvider);
+  return SafeArea(
+    child: Scaffold(
+      backgroundColor: AppTheme.primaryColor,
       appBar: AppBar(
-        title: const Text("Cofrinhos"),
+        backgroundColor: AppTheme.primaryColor,
+        title: const Text(
+          "Cofrinhos",
+          style: TextStyle(color: Colors.white),
+        ),
+        leading: IconButton(
+          icon: const Icon(Iconsax.arrow_left, color: Colors.white),
+          onPressed: () => Navigator.of(context).pushReplacementNamed('/menu'),
+        ),
       ),
-      body: Container(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            children: [
-              Expanded(
-                child: _loading
-                    ? Center(
-                        child: LoadingAnimationWidget.staggeredDotsWave(
-                          color: AppTheme.primaryColor,
-                          size: 64,
-                        ),
-                      )
-                    : savings.isEmpty
-                        ? const Center(
-                            child: Text(
-                              "Nenhum cofrinho encontrada",
-                              style: TextStyle(fontSize: 16),
-                            ),
-                          )
-                        : ListView.builder(
-                            itemCount: savings.length,
-                            itemBuilder: (context, index) {
-                              return Dismissible(
-                                  key: Key(savings[index].id.toString()),
-                                  direction: DismissDirection.endToStart,
-                                  background: Container(
-                                    margin: const EdgeInsets.only(
-                                        bottom: 16, right: 16),
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 20),
-                                    decoration: BoxDecoration(
-                                      color: Colors.red,
-                                      borderRadius: BorderRadius.circular(
-                                          16), // igual ao do seu SubscriptionCard
-                                    ),
-                                    alignment: Alignment.centerRight,
-                                    child: const Icon(Icons.delete,
-                                        color: Colors.white),
-                                  ),
-                                  onDismissed: (direction) {
-                                    onDelete(savings[index].id!);
-                                  },
-                                  child: Savingbigcard(saving: savings[index]));
-                            },
-                          ),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+
+              ],
+            ),
+          ),
+          Expanded(
+            child: Container(
+              width: double.infinity,
+              margin: const EdgeInsets.only(top: 16),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 32),
+              decoration: const BoxDecoration(
+                color: AppTheme.backgroundColor,
+                borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
               ),
-            ],
-          )),
+              child: _loading
+                  ? Center(
+                      child: LoadingAnimationWidget.staggeredDotsWave(
+                        color: AppTheme.primaryColor,
+                        size: 64,
+                      ),
+                    )
+                  : savings.isEmpty
+                      ? const Center(
+                          child: Text(
+                            "Nenhum cofrinho encontrado",
+                            style: TextStyle(fontSize: 16),
+                          ),
+                        )
+                      : ListView.builder(
+                          itemCount: savings.length,
+                          itemBuilder: (context, index) {
+                            return Dismissible(
+                              key: Key(savings[index].id.toString()),
+                              direction: DismissDirection.endToStart,
+                              background: Container(
+                                margin: const EdgeInsets.only(
+                                    bottom: 18, right: 16, top: 2),
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 20),
+                                decoration: BoxDecoration(
+                                  color: Colors.red,
+                                  borderRadius: BorderRadius.circular(16),
+                                ),
+                                alignment: Alignment.centerRight,
+                                child:
+                                    const Icon(Icons.delete, color: Colors.white),
+                              ),
+                              onDismissed: (direction) {
+                                onDelete(savings[index].id!);
+                              },
+                              child: Savingbigcard(saving: savings[index]),
+                            );
+                          },
+                        ),
+            ),
+          ),
+        ],
+      ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          _openAddTransactionModal(context);
-        },
+        onPressed: () => _openAddTransactionModal(context),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(30),
         ),
@@ -155,6 +178,7 @@ class _SavingScreenState extends ConsumerState<SavingScreen> {
           size: 32,
         ),
       ),
-    );
-  }
+    ),
+  );
+}
 }

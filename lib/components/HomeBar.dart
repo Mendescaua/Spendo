@@ -44,12 +44,12 @@ class Homebar extends ConsumerWidget implements PreferredSizeWidget {
               backgroundColor: Colors.grey.shade200,
               backgroundImage:
                   users?.picture != null && users!.picture!.isNotEmpty
-                      ? base64ToImage(users!.picture!)
+                      ? base64ToImage(users.picture!)
                       : null,
               child: users?.picture == null || users!.picture!.isEmpty
                   ? Text(
-                      (users?.name?.isNotEmpty ?? false)
-                          ? users!.name![0].toUpperCase()
+                      (users?.name.isNotEmpty ?? false)
+                          ? users!.name[0].toUpperCase()
                           : '',
                       style: const TextStyle(
                         fontSize: 24,

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
+import 'package:spendo/components/buttons/StyleButton.dart';
 import 'package:spendo/components/modals/ModalSaving.dart';
-import 'package:spendo/controllers/subscription_controller.dart';
+import 'package:spendo/controllers/saving_controller.dart';
 import 'package:spendo/models/saving_model.dart';
 import 'package:spendo/utils/customText.dart';
 import 'package:spendo/utils/theme.dart';
@@ -17,7 +18,7 @@ class SavingInfoScreen extends ConsumerStatefulWidget {
 }
 
 class _SavingInfoScreenState extends ConsumerState<SavingInfoScreen> {
-  void _openAddTransactionModal(BuildContext context) {
+  void _openAddTransactionModal(BuildContext context, {required String type}) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -39,8 +40,9 @@ class _SavingInfoScreenState extends ConsumerState<SavingInfoScreen> {
                     borderRadius:
                         const BorderRadius.vertical(top: Radius.circular(20)),
                     clipBehavior: Clip.antiAlias,
-                    child: const Modalsaving(
-                      type: 'add value',
+                    child: Modalsaving(
+                      type: type,
+                      saving: widget.saving,
                     ),
                   ),
                 ),
@@ -54,6 +56,9 @@ class _SavingInfoScreenState extends ConsumerState<SavingInfoScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final savings = ref.watch(savingControllerProvider);
+    final currentSaving =
+        savings.firstWhere((item) => item.id == widget.saving.id);
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -68,6 +73,15 @@ class _SavingInfoScreenState extends ConsumerState<SavingInfoScreen> {
             ),
             onPressed: () => Navigator.of(context).pop(),
           ),
+          // actions: [
+          //   IconButton(
+          //     icon: const Icon(
+          //       Iconsax.edit,
+          //       color: AppTheme.whiteColor,
+          //     ),
+          //     onPressed: () {},
+          //   ),
+          // ],
         ),
         backgroundColor: AppTheme.primaryColor,
         body: Column(
@@ -114,7 +128,7 @@ class _SavingInfoScreenState extends ConsumerState<SavingInfoScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            widget.saving.title ?? '',
+                            currentSaving.title ?? '',
                             style: const TextStyle(
                               fontSize: 26,
                               fontWeight: FontWeight.bold,
@@ -128,15 +142,15 @@ class _SavingInfoScreenState extends ConsumerState<SavingInfoScreen> {
                               lineWidth: 14.0,
                               animation: true,
                               animationDuration: 1000,
-                              percent: (widget.saving.value ?? 0) /
-                                  (widget.saving.goalValue == 0
+                              percent: (currentSaving.value ?? 0) /
+                                  (currentSaving.goalValue == 0
                                       ? 1
-                                      : widget.saving.goalValue!),
+                                      : currentSaving.goalValue!),
                               center: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text(
-                                    '${((widget.saving.value ?? 0) / (widget.saving.goalValue == 0 ? 1 : widget.saving.goalValue!) * 100).toStringAsFixed(0)}%',
+                                    '${((currentSaving.value ?? 0) / (currentSaving.goalValue == 0 ? 1 : currentSaving.goalValue!) * 100).toStringAsFixed(0)}%',
                                     style: const TextStyle(
                                       fontSize: 24.0,
                                       fontWeight: FontWeight.w900,
@@ -164,15 +178,15 @@ class _SavingInfoScreenState extends ConsumerState<SavingInfoScreen> {
                                 icon: Iconsax.wallet_2,
                                 label: 'Acumulado',
                                 value: Customtext.formatMoeda(
-                                    widget.saving.value ?? 0),
+                                    currentSaving.value ?? 0),
                                 valueColor: Colors.black87,
                               ),
                               _InfoColumn(
                                 icon: Iconsax.wallet_money,
                                 label: 'Restante',
                                 value: Customtext.formatMoeda(
-                                    (widget.saving.goalValue ?? 0) -
-                                        (widget.saving.value ?? 0)),
+                                    (currentSaving.goalValue ?? 0) -
+                                        (currentSaving.value ?? 0)),
                                 valueColor: Colors.grey[700]!,
                               ),
                             ],
@@ -180,25 +194,33 @@ class _SavingInfoScreenState extends ConsumerState<SavingInfoScreen> {
                         ],
                       ),
                     ),
+                    Row(
+                      spacing: 16,
+                      children: [
+                        Expanded(
+                          child: StyleButton(
+                            color: Colors.grey.shade600,
+                            icon: Iconsax.money_send,
+                              text: 'Resgatar',
+                              onClick: () {
+                                _openAddTransactionModal(context, type: 'resgatar');
+                              }),
+                        ),
+                        Expanded(
+                          child: StyleButton(
+                              text: 'Guardar',
+                              icon: Iconsax.money_recive,
+                              onClick: () {
+                                _openAddTransactionModal(context, type: 'guardar');
+                              }),
+                        ),
+                      ],
+                    )
                   ],
                 ),
               ),
             )
           ],
-        ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            _openAddTransactionModal(context);
-          },
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(30),
-          ),
-          backgroundColor: AppTheme.primaryColor,
-          child: const Icon(
-            Iconsax.add,
-            color: Colors.white,
-            size: 32,
-          ),
         ),
       ),
     );
