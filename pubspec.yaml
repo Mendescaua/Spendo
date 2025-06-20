@@ -49,6 +49,7 @@ dependencies:
   flutter_native_splash: ^2.4.4
   month_year_picker: ^0.4.0+1
   percent_indicator: ^4.2.5
+  shimmer: ^3.0.0
 
 dev_dependencies:
   flutter_test:

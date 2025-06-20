@@ -20,7 +20,6 @@ class _ModalsavingState extends ConsumerState<Modalsaving> {
   final TextEditingController _titlecontroller = TextEditingController();
   final TextEditingController _goalvaluecontroller = TextEditingController();
   final TextEditingController _valuecontroller = TextEditingController();
-  String _color = '#FF4678c0';
 
   @override
   Widget build(BuildContext context) {
@@ -32,14 +31,13 @@ class _ModalsavingState extends ConsumerState<Modalsaving> {
         saving: SavingModel(
           title: _titlecontroller.text,
           goalValue: double.tryParse(_goalvaluecontroller.text) ?? 0.0,
-          colorCard: _color,
         ),
       );
       if (response != null) {
         FloatingMessage(context, response, 'error', 2);
       } else {
         FloatingMessage(
-            context, 'Cofrinho adicionada com sucesso', 'success', 2);
+            context, 'Meta adicionada com sucesso', 'success', 2);
         Navigator.of(context).pop();
       }
     }
@@ -182,14 +180,7 @@ class _ModalsavingState extends ConsumerState<Modalsaving> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 16),
-                  ColorPickerField(
-                    initialColorHex: '#FF4678c0',
-                    onColorSelected: (colorHex) {
-                      _color = colorHex;
-                      print('Cor selecionada: $colorHex');
-                    },
-                  ),
+
                   SizedBox(height: 32),
                   StyleButton(
                       text: 'Adicionar',

@@ -8,7 +8,6 @@ import 'package:spendo/ui/home_screen.dart';
 import 'package:spendo/ui/auth/login_screen.dart';
 import 'package:spendo/ui/main_screen.dart';
 import 'package:spendo/ui/auth/register_screen.dart';
-import 'package:spendo/ui/saving/saving_screen.dart';
 import 'package:spendo/ui/splash_screen.dart';
 import 'package:spendo/utils/theme.dart';
 
@@ -49,7 +48,6 @@ class MyApp extends StatelessWidget {
         '/register': (context) => const RegisterScreen(),
         '/home': (context) => const HomeScreen(),
         '/menu': (context) => const MainScreen(),
-        '/saving': (context) => const SavingScreen(),
       },
     );
   }

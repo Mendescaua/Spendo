@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:spendo/components/FloatingMessage.dart';
-import 'package:spendo/components/cards/SavingBigCard.dart';
+import 'package:spendo/components/cards/NewCard.dart';
 import 'package:spendo/components/modals/ModalSaving.dart';
 import 'package:spendo/controllers/saving_controller.dart';
 import 'package:spendo/utils/theme.dart';
@@ -21,22 +21,6 @@ class _SavingScreenState extends ConsumerState<SavingScreen> {
   @override
   void initState() {
     super.initState();
-    Future.microtask(() => loadSaving());
-  }
-
-  Future<void> loadSaving() async {
-    if (_loading) return;
-
-    setState(() => _loading = true);
-
-    final controller = ref.read(savingControllerProvider.notifier);
-    final result = await controller.getSaving();
-
-    setState(() => _loading = false);
-
-    if (result != null) {
-      print('Erro ao carregar cofrinhos: $result');
-    }
   }
 
   void onDelete(int id) async {
@@ -93,7 +77,7 @@ Widget build(BuildContext context) {
       appBar: AppBar(
         backgroundColor: AppTheme.primaryColor,
         title: const Text(
-          "Cofrinhos",
+          "Minhas metas",
           style: TextStyle(color: Colors.white),
         ),
         leading: IconButton(
@@ -132,7 +116,7 @@ Widget build(BuildContext context) {
                   : savings.isEmpty
                       ? const Center(
                           child: Text(
-                            "Nenhum cofrinho encontrado",
+                            "Nenhuma meta encontrado",
                             style: TextStyle(fontSize: 16),
                           ),
                         )
@@ -140,26 +124,47 @@ Widget build(BuildContext context) {
                           itemCount: savings.length,
                           itemBuilder: (context, index) {
                             return Dismissible(
-                              key: Key(savings[index].id.toString()),
-                              direction: DismissDirection.endToStart,
-                              background: Container(
-                                margin: const EdgeInsets.only(
-                                    bottom: 18, right: 16, top: 2),
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 20),
-                                decoration: BoxDecoration(
-                                  color: Colors.red,
-                                  borderRadius: BorderRadius.circular(16),
-                                ),
-                                alignment: Alignment.centerRight,
-                                child:
-                                    const Icon(Icons.delete, color: Colors.white),
-                              ),
-                              onDismissed: (direction) {
-                                onDelete(savings[index].id!);
-                              },
-                              child: Savingbigcard(saving: savings[index]),
-                            );
+  key: Key(savings[index].id.toString()),
+  direction: DismissDirection.endToStart,
+  confirmDismiss: (direction) async {
+    return await showDialog<bool>(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Confirmar exclusão'),
+          content: const Text('Você realmente deseja excluir esta meta?'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(false),
+              child: const Text('Cancelar'),
+            ),
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(true),
+              child: const Text('Excluir', style: TextStyle(color: Colors.red)),
+            ),
+          ],
+        );
+      },
+    );
+  },
+  background: Container(
+    margin: const EdgeInsets.only(bottom: 18, right: 16, top: 2),
+    padding: const EdgeInsets.symmetric(horizontal: 20),
+    decoration: BoxDecoration(
+      color: Colors.red,
+      borderRadius: BorderRadius.circular(16),
+    ),
+    alignment: Alignment.centerRight,
+    child: const Icon(Icons.delete, color: Colors.white),
+  ),
+  onDismissed: (direction) {
+    onDelete(savings[index].id!);
+  },
+  child: MetaCard(
+    saving: savings[index],
+  ),
+);
+
                           },
                         ),
             ),

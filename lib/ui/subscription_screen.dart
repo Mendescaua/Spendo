@@ -213,15 +213,46 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
                                       key: Key(
                                           subscription[index].id.toString()),
                                       direction: DismissDirection.endToStart,
-                                      background: Container( // mesmo espaçamento do card
-                                      margin: const EdgeInsets.only(
-                                        bottom: 14, right: 16, top: 2),
+                                      confirmDismiss: (direction) async {
+                                        return await showDialog<bool>(
+                                          context: context,
+                                          builder: (context) {
+                                            return AlertDialog(
+                                              title: const Text(
+                                                  'Confirmar exclusão'),
+                                              content: const Text(
+                                                  'Você realmente deseja excluir esta assinatura?'),
+                                              actions: [
+                                                TextButton(
+                                                  onPressed: () =>
+                                                      Navigator.of(context)
+                                                          .pop(false),
+                                                  child: const Text('Cancelar'),
+                                                ),
+                                                TextButton(
+                                                  onPressed: () =>
+                                                      Navigator.of(context)
+                                                          .pop(true),
+                                                  child: const Text(
+                                                    'Excluir',
+                                                    style: TextStyle(
+                                                        color: Colors.red),
+                                                  ),
+                                                ),
+                                              ],
+                                            );
+                                          },
+                                        );
+                                      },
+                                      background: Container(
+                                        margin: const EdgeInsets.only(
+                                            bottom: 14, right: 16, top: 2),
                                         padding: const EdgeInsets.symmetric(
                                             horizontal: 10),
                                         decoration: BoxDecoration(
                                           color: Colors.red,
-                                          borderRadius: BorderRadius.circular(
-                                              16), // igual ao do seu SubscriptionCard
+                                          borderRadius:
+                                              BorderRadius.circular(16),
                                         ),
                                         alignment: Alignment.centerRight,
                                         child: const Icon(Icons.delete,

@@ -48,7 +48,6 @@ class SavingController extends StateNotifier<List<SavingModel>> {
         uuid: userId,
         title: saving.title,
         goalValue: saving.goalValue,
-        colorCard: saving.colorCard,
       );
       await _saving.addSaving(newSaving);
       state = [...state, newSaving];

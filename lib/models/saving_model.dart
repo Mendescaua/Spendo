@@ -4,7 +4,7 @@ class SavingModel {
   final String? title;
   final double? value;
   final double? goalValue;
-  final String? colorCard;
+  final String? picture;
   final DateTime? createdAt;
 
   SavingModel(
@@ -13,8 +13,8 @@ class SavingModel {
       this.title,
       this.value,
       this.goalValue,
-      this.colorCard,
-      this.createdAt});
+      this.createdAt,
+      this.picture});
 
   factory SavingModel.fromJson(Map<String, dynamic> json) {
     return SavingModel(
@@ -25,7 +25,7 @@ class SavingModel {
       goalValue: json['goal_value'] != null
           ? (json['goal_value'] as num).toDouble()
           : 0.0,
-      colorCard: json['color_card'],
+      picture: json['picture'],
       createdAt: json['created_at'] != null
           ? DateTime.parse(json['created_at'])
           : null,
@@ -38,7 +38,7 @@ class SavingModel {
       'title': title,
       'value': value,
       'goal_value': goalValue,
-      'color_card': colorCard,
+      'picture': picture,
     };
   }
 
@@ -48,7 +48,7 @@ class SavingModel {
   String? title,
   double? value,
   double? goalValue,
-  String? colorCard,
+  final String? picture,
   DateTime? createdAt,
 }) {
   return SavingModel(
@@ -57,7 +57,7 @@ class SavingModel {
     title: title ?? this.title,
     value: value ?? this.value,
     goalValue: goalValue ?? this.goalValue,
-    colorCard: colorCard ?? this.colorCard,
+    picture: picture ?? this.picture,
     createdAt: createdAt ?? this.createdAt,
   );
 }

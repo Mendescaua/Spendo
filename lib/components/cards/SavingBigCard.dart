@@ -37,7 +37,7 @@ class Savingbigcard extends StatelessWidget {
         padding: const EdgeInsets.all(16),
         margin: const EdgeInsets.only(bottom: 16),
         decoration: BoxDecoration(
-          color: Customtext.stringToColor(saving.colorCard ?? '#FF4678c0'),
+          color: Customtext.stringToColor('#FF4678c0'),
           borderRadius: BorderRadius.circular(12),
         ),
         child: Column(

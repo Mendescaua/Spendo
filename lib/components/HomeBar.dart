@@ -152,7 +152,7 @@ class HomeDrawer extends StatelessWidget {
                       contentPadding: const EdgeInsets.symmetric(vertical: 4),
                       leading: Icon(Iconsax.wallet_2,
                           size: 28, color: AppTheme.primaryColor),
-                      title: Text("Cofrinho",
+                      title: Text("Minhas metas",
                           style: const TextStyle(fontSize: 16)),
                       onTap: () {
                         Navigator.of(context).pop();
