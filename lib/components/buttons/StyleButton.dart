@@ -4,6 +4,7 @@ import 'package:spendo/utils/theme.dart';
 
 Widget StyleButton({
   required String text,
+  final int? textSize,
   final VoidCallback? onClick,
   final Color? color,
   final IconData? icon,
@@ -43,8 +44,8 @@ Widget StyleButton({
                 ],
                 Text(
                   text,
-                  style: const TextStyle(
-                    fontSize: 22,
+                  style: TextStyle(
+                    fontSize: textSize != null ? textSize.toDouble() : 22,
                     fontWeight: FontWeight.w600,
                     color: AppTheme.whiteColor,
                   ),

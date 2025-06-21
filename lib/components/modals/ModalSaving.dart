@@ -36,8 +36,7 @@ class _ModalsavingState extends ConsumerState<Modalsaving> {
       if (response != null) {
         FloatingMessage(context, response, 'error', 2);
       } else {
-        FloatingMessage(
-            context, 'Meta adicionada com sucesso', 'success', 2);
+        FloatingMessage(context, 'Meta adicionada com sucesso', 'success', 2);
         Navigator.of(context).pop();
       }
     }
@@ -81,7 +80,9 @@ class _ModalsavingState extends ConsumerState<Modalsaving> {
                   ),
                   Center(
                     child: Text(
-                      widget.type == 'resgatar' ? 'Resgatar valor do cofrinho' : 'Guardar novo valor ao cofrinho',
+                      widget.type == 'resgatar'
+                          ? 'Resgatar valor do cofrinho'
+                          : 'Guardar novo valor ao cofrinho',
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
@@ -118,7 +119,7 @@ class _ModalsavingState extends ConsumerState<Modalsaving> {
           : Container(
               padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 24),
               width: double.infinity,
-              height: size.height * 0.54,
+              height: size.height * 0.64,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
@@ -140,6 +141,25 @@ class _ModalsavingState extends ConsumerState<Modalsaving> {
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 16),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.of(context).pushNamed('/saving_picker_image');
+                    },
+                    child: Container(
+                      width: double.infinity,
+                      height: 120,
+                      decoration: BoxDecoration(
+                        color: Colors.grey,
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      child: Icon(
+                        Iconsax.gallery_add,
+                        size: 42,
+                        color: Colors.white,
                       ),
                     ),
                   ),
@@ -180,7 +200,6 @@ class _ModalsavingState extends ConsumerState<Modalsaving> {
                       ),
                     ),
                   ),
-
                   SizedBox(height: 32),
                   StyleButton(
                       text: 'Adicionar',

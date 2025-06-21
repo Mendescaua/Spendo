@@ -1,24 +1,35 @@
 import 'package:flutter/material.dart';
-import 'package:spendo/utils/base64.dart';
-import 'package:spendo/utils/base64/imagesBase64.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:iconsax/iconsax.dart';
+import 'package:spendo/controllers/saving_image_controller.dart';
 
-void main() {
-  runApp(const MaterialApp(home: ImagePickerScreen()));
-}
-
-class ImagePickerScreen extends StatelessWidget {
+class ImagePickerScreen extends ConsumerStatefulWidget {
   const ImagePickerScreen({super.key});
 
   @override
+  ConsumerState<ImagePickerScreen> createState() => _ImagePickerScreenState();
+}
+
+class _ImagePickerScreenState extends ConsumerState<ImagePickerScreen> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    Future.microtask(() {
+      // Carregar imagens do banco de dados
+      ref.read(imagesControllerProvider.notifier).getImages();
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    
-    final base64Images = Base64Images.allImages;
-
-
+    final images = ref.watch(imagesControllerProvider);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Personalizar'),
-        leading: const BackButton(),
+        leading: IconButton(
+            onPressed: () => Navigator.pop(context),
+            icon: const Icon(Iconsax.arrow_left)),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),
@@ -63,16 +74,18 @@ class ImagePickerScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-                  // Imagens em base64
-                  ...base64Images.map((img) {
-                    return ClipRRect(
-                      borderRadius: BorderRadius.circular(16),
-                      child: Image(
-                        image: base64ToImage(img),
-                        fit: BoxFit.cover,
-                      ),
-                    );
-                  }).toList(),
+                  // Mostrar imagens carregadas
+                  ...images
+                      .map((image) => ClipRRect(
+                            borderRadius: BorderRadius.circular(16),
+                            child: Image.network(
+                              image,
+                              fit: BoxFit.cover,
+                              errorBuilder: (_, __, ___) =>
+                                  const Icon(Icons.broken_image),
+                            ),
+                          ))
+                      .toList(),
                 ],
               ),
             ),

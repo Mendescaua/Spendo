@@ -12,6 +12,7 @@ class SavingController extends StateNotifier<List<SavingModel>> {
   final SupabaseService _saving = SupabaseService();
   final Ref ref;
 
+
   SavingController(this.ref) : super([]);
 
   Future<String?> getSaving() async {

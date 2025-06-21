@@ -61,165 +61,227 @@ class _SavingInfoScreenState extends ConsumerState<SavingInfoScreen> {
         savings.firstWhere((item) => item.id == widget.saving.id);
     return SafeArea(
       child: Scaffold(
-        appBar: AppBar(
-          title: Text(
-            widget.saving.title ?? 'Cofrinho',
-            style: TextStyle(color: AppTheme.whiteColor),
-          ),
-          leading: IconButton(
-            icon: const Icon(
-              Iconsax.arrow_left,
-              color: AppTheme.whiteColor,
-            ),
-            onPressed: () => Navigator.of(context).pop(),
-          ),
-          // actions: [
-          //   IconButton(
-          //     icon: const Icon(
-          //       Iconsax.edit,
-          //       color: AppTheme.whiteColor,
-          //     ),
-          //     onPressed: () {},
-          //   ),
-          // ],
-        ),
-        backgroundColor: AppTheme.primaryColor,
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        body: Stack(
           children: [
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16),
+            // 🔹 Imagem + AppBar + Texto "Meta"
+            Column(
+              children: [
+                SizedBox(
+                  width: double.infinity,
+                  height: 220,
+                  child: Stack(
+                    fit: StackFit.expand,
+                    children: [
+                      Image.network(
+                        widget.saving.picture ?? '',
+                        fit: BoxFit.cover,
+                      ),
+                      // Sombra subindo de baixo pra cima
+                      Container(
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.bottomCenter,
+                            end: Alignment.topCenter,
+                            colors: [
+                              Colors.black
+                                  .withOpacity(0.8), // sombra na parte de baixo
+                              Colors.transparent, // parte de cima sem sombra
+                            ],
+                            stops: [0.0, 0.6], // até 60% da altura
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+
+            // 🔹 AppBar sobre a imagem
+            Positioned(
+              top: 0,
+              left: 0,
+              right: 0,
+              child: AppBar(
+                backgroundColor: Colors.transparent,
+                elevation: 0,
+                title: Text(
+                  widget.saving.title ?? 'Cofrinho',
+                  style: const TextStyle(color: Colors.white),
+                ),
+                leading: IconButton(
+                  icon: const Icon(Iconsax.arrow_left, color: Colors.white),
+                  onPressed: () => Navigator.of(context).pop(),
+                ),
+              ),
+            ),
+
+            // 🔹 Texto "Meta"
+            Positioned(
+              left: 16,
+              top: 110,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     'Meta',
-                    style: TextStyle(color: Colors.white70),
+                    style: TextStyle(
+                      color: Colors.grey.shade200,
+                      fontSize: 16,
+                      shadows: [
+                        Shadow(
+                          blurRadius: 4,
+                          color: Colors.black.withOpacity(0.7),
+                          offset: Offset(0, 2),
+                        ),
+                      ],
+                    ),
                   ),
-                  SizedBox(height: 8),
+                  const SizedBox(height: 4),
+                  Text(
+                    Customtext.formatMoeda(widget.saving.goalValue ?? 0),
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 28,
+                      fontWeight: FontWeight.bold,
+                      shadows: [
+                        Shadow(
+                          blurRadius: 4,
+                          color: Colors.black.withOpacity(0.7),
+                          offset: Offset(0, 2),
+                        ),
+                      ],
+                    ),
+                  ),
                 ],
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Text(
-                Customtext.formatMoeda(widget.saving.goalValue ?? 0),
-                style: const TextStyle(
-                  color: AppTheme.whiteColor,
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-            const SizedBox(height: 32),
-            Expanded(
+
+            // 🔹 Container branco preenchendo todo o restante da tela
+            Positioned.fill(
+              top: 186, // altura da imagem menos um pouco para sobrepor
               child: Container(
-                width: double.infinity,
                 padding: const EdgeInsets.all(16),
                 decoration: const BoxDecoration(
                   color: AppTheme.backgroundColor,
-                  borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+                  borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black12,
+                      blurRadius: 6,
+                      offset: Offset(0, -3),
+                    )
+                  ],
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            currentSaving.title ?? '',
-                            style: const TextStyle(
-                              fontSize: 26,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black87,
+                      child: SingleChildScrollView(
+                        // em caso de overflow
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              currentSaving.title ?? '',
+                              style: const TextStyle(
+                                fontSize: 26,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black87,
+                              ),
                             ),
-                          ),
-                          const SizedBox(height: 30),
-                          Center(
-                            child: CircularPercentIndicator(
-                              radius: 110.0,
-                              lineWidth: 14.0,
-                              animation: true,
-                              animationDuration: 1000,
-                              percent: (currentSaving.value ?? 0) /
-                                  (currentSaving.goalValue == 0
-                                      ? 1
-                                      : currentSaving.goalValue!),
-                              center: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    '${((currentSaving.value ?? 0) / (currentSaving.goalValue == 0 ? 1 : currentSaving.goalValue!) * 100).toStringAsFixed(0)}%',
-                                    style: const TextStyle(
-                                      fontSize: 24.0,
-                                      fontWeight: FontWeight.w900,
-                                      color: AppTheme.primaryColor,
+                            const SizedBox(height: 30),
+                            Center(
+                              child: CircularPercentIndicator(
+                                radius: 110.0,
+                                lineWidth: 14.0,
+                                animation: true,
+                                animationDuration: 1000,
+                                percent: (currentSaving.value ?? 0) /
+                                    (currentSaving.goalValue == 0
+                                        ? 1
+                                        : currentSaving.goalValue!),
+                                center: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      '${((currentSaving.value ?? 0) / (currentSaving.goalValue == 0 ? 1 : currentSaving.goalValue!) * 100).toStringAsFixed(0)}%',
+                                      style: const TextStyle(
+                                        fontSize: 24.0,
+                                        fontWeight: FontWeight.w900,
+                                        color: AppTheme.primaryColor,
+                                      ),
                                     ),
-                                  ),
-                                  const SizedBox(height: 6),
-                                  const Text(
-                                    'concluído',
-                                    style: TextStyle(
-                                        fontSize: 14, color: Colors.black54),
-                                  ),
-                                ],
+                                    const SizedBox(height: 6),
+                                    const Text(
+                                      'concluído',
+                                      style: TextStyle(
+                                          fontSize: 14, color: Colors.black54),
+                                    ),
+                                  ],
+                                ),
+                                circularStrokeCap: CircularStrokeCap.round,
+                                progressColor: AppTheme.primaryColor,
+                                backgroundColor: Colors.grey.shade300,
                               ),
-                              circularStrokeCap: CircularStrokeCap.round,
-                              progressColor: AppTheme.primaryColor,
-                              backgroundColor: Colors.grey.shade300,
                             ),
-                          ),
-                          const SizedBox(height: 30),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              _InfoColumn(
-                                icon: Iconsax.wallet_2,
-                                label: 'Acumulado',
-                                value: Customtext.formatMoeda(
-                                    currentSaving.value ?? 0),
-                                valueColor: Colors.black87,
-                              ),
-                              _InfoColumn(
-                                icon: Iconsax.wallet_money,
-                                label: 'Restante',
-                                value: Customtext.formatMoeda(
-                                    (currentSaving.goalValue ?? 0) -
-                                        (currentSaving.value ?? 0)),
-                                valueColor: Colors.grey[700]!,
-                              ),
-                            ],
-                          ),
-                        ],
+                            const SizedBox(height: 30),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                _InfoColumn(
+                                  icon: Iconsax.wallet_2,
+                                  label: 'Acumulado',
+                                  value: Customtext.formatMoeda(
+                                      currentSaving.value ?? 0),
+                                  valueColor: Colors.black87,
+                                ),
+                                _InfoColumn(
+                                  icon: Iconsax.wallet_money,
+                                  label: 'Restante',
+                                  value: Customtext.formatMoeda(
+                                      (currentSaving.goalValue ?? 0) -
+                                          (currentSaving.value ?? 0)),
+                                  valueColor: Colors.grey[700]!,
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                     Row(
-                      spacing: 16,
                       children: [
                         Expanded(
                           child: StyleButton(
                             color: Colors.grey.shade600,
                             icon: Iconsax.money_send,
-                              text: 'Resgatar',
-                              onClick: () {
-                                _openAddTransactionModal(context, type: 'resgatar');
-                              }),
+                            text: 'Resgatar',
+                            textSize: 18,
+                            onClick: () {
+                              _openAddTransactionModal(context,
+                                  type: 'resgatar');
+                            },
+                          ),
                         ),
+                        const SizedBox(width: 16),
                         Expanded(
                           child: StyleButton(
-                              text: 'Guardar',
-                              icon: Iconsax.money_recive,
-                              onClick: () {
-                                _openAddTransactionModal(context, type: 'guardar');
-                              }),
+                            text: 'Guardar',
+                            textSize: 18,
+                            icon: Iconsax.money_recive,
+                            onClick: () {
+                              _openAddTransactionModal(context,
+                                  type: 'guardar');
+                            },
+                          ),
                         ),
                       ],
-                    )
+                    ),
                   ],
                 ),
               ),
-            )
+            ),
           ],
         ),
       ),
@@ -262,7 +324,7 @@ class _InfoColumn extends StatelessWidget {
               value,
               style: TextStyle(
                 fontWeight: FontWeight.bold,
-                fontSize: 20,
+                fontSize: 18,
                 color: valueColor,
               ),
             ),

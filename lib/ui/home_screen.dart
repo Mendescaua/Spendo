@@ -175,8 +175,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                       shrinkWrap: true,
                                       physics:
                                           const NeverScrollableScrollPhysics(),
-                                      itemCount: savings.length >= 3
-                                          ? 3
+                                      itemCount: savings.length >= 2
+                                          ? 2
                                           : savings.length,
                                       itemBuilder: (context, index) {
                                         return MetaCard(

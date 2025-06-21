@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:spendo/models/saving_model.dart';
 import 'package:spendo/ui/saving/saving_info_screen.dart';
-import 'package:spendo/utils/base64.dart';
 import 'package:spendo/utils/customText.dart';
 import 'package:spendo/utils/theme.dart';
 
@@ -48,14 +47,13 @@ class MetaCard extends StatelessWidget {
                 topLeft: Radius.circular(16),
                 topRight: Radius.circular(16),
               ),
-              child: Image(
-                image: base64ToImage(saving.picture ?? ''),
+              child: Image.network(
+                saving.picture ?? '',
                 height: 120,
                 width: double.infinity,
                 fit: BoxFit.cover,
               ),
             ),
-
             Padding(
               padding: const EdgeInsets.all(12.0),
               child: Column(

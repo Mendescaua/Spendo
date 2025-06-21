@@ -88,6 +88,22 @@ class SupabaseService {
     await supabase.from('SAVING').delete().eq('id', id);
   }
 
+  // Imagens do saving
+  Future<List<String>> getImagesSaving() async {
+    final response = await supabase.storage
+        .from('saving') // Ex: 'images'
+        .list();
+
+    if (response.isEmpty) return [];
+
+    // Gera a URL pública para cada imagem
+    final urls = response.map((file) {
+      return supabase.storage.from('saving').getPublicUrl(file.name);
+    }).toList();
+
+    return urls;
+  }
+
   // Aqui eu uso apenas no categoriesField para carregar as categorias do banco
   Future<List<CategoryTransactionModel>> getCategoryTransaction(
       String userId) async {
