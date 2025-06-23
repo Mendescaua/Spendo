@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:spendo/components/FloatingMessage.dart';
-import 'package:spendo/components/cards/NewCard.dart';
+import 'package:spendo/components/cards/SavingCard.dart';
 import 'package:spendo/components/modals/ModalSaving.dart';
 import 'package:spendo/controllers/saving_controller.dart';
 import 'package:spendo/utils/theme.dart';

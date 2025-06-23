@@ -8,6 +8,7 @@ import 'package:spendo/ui/configuration_screen.dart';
 import 'package:spendo/ui/home_screen.dart';
 import 'package:spendo/ui/saving/saving_screen.dart';
 import 'package:spendo/ui/subscription_screen.dart';
+import 'package:spendo/ui/wallet_screen.dart';
 import 'package:spendo/utils/theme.dart';
 
 class MainScreen extends ConsumerStatefulWidget {
@@ -36,7 +37,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
     List<Widget> screens = [
       const HomeScreen(),
       const Center(child: Text('Tela 2')),
-      const Center(child: Text('Tela 3')),
+      WalletScreen(),
       const SubscriptionScreen(),
       const SavingScreen(),
       const ConfiguracoesScreen(),

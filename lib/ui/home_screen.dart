@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:spendo/components/cards/NewCard.dart';
+import 'package:spendo/components/cards/SavingCard.dart';
 import 'package:spendo/components/cards/TotalBalanceCard.dart';
 import 'package:spendo/components/cards/TransactionCard.dart';
 import 'package:spendo/components/skeletons/skeletonBigCard.dart';
