@@ -13,7 +13,6 @@ class ImagePickerScreen extends ConsumerStatefulWidget {
 class _ImagePickerScreenState extends ConsumerState<ImagePickerScreen> {
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     Future.microtask(() {
       // Carregar imagens do banco de dados
@@ -24,6 +23,14 @@ class _ImagePickerScreenState extends ConsumerState<ImagePickerScreen> {
   @override
   Widget build(BuildContext context) {
     final images = ref.watch(imagesControllerProvider);
+    if (images.isEmpty) {
+      // Mostra loading enquanto a lista estiver vazia
+      return const Scaffold(
+        body: Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+    }
     return Scaffold(
       appBar: AppBar(
         title: const Text('Personalizar'),
@@ -47,45 +54,25 @@ class _ImagePickerScreenState extends ConsumerState<ImagePickerScreen> {
                 mainAxisSpacing: 16,
                 crossAxisSpacing: 16,
                 children: [
-                  // Botão de upload
-                  InkWell(
-                    onTap: () {
-                      // lógica de upload
-                    },
-                    borderRadius: BorderRadius.circular(16),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey),
+                  // Mostrar imagens carregadas
+                  ...images.map((image) {
+                    return InkWell(
+                      onTap: () {
+                        Navigator.pop(
+                            context, image); // Retorna a URL da imagem
+                      },
+                      borderRadius: BorderRadius.circular(16),
+                      child: ClipRRect(
                         borderRadius: BorderRadius.circular(16),
-                      ),
-                      child: const Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(Icons.add, size: 40),
-                            SizedBox(height: 8),
-                            Text(
-                              'Enviar\nImagem',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                          ],
+                        child: Image.network(
+                          image,
+                          fit: BoxFit.cover,
+                          errorBuilder: (_, __, ___) =>
+                              const Icon(Icons.broken_image),
                         ),
                       ),
-                    ),
-                  ),
-                  // Mostrar imagens carregadas
-                  ...images
-                      .map((image) => ClipRRect(
-                            borderRadius: BorderRadius.circular(16),
-                            child: Image.network(
-                              image,
-                              fit: BoxFit.cover,
-                              errorBuilder: (_, __, ___) =>
-                                  const Icon(Icons.broken_image),
-                            ),
-                          ))
-                      .toList(),
+                    );
+                  }).toList(),
                 ],
               ),
             ),

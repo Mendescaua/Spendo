@@ -43,12 +43,14 @@ class SavingController extends StateNotifier<List<SavingModel>> {
 
     if (saving.title!.isEmpty) return 'Adicione um título.';
     if (saving.goalValue! <= 0) return 'Adicione um valor de meta.';
+    if (saving.picture!.isEmpty) return 'Adicione uma imagem de meta.';
 
     try {
       final newSaving = SavingModel(
         uuid: userId,
         title: saving.title,
         goalValue: saving.goalValue,
+        picture: saving.picture
       );
       await _saving.addSaving(newSaving);
       state = [...state, newSaving];

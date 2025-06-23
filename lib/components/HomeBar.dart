@@ -150,7 +150,7 @@ class HomeDrawer extends StatelessWidget {
                     ),
                     ListTile(
                       contentPadding: const EdgeInsets.symmetric(vertical: 4),
-                      leading: Icon(Iconsax.wallet_2,
+                      leading: Icon(Iconsax.archive_add,
                           size: 28, color: AppTheme.primaryColor),
                       title: Text("Minhas metas",
                           style: const TextStyle(fontSize: 16)),

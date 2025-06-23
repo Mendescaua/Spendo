@@ -15,7 +15,7 @@ class ImagesController extends StateNotifier<List<String>> {
   Future<String?> getImages() async {
     try {
       final urls = await _supabaseService.getImagesSaving();
-      print('URLs obtidas: $urls');
+      // print('URLs obtidas: $urls');
       state = urls;
       return null;
     } catch (e) {

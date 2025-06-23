@@ -20,6 +20,7 @@ class _ModalsavingState extends ConsumerState<Modalsaving> {
   final TextEditingController _titlecontroller = TextEditingController();
   final TextEditingController _goalvaluecontroller = TextEditingController();
   final TextEditingController _valuecontroller = TextEditingController();
+  String? selectedImageUrl;
 
   @override
   Widget build(BuildContext context) {
@@ -31,6 +32,7 @@ class _ModalsavingState extends ConsumerState<Modalsaving> {
         saving: SavingModel(
           title: _titlecontroller.text,
           goalValue: double.tryParse(_goalvaluecontroller.text) ?? 0.0,
+          picture: selectedImageUrl ?? '',
         ),
       );
       if (response != null) {
@@ -146,21 +148,37 @@ class _ModalsavingState extends ConsumerState<Modalsaving> {
                   ),
                   SizedBox(height: 16),
                   GestureDetector(
-                    onTap: () {
-                      Navigator.of(context).pushNamed('/saving_picker_image');
+                    onTap: () async {
+                      final selectedImage = await Navigator.of(context)
+                          .pushNamed('/saving_picker_image');
+
+                      if (selectedImage != null && selectedImage is String) {
+                        setState(() {
+                          selectedImageUrl = selectedImage;
+                        });
+                        print('Imagem escolhida: $selectedImage');
+                      }
                     },
                     child: Container(
                       width: double.infinity,
                       height: 120,
                       decoration: BoxDecoration(
-                        color: Colors.grey,
                         borderRadius: BorderRadius.circular(16),
+                        image: selectedImageUrl != null
+                            ? DecorationImage(
+                                image: NetworkImage(selectedImageUrl!),
+                                fit: BoxFit.cover,
+                              )
+                            : null,
+                        color: selectedImageUrl == null ? Colors.grey : null,
                       ),
-                      child: Icon(
-                        Iconsax.gallery_add,
-                        size: 42,
-                        color: Colors.white,
-                      ),
+                      child: selectedImageUrl == null
+                          ? const Icon(
+                              Iconsax.gallery_add,
+                              size: 42,
+                              color: Colors.white,
+                            )
+                          : null,
                     ),
                   ),
                   SizedBox(height: 16),

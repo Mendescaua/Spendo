@@ -65,6 +65,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     final transactions = ref.watch(
         transactionControllerProvider); // basicamente vc usa isso para ver oque a consulta carregou no provider e reconstruir a tela com os dados carregados
     final savings = ref.watch(savingControllerProvider);
+    final filteredSavings =
+        savings.where((saving) => saving.value != saving.goalValue).toList();
+
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
@@ -171,19 +174,31 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                         style: TextStyle(fontSize: 16),
                                       ),
                                     )
-                                  : ListView.builder(
-                                      shrinkWrap: true,
-                                      physics:
-                                          const NeverScrollableScrollPhysics(),
-                                      itemCount: savings.length >= 2
-                                          ? 2
-                                          : savings.length,
-                                      itemBuilder: (context, index) {
-                                        return MetaCard(
-                                          saving: savings[index],
-                                        );
-                                      },
-                                    ),
+                                  : savings == null
+                                      ? Column(
+                                          children: List.generate(
+                                              3, (_) => SkeletonBigCard()))
+                                      : savings.isEmpty
+                                          ? const Center(
+                                              child: Text(
+                                                "Nenhuma meta encontrada",
+                                                style: TextStyle(fontSize: 16),
+                                              ),
+                                            )
+                                          : ListView.builder(
+                                              shrinkWrap: true,
+                                              physics:
+                                                  const NeverScrollableScrollPhysics(),
+                                              itemCount:
+                                                  filteredSavings.length >= 2
+                                                      ? 2
+                                                      : filteredSavings.length,
+                                              itemBuilder: (context, index) {
+                                                return MetaCard(
+                                                    saving:
+                                                        filteredSavings[index]);
+                                              },
+                                            )
                         ],
                       ),
                     ),
