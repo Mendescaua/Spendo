@@ -31,7 +31,7 @@ class TransactionContainer extends StatelessWidget {
     break;
   case 'I02':
     backgroundColor;
-    IconColor = const Color(0xFF003A12);
+    IconColor = AppTheme.whiteColor;
     iconData = Iconsax.video;
     break;
   case 'I03':

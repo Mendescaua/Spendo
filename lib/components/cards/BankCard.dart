@@ -29,28 +29,29 @@ class BankCard extends StatelessWidget {
             url:
                 "https://www.designtagebuch.de/wp-content/uploads/mediathek/2018/03/santander-logo-icon-743x545.jpg",
           ),
+          const SizedBox(height: 16),
           bankcard(
-            title: "Wallet",
+            title: "Carteira",
             url: "",
           ),
-          const Divider(height: 24),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                'Total',
-                style: TextStyle(
-                  fontSize: 16,
-                ),
-              ),
-              Text(
-                'R\$ 0,00',
-                style: TextStyle(
-                  fontSize: 16,
-                ),
-              ),
-            ],
-          ),
+          // const Divider(height: 24),
+          // Row(
+          //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //   children: [
+          //     Text(
+          //       'Total',
+          //       style: TextStyle(
+          //         fontSize: 16,
+          //       ),
+          //     ),
+          //     Text(
+          //       'R\$ 0,00',
+          //       style: TextStyle(
+          //         fontSize: 16,
+          //       ),
+          //     ),
+          //   ],
+          // ),
         ],
       ),
     );
@@ -69,50 +70,45 @@ class bankcard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 20),
-      child: Row(
-        children: [
-          CircleAvatar(
-            radius: 22,
-            backgroundColor: const Color(0xFFE5E7EB), // fundo cinza claro
-            backgroundImage: url.isNotEmpty ? NetworkImage(url) : null,
-            child: url.isEmpty
-                ? const Icon(
-                    Iconsax.wallet,
-                    color: AppTheme.primaryColor,
+    return Row(
+      children: [
+        Container(
+          width: 40,
+          height: 40,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12),
+            color: const Color(0xFFE5E7EB), // fundo cinza claro
+            image: url.isNotEmpty
+                ? DecorationImage(
+                    image: NetworkImage(url),
+                    fit: BoxFit.cover,
                   )
                 : null,
           ),
-          const SizedBox(width: 16),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                title,
-                style: TextStyle(
-                  fontSize: 16,
-                ),
+          child: url.isEmpty
+              ? const Icon(Iconsax.wallet,
+                  color: Color(0xFF4678C0)) // cor primária
+              : null,
+        ),
+        const SizedBox(width: 16),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              title,
+              style: TextStyle(
+                fontSize: 16,
               ),
-              const Text(
-                'R\$ 0,00',
-                style: TextStyle(
-                  fontSize: 14,
-                ),
-              ),
-            ],
-          ),
-          Spacer(),
-          IconButton(
-            icon: Icon(
-              Iconsax.add,
-              color: AppTheme.primaryColor,
-              size: 26,
             ),
-            onPressed: () {},
-          ),
-        ],
-      ),
+            const Text(
+              'R\$ 0,00',
+              style: TextStyle(
+                fontSize: 14,
+              ),
+            ),
+          ],
+        ),
+      ],
     );
   }
 }

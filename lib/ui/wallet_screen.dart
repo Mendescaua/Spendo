@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:iconsax/iconsax.dart';
+import 'package:spendo/components/cards/BankCard.dart';
+import 'package:spendo/components/modals/ModalBank.dart';
+import 'package:spendo/utils/theme.dart';
 
 class WalletScreen extends StatelessWidget {
   WalletScreen({Key? key}) : super(key: key);
@@ -18,33 +22,71 @@ class WalletScreen extends StatelessWidget {
     },
   ];
 
-  final List<Map<String, String>> transactions = [
-    {'title': 'Uber', 'date': '20 Jun', 'amount': '- R\$ 25,00'},
-    {'title': 'Salário', 'date': '15 Jun', 'amount': '+ R\$ 2000,00'},
-    {'title': 'Netflix', 'date': '10 Jun', 'amount': '- R\$ 45,90'},
-  ];
+    void _openAddTransactionModal(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      useRootNavigator: true,
+      builder: (context) => ScaffoldMessenger(
+        child: Scaffold(
+          backgroundColor: Colors.transparent,
+          body: GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onTap: () => Navigator.of(context).pop(),
+            child: SafeArea(
+              top: false,
+              child: Align(
+                alignment: Alignment.bottomCenter,
+                child: GestureDetector(
+                  onTap: () {},
+                  child: Material(
+                    borderRadius:
+                        const BorderRadius.vertical(top: Radius.circular(20)),
+                    clipBehavior: Clip.antiAlias,
+                    child: const ModalBank(),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Minha Carteira'),
-        centerTitle: true,
-        backgroundColor: Colors.deepPurple,
+        automaticallyImplyLeading: false,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
+          spacing: 16,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              'Cartões',
-              style: TextStyle(color: Colors.grey[600], fontSize: 18),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "Cartões",
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                IconButton(
+                    onPressed: () {},
+                    icon: Icon(
+                      Iconsax.add,
+                      color: AppTheme.primaryColor,
+                      size: 26,
+                    ))
+              ],
             ),
-
-            const SizedBox(height: 16),
-
-            // Cartões
             SizedBox(
               height: 150,
               child: ListView.builder(
@@ -102,50 +144,27 @@ class WalletScreen extends StatelessWidget {
                 },
               ),
             ),
-
-            const SizedBox(height: 32),
-
-            // Transações recentes
-            const Text(
-              'Transações Recentes',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            const SizedBox(height: 16),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "Contas",
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                IconButton(
+                    onPressed: () {_openAddTransactionModal(context);},
+                    icon: Icon(
+                      Iconsax.add,
+                      color: AppTheme.primaryColor,
+                      size: 26,
+                    ))
+              ],
             ),
-
-            const SizedBox(height: 12),
-
-            Expanded(
-              child: ListView.separated(
-                itemCount: transactions.length,
-                separatorBuilder: (_, __) => const Divider(),
-                itemBuilder: (context, index) {
-                  final tx = transactions[index];
-                  final isPositive = tx['amount']!.startsWith('+');
-
-                  return ListTile(
-                    leading: CircleAvatar(
-                      backgroundColor:
-                          isPositive ? Colors.green : Colors.redAccent,
-                      child: Icon(
-                        isPositive ? Icons.arrow_downward : Icons.arrow_upward,
-                        color: Colors.white,
-                      ),
-                    ),
-                    title: Text(tx['title']!),
-                    subtitle: Text(tx['date']!),
-                    trailing: Text(
-                      tx['amount']!,
-                      style: TextStyle(
-                        color: isPositive ? Colors.green : Colors.redAccent,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ),
-
-            // Botões de ação (opcional)
-            // Pode ser implementado na parte inferior fixo usando bottomNavigationBar ou FloatingActionButton
+            BankCard(),
           ],
         ),
       ),
