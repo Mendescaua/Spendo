@@ -67,6 +67,8 @@ flutter_launcher_icons:
   android: true
   ios: true
   image_path: "assets/images/IconSpendo.png"
+  adaptive_icon_background: "assets/images/IconSpendo.png"
+  adaptive_icon_foreground: "assets/images/IconSpendo.png"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

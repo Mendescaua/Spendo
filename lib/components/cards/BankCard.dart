@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:spendo/controllers/auth_controller.dart';
 import 'package:spendo/utils/theme.dart';
 
 class BankCard extends StatelessWidget {
