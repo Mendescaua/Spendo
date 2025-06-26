@@ -12,7 +12,6 @@ class SavingController extends StateNotifier<List<SavingModel>> {
   final SupabaseService _saving = SupabaseService();
   final Ref ref;
 
-
   SavingController(this.ref) : super([]);
 
   Future<String?> getSaving() async {
@@ -47,11 +46,10 @@ class SavingController extends StateNotifier<List<SavingModel>> {
 
     try {
       final newSaving = SavingModel(
-        uuid: userId,
-        title: saving.title,
-        goalValue: saving.goalValue,
-        picture: saving.picture
-      );
+          uuid: userId,
+          title: saving.title,
+          goalValue: saving.goalValue,
+          picture: saving.picture);
       await _saving.addSaving(newSaving);
       state = [...state, newSaving];
       return null;
@@ -78,8 +76,8 @@ class SavingController extends StateNotifier<List<SavingModel>> {
         }
         newValue = (current.value ?? 0) - saving.value!;
       } else {
-        if (saving.value! > (current.goalValue ?? 0)) {
-          return ' Vocé nao pode adicionar um valor maior que a meta.';
+        if ((current.value ?? 0) + saving.value! > (current.goalValue ?? 0)) {
+          return 'Você não pode adicionar um valor que ultrapasse a meta.';
         }
         newValue = (current.value ?? 0) + saving.value!;
       }

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_masked_text2/flutter_masked_text2.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:intl/intl.dart';
-import 'package:spendo/components/CategoriesComboBox.dart';
+import 'package:spendo/components/comboBox/CategoriesComboBox.dart';
 import 'package:spendo/components/FloatingMessage.dart';
 import 'package:spendo/controllers/transaction_controller.dart';
 import 'package:spendo/models/transaction_model.dart';

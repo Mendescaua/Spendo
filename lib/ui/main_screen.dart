@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:spendo/components/HomeBar.dart';
 import 'package:spendo/components/modals/ModalTransaction.dart';
+import 'package:spendo/controllers/bank_controller.dart';
 import 'package:spendo/controllers/user_controller.dart';
 import 'package:spendo/ui/configuration_screen.dart';
 import 'package:spendo/ui/home_screen.dart';
@@ -29,6 +30,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
     currentTab = widget.initialIndex;
     Future.microtask(() {
       ref.read(userControllerProvider.notifier).getUser();
+      ref.read(bankControllerProvider.notifier).getBank();
     });
   }
 

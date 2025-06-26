@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:iconsax/iconsax.dart';
-import 'package:spendo/components/BankBoxAccount.dart';
+import 'package:spendo/components/comboBox/BankComboBox.dart';
+import 'package:spendo/components/FloatingMessage.dart';
 import 'package:spendo/components/buttons/StyleButton.dart';
+import 'package:spendo/components/comboBox/BankTypeComboBox.dart';
+import 'package:spendo/controllers/bank_controller.dart';
+import 'package:spendo/models/bank_model.dart';
 
 class ModalBank extends ConsumerStatefulWidget {
   const ModalBank({super.key});
@@ -12,8 +15,26 @@ class ModalBank extends ConsumerStatefulWidget {
 }
 
 class _ModalBankState extends ConsumerState<ModalBank> {
-  final TextEditingController _valuecontroller = TextEditingController();
-  Map<String, String>? selectedAccount;
+    Map<String, String>? selectedAccount;
+    Map<String, dynamic>? selectedTypeAccount;
+
+    void onSave() async {
+      final BankController = ref.read(bankControllerProvider.notifier);
+      final response = await BankController.addBank(
+        bank: BanksModel(
+          name: selectedAccount?['name'] ?? '',
+          type: selectedTypeAccount?['name'] ?? ''
+        ),
+      );
+      if (response != null) {
+        FloatingMessage(context, response, 'error', 2);
+      } else {
+        Navigator.of(context).pop(true);
+        FloatingMessage(
+            context, 'Conta bancária adicionada com sucesso', 'success', 2);
+      }
+    }
+  
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -54,41 +75,37 @@ class _ModalBankState extends ConsumerState<ModalBank> {
                 fontWeight: FontWeight.w600,
               ),
             ),
-            DropdownBoxAccount(
+            BankComboBox(
               selected: selectedAccount,
               onSelect: (account) {
                 setState(() {
                   selectedAccount = account;
+                  print("Conta ${account}");
                 });
               },
             ),
             const SizedBox(height: 16),
             const Text(
-              'Descrição',
+              'Tipo de conta',
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
               ),
             ),
-            TextField(
-              controller: _valuecontroller,
-              keyboardType: TextInputType.number,
-              decoration: InputDecoration(
-                prefixIcon: const Icon(Iconsax.attach_square),
-                hintText: 'Descrição',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(16),
-                  borderSide: const BorderSide(
-                    color: Color(0xFF4678c0),
-                  ),
-                ),
-              ),
+            BankTypeComboBox(
+              selected: selectedTypeAccount,
+              onSelect: (account) {
+                setState(() {
+                  selectedTypeAccount = account;
+                  print("Tipo da conta ${account}");
+                });
+              },
             ),
             const SizedBox(height: 32),
             StyleButton(
               text: 'Adicionar',
               onClick: () {
-                // onSave();
+                onSave();
               },
             ),
           ],

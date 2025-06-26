@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:spendo/services/supabase_service.dart';
 
+//eu uso isso para quando o usuario vai criar suas metas, ai ao escolher a imagem da meta eu carrego aqui
 final imagesControllerProvider =
     StateNotifierProvider<ImagesController, List<String>>((ref) {
   return ImagesController(ref);

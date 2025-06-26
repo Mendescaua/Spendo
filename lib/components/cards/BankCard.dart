@@ -1,12 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:iconsax/iconsax.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:spendo/components/banksContainer.dart';
+import 'package:spendo/controllers/bank_controller.dart';
 import 'package:spendo/utils/theme.dart';
 
-class BankCard extends StatelessWidget {
+class BankCard extends ConsumerWidget {
   const BankCard({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final banks = ref.watch(bankControllerProvider);
+
+    if (banks.isEmpty) {
+      return const Center(child: Text("Nenhuma conta cadastrada."));
+    }
+
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -20,87 +28,54 @@ class BankCard extends StatelessWidget {
           )
         ],
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          bankcard(
-            title: "Banco Santander",
-            url:
-                "https://www.designtagebuch.de/wp-content/uploads/mediathek/2018/03/santander-logo-icon-743x545.jpg",
-          ),
-          const SizedBox(height: 16),
-          bankcard(
-            title: "Carteira",
-            url: "",
-          ),
-          // const Divider(height: 24),
-          // Row(
-          //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          //   children: [
-          //     Text(
-          //       'Total',
-          //       style: TextStyle(
-          //         fontSize: 16,
-          //       ),
-          //     ),
-          //     Text(
-          //       'R\$ 0,00',
-          //       style: TextStyle(
-          //         fontSize: 16,
-          //       ),
-          //     ),
-          //   ],
-          // ),
-        ],
+      child: ListView.builder(
+        shrinkWrap:
+            true, // para usar dentro de Column/ScrollView sem expandir infinito
+        physics:
+            const NeverScrollableScrollPhysics(), // desativa scroll interno, para não conflitar
+        itemCount: banks.length,
+        itemBuilder: (context, index) {
+          final bank = banks[index];
+          return Padding(
+            padding: const EdgeInsets.only(bottom: 16),
+            child: BankCardItem(
+              title: bank.name ?? '',
+              type: bank.type ?? '', // ou banco.url se tiver
+            ),
+          );
+        },
       ),
     );
   }
 }
 
-class bankcard extends StatelessWidget {
+class BankCardItem extends StatelessWidget {
   final String title;
-  final String url;
+  final String type;
 
-  const bankcard({
+  const BankCardItem({
     super.key,
     required this.title,
-    required this.url,
+    required this.type,
   });
 
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Container(
-          width: 40,
-          height: 40,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(12),
-            color: const Color(0xFFE5E7EB), // fundo cinza claro
-            image: url.isNotEmpty
-                ? DecorationImage(
-                    image: NetworkImage(url),
-                    fit: BoxFit.cover,
-                  )
-                : null,
-          ),
-          child: url.isEmpty
-              ? const Icon(Iconsax.wallet,
-                  color: Color(0xFF4678C0)) // cor primária
-              : null,
-        ),
+        Bankscontainer(name: title),
         const SizedBox(width: 16),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               title,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 16,
               ),
             ),
-            const Text(
-              'R\$ 0,00',
+            Text(
+              type, // Pode ser atualizado futuramente
               style: TextStyle(
                 fontSize: 14,
               ),

@@ -60,67 +60,72 @@ class _ModalsavingState extends ConsumerState<Modalsaving> {
 
     return SafeArea(
       child: widget.type == 'resgatar' || widget.type == 'guardar'
-          ? Container(
-              padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 24),
-              width: double.infinity,
-              height: size.height * 0.36,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                spacing: 16,
-                children: [
-                  Center(
-                    child: Container(
-                      height: 4,
-                      width: 40,
-                      decoration: BoxDecoration(
-                        color: Colors.grey,
-                        borderRadius: BorderRadius.circular(2),
+          ? SingleChildScrollView(
+            padding: EdgeInsets.only(
+            bottom: MediaQuery.of(context).viewInsets.bottom + 24,
+          ),
+            child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 24),
+                width: double.infinity,
+                height: size.height * 0.40,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  spacing: 16,
+                  children: [
+                    Center(
+                      child: Container(
+                        height: 4,
+                        width: 40,
+                        decoration: BoxDecoration(
+                          color: Colors.grey,
+                          borderRadius: BorderRadius.circular(2),
+                        ),
                       ),
                     ),
-                  ),
-                  Center(
-                    child: Text(
-                      widget.type == 'resgatar'
-                          ? 'Resgatar valor do cofrinho'
-                          : 'Guardar novo valor ao cofrinho',
+                    Center(
+                      child: Text(
+                        widget.type == 'resgatar'
+                            ? 'Resgatar valor do cofrinho'
+                            : 'Guardar novo valor ao cofrinho',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    const Text(
+                      'Valor',
                       style: TextStyle(
                         fontSize: 16,
-                        fontWeight: FontWeight.bold,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
-                  ),
-                  const Text(
-                    'Valor',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  TextField(
-                    controller: _valuecontroller,
-                    keyboardType: TextInputType.number,
-                    decoration: InputDecoration(
-                      prefixIcon: const Icon(Iconsax.dollar_circle),
-                      hintText: 'Valor',
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(16),
+                    TextField(
+                      controller: _valuecontroller,
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
+                        prefixIcon: const Icon(Iconsax.dollar_circle),
+                        hintText: 'Valor',
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(16),
+                        ),
                       ),
                     ),
-                  ),
-                  SizedBox(height: 4),
-                  StyleButton(
-                      text: widget.type == 'resgatar' ? 'Resgatar' : 'Guardar',
-                      onClick: () {
-                        onUpdateValue();
-                      }),
-                ],
+                    SizedBox(height: 4),
+                    StyleButton(
+                        text: widget.type == 'resgatar' ? 'Resgatar' : 'Guardar',
+                        onClick: () {
+                          onUpdateValue();
+                        }),
+                  ],
+                ),
               ),
-            )
+          )
           : Container(
               padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 24),
               width: double.infinity,
-              height: size.height * 0.64,
+              height: size.height * 0.66,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
