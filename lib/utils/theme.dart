@@ -22,10 +22,10 @@ class AppTheme {
       secondaryHeaderColor: secondaryColor,
       appBarTheme: AppBarTheme(
         centerTitle: true,
-        backgroundColor: Colors.transparent,
+        backgroundColor: primaryColor,
         elevation: 0,
         titleTextStyle: const TextStyle(
-          color: textColor,
+          color: whiteColor,
           fontSize: 18,
           fontWeight: FontWeight.w700,
         ),

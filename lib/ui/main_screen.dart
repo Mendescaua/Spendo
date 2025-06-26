@@ -9,6 +9,9 @@ import 'package:spendo/ui/configuration_screen.dart';
 import 'package:spendo/ui/home_screen.dart';
 import 'package:spendo/ui/saving/saving_screen.dart';
 import 'package:spendo/ui/subscription_screen.dart';
+import 'package:spendo/ui/transactionChart/category_chart.dart';
+import 'package:spendo/ui/transactionChart/transaction_chart_tab.dart';
+import 'package:spendo/ui/transaction/transaction_screen.dart';
 import 'package:spendo/ui/wallet_screen.dart';
 import 'package:spendo/utils/theme.dart';
 
@@ -38,7 +41,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
   Widget build(BuildContext context) {
     List<Widget> screens = [
       const HomeScreen(),
-      const Center(child: Text('Tela 2')),
+      TransactionChartTab(),
       WalletScreen(),
       const SubscriptionScreen(),
       const SavingScreen(),
@@ -63,74 +66,73 @@ class _MainScreenState extends ConsumerState<MainScreen> {
       );
     }
 
-    return SafeArea(
-      child: Scaffold(
-        appBar: currentTab == 0
-            ? Homebar(
-                onItemSelected: (index) {
-                  setState(() {
-                    currentTab = index;
-                  });
-                },
-              )
-            : null,
-        drawer: HomeDrawer(
-          onItemSelected: (index) {
-            setState(() {
-              currentTab = index;
-            });
-          },
-        ),
-        body: screens[currentTab],
-        bottomNavigationBar: currentTab == 3 || currentTab == 4
-            ? null
-            : Container(
-                height: 70,
-                decoration: BoxDecoration(
-                  color: AppTheme.whiteColor,
-                  borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(40),
-                    topRight: Radius.circular(40),
-                  ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.05),
-                      blurRadius: 10,
-                      offset: const Offset(0, -2),
-                    ),
-                  ],
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    _buildNavIcon(index: 0, icon: items[0]),
-                    _buildNavIcon(index: 1, icon: items[1]),
-                    GestureDetector(
-                      onTap: () => _openAddTransactionModal(context),
-                      child: Container(
-                        height: 55,
-                        width: 55,
-                        decoration: const BoxDecoration(
-                          color: AppTheme.primaryColor,
-                          shape: BoxShape.circle,
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black26,
-                              blurRadius: 10,
-                              offset: Offset(0, 4),
-                            ),
-                          ],
-                        ),
-                        child: const Icon(Iconsax.add,
-                            color: AppTheme.whiteColor, size: 30),
-                      ),
-                    ),
-                    _buildNavIcon(index: 2, icon: items[2]),
-                    _buildNavIcon(index: 5, icon: items[3]),
-                  ],
-                ),
-              ),
+    return Scaffold(
+      appBar: currentTab == 0 
+          ? Homebar(
+              onItemSelected: (index) {
+                setState(() {
+                  currentTab = index;
+                });
+              },
+            )
+          : null,
+      drawer: HomeDrawer(
+        onItemSelected: (index) {
+          setState(() {
+            currentTab = index;
+          });
+        },
       ),
+      body: screens[currentTab],
+      bottomNavigationBar: currentTab == 3 || currentTab == 4
+          ? null
+          : Container(
+              height: 90,
+              padding: EdgeInsets.only(bottom: 20),
+              decoration: BoxDecoration(
+                color: AppTheme.whiteColor,
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(40),
+                  topRight: Radius.circular(40),
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.05),
+                    blurRadius: 10,
+                    offset: const Offset(0, -2),
+                  ),
+                ],
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  _buildNavIcon(index: 0, icon: items[0]),
+                  _buildNavIcon(index: 1, icon: items[1]),
+                  GestureDetector(
+                    onTap: () => _openAddTransactionModal(context),
+                    child: Container(
+                      height: 55,
+                      width: 55,
+                      decoration: const BoxDecoration(
+                        color: AppTheme.primaryColor,
+                        shape: BoxShape.circle,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black26,
+                            blurRadius: 10,
+                            offset: Offset(0, 4),
+                          ),
+                        ],
+                      ),
+                      child: const Icon(Iconsax.add,
+                          color: AppTheme.whiteColor, size: 30),
+                    ),
+                  ),
+                  _buildNavIcon(index: 2, icon: items[2]),
+                  _buildNavIcon(index: 5, icon: items[3]),
+                ],
+              ),
+            ),
     );
   }
 

@@ -12,17 +12,24 @@ class Customtext {
   return text[0].toUpperCase() + text.substring(1);
   }
 
-  static Color stringToColor(String colorString) {
-  // Remove o "#" se existir
-  colorString = colorString.replaceAll("#", "");
-
-  // Se tiver apenas 6 caracteres (sem alpha), adiciona FF (totalmente opaco)
-  if (colorString.length == 6) {
-    colorString = "FF$colorString";
+ static Color stringToColor(String colorString) {
+  if (colorString == null || colorString.isEmpty) {
+    // Retorna uma cor padrão, por exemplo transparente, para evitar erro
+    return Colors.transparent;
   }
-
-  // Converte para Color
-  return Color(int.parse(colorString, radix: 16));
+  
+  colorString = colorString.replaceAll("#", "").toUpperCase();
+  
+  if (colorString.length == 6) {
+    // Se tiver só RRGGBB, adiciona FF para alfa full opacity
+    colorString = "FF$colorString";
+  } else if (colorString.length != 8) {
+    // Se tiver tamanho inválido, também pode retornar transparente ou lançar erro
+    return Colors.transparent;
+  }
+  
+  return Color(int.parse("0x$colorString"));
 }
+
 
 }

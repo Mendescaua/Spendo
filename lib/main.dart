@@ -10,6 +10,7 @@ import 'package:spendo/ui/main_screen.dart';
 import 'package:spendo/ui/auth/register_screen.dart';
 import 'package:spendo/ui/saving/saving_picker_image.dart';
 import 'package:spendo/ui/splash_screen.dart';
+import 'package:spendo/ui/transactionChart/category_chart.dart';
 import 'package:spendo/utils/theme.dart';
 
 void main() {
@@ -20,6 +21,7 @@ void main() {
   runApp(
     const ProviderScope(child: MyApp()),
   );
+
 }
 
 class MyApp extends StatelessWidget {
@@ -50,6 +52,7 @@ class MyApp extends StatelessWidget {
         '/home': (context) => const HomeScreen(),
         '/menu': (context) => const MainScreen(),
         '/saving_picker_image': (context) => const ImagePickerScreen(),
+        '/category_chart': (context) => const CategoryChart(),
       },
     );
   }

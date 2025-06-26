@@ -52,113 +52,115 @@ class _ModalSubscriptionState extends ConsumerState<ModalSubscription> {
     }
 
     return SafeArea(
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 24),
-        width: double.infinity,
-        height: size.height * 0.60,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Center(
-              child: Container(
-                height: 4,
-                width: 40,
-                decoration: BoxDecoration(
-                  color: Colors.grey,
-                  borderRadius: BorderRadius.circular(2),
+      child: SingleChildScrollView(
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 24),
+          width: double.infinity,
+          height: size.height * 0.60,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Center(
+                child: Container(
+                  height: 4,
+                  width: 40,
+                  decoration: BoxDecoration(
+                    color: Colors.grey,
+                    borderRadius: BorderRadius.circular(2),
+                  ),
                 ),
               ),
-            ),
-            SizedBox(height: 16),
-            Center(
-              child: const Text(
-                'Adicionar nova assinatura',
+              SizedBox(height: 16),
+              Center(
+                child: const Text(
+                  'Adicionar nova assinatura',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              SizedBox(height: 16),
+              const Text(
+                'Título',
                 style: TextStyle(
                   fontSize: 16,
-                  fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.w600,
                 ),
               ),
-            ),
-            SizedBox(height: 16),
-            const Text(
-              'Título',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-            TextField(
-              controller: _titlecontroller,
-              decoration: InputDecoration(
-                prefixIcon: const Icon(Iconsax.text_block),
-                hintText: 'Título',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(16),
-                  borderSide: const BorderSide(
-                    color: Color(0xFF4678c0),
+              TextField(
+                controller: _titlecontroller,
+                decoration: InputDecoration(
+                  prefixIcon: const Icon(Iconsax.text_block),
+                  hintText: 'Título',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(16),
+                    borderSide: const BorderSide(
+                      color: Color(0xFF4678c0),
+                    ),
                   ),
                 ),
               ),
-            ),
-            SizedBox(height: 16),
-            const Text(
-              'Valor',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
+              SizedBox(height: 16),
+              const Text(
+                'Valor',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
-            ),
-            TextField(
-              controller: _valuecontroller,
-              decoration: InputDecoration(
-                prefixIcon: const Icon(Iconsax.dollar_circle),
-                hintText: 'Valor',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(16),
-                  borderSide: const BorderSide(
-                    color: Color(0xFF4678c0),
+              TextField(
+                controller: _valuecontroller,
+                decoration: InputDecoration(
+                  prefixIcon: const Icon(Iconsax.dollar_circle),
+                  hintText: 'Valor',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(16),
+                    borderSide: const BorderSide(
+                      color: Color(0xFF4678c0),
+                    ),
                   ),
                 ),
               ),
-            ),
-            SizedBox(height: 16),
-            const Text(
-              'Duração',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
+              SizedBox(height: 16),
+              const Text(
+                'Duração',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
-            ),
-            const SizedBox(height: 8),
-            Wrap(
-              spacing: 12,
-              children: durations.map((duration) {
-                final isSelected = selectedDuration == duration['value'];
-                return ChoiceChip(
-                  label: Text(duration['label']),
-                  selected: isSelected,
-                  onSelected: (_) {
-                    setState(() {
-                      selectedDuration = duration['value'];
-                    });
-                  },
-                  selectedColor: AppTheme.primaryColor,
-                  backgroundColor: AppTheme.whiteColor,
-                  labelStyle: TextStyle(
-                    color: isSelected ? Colors.white : Colors.black,
-                    fontWeight: FontWeight.w600,
-                  ),
-                );
-              }).toList(),
-            ),
-            SizedBox(height: 32),
-            StyleButton(
-                text: 'Adicionar',
-                onClick: () {
-                  onSave();
-                }),
-          ],
+              const SizedBox(height: 8),
+              Wrap(
+                spacing: 12,
+                children: durations.map((duration) {
+                  final isSelected = selectedDuration == duration['value'];
+                  return ChoiceChip(
+                    label: Text(duration['label']),
+                    selected: isSelected,
+                    onSelected: (_) {
+                      setState(() {
+                        selectedDuration = duration['value'];
+                      });
+                    },
+                    selectedColor: AppTheme.primaryColor,
+                    backgroundColor: AppTheme.whiteColor,
+                    labelStyle: TextStyle(
+                      color: isSelected ? Colors.white : Colors.black,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  );
+                }).toList(),
+              ),
+              SizedBox(height: 32),
+              StyleButton(
+                  text: 'Adicionar',
+                  onClick: () {
+                    onSave();
+                  }),
+            ],
+          ),
         ),
       ),
     );

@@ -29,6 +29,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   }
 
   Future<void> loadTransactions() async {
+    
     if (_loading) return;
 
     setState(() => _loading = true);

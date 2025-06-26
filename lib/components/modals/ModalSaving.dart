@@ -122,115 +122,117 @@ class _ModalsavingState extends ConsumerState<Modalsaving> {
                 ),
               ),
           )
-          : Container(
-              padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 24),
-              width: double.infinity,
-              height: size.height * 0.66,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Center(
-                    child: Container(
-                      height: 4,
-                      width: 40,
-                      decoration: BoxDecoration(
-                        color: Colors.grey,
-                        borderRadius: BorderRadius.circular(2),
+          : SingleChildScrollView(
+            child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 24),
+                width: double.infinity,
+                height: size.height * 0.66,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Center(
+                      child: Container(
+                        height: 4,
+                        width: 40,
+                        decoration: BoxDecoration(
+                          color: Colors.grey,
+                          borderRadius: BorderRadius.circular(2),
+                        ),
                       ),
                     ),
-                  ),
-                  SizedBox(height: 16),
-                  Center(
-                    child: const Text(
-                      'Adicionar novo cofrinho',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
+                    SizedBox(height: 16),
+                    Center(
+                      child: const Text(
+                        'Adicionar novo cofrinho',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
-                  ),
-                  SizedBox(height: 16),
-                  GestureDetector(
-                    onTap: () async {
-                      final selectedImage = await Navigator.of(context)
-                          .pushNamed('/saving_picker_image');
-
-                      if (selectedImage != null && selectedImage is String) {
-                        setState(() {
-                          selectedImageUrl = selectedImage;
-                        });
-                        print('Imagem escolhida: $selectedImage');
-                      }
-                    },
-                    child: Container(
-                      width: double.infinity,
-                      height: 120,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(16),
-                        image: selectedImageUrl != null
-                            ? DecorationImage(
-                                image: NetworkImage(selectedImageUrl!),
-                                fit: BoxFit.cover,
+                    SizedBox(height: 16),
+                    GestureDetector(
+                      onTap: () async {
+                        final selectedImage = await Navigator.of(context)
+                            .pushNamed('/saving_picker_image');
+            
+                        if (selectedImage != null && selectedImage is String) {
+                          setState(() {
+                            selectedImageUrl = selectedImage;
+                          });
+                          print('Imagem escolhida: $selectedImage');
+                        }
+                      },
+                      child: Container(
+                        width: double.infinity,
+                        height: 120,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(16),
+                          image: selectedImageUrl != null
+                              ? DecorationImage(
+                                  image: NetworkImage(selectedImageUrl!),
+                                  fit: BoxFit.cover,
+                                )
+                              : null,
+                          color: selectedImageUrl == null ? Colors.grey : null,
+                        ),
+                        child: selectedImageUrl == null
+                            ? const Icon(
+                                Iconsax.gallery_add,
+                                size: 42,
+                                color: Colors.white,
                               )
                             : null,
-                        color: selectedImageUrl == null ? Colors.grey : null,
-                      ),
-                      child: selectedImageUrl == null
-                          ? const Icon(
-                              Iconsax.gallery_add,
-                              size: 42,
-                              color: Colors.white,
-                            )
-                          : null,
-                    ),
-                  ),
-                  SizedBox(height: 16),
-                  const Text(
-                    'Título',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  TextField(
-                    controller: _titlecontroller,
-                    decoration: InputDecoration(
-                      prefixIcon: const Icon(Iconsax.text_block),
-                      hintText: 'Título',
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(16),
                       ),
                     ),
-                  ),
-                  SizedBox(height: 16),
-                  const Text(
-                    'Meta de valor',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  TextField(
-                    controller: _goalvaluecontroller,
-                    keyboardType: TextInputType.number,
-                    decoration: InputDecoration(
-                      prefixIcon: const Icon(Iconsax.dollar_circle),
-                      hintText: 'Meta de valor',
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(16),
+                    SizedBox(height: 16),
+                    const Text(
+                      'Título',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
-                  ),
-                  SizedBox(height: 32),
-                  StyleButton(
-                      text: 'Adicionar',
-                      onClick: () {
-                        onSave();
-                      }),
-                ],
+                    TextField(
+                      controller: _titlecontroller,
+                      decoration: InputDecoration(
+                        prefixIcon: const Icon(Iconsax.text_block),
+                        hintText: 'Título',
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 16),
+                    const Text(
+                      'Meta de valor',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    TextField(
+                      controller: _goalvaluecontroller,
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
+                        prefixIcon: const Icon(Iconsax.dollar_circle),
+                        hintText: 'Meta de valor',
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 32),
+                    StyleButton(
+                        text: 'Adicionar',
+                        onClick: () {
+                          onSave();
+                        }),
+                  ],
+                ),
               ),
-            ),
+          ),
     );
   }
 }

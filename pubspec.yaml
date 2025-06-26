@@ -50,6 +50,7 @@ dependencies:
   month_year_picker: 0.5.0+1
   percent_indicator: ^4.2.5
   shimmer: ^3.0.0
+  fl_chart: ^1.0.0
 
 dev_dependencies:
   flutter_test:

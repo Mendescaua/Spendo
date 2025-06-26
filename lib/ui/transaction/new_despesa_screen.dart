@@ -63,6 +63,7 @@ class _NewDespesaScreenState extends ConsumerState<NewDespesaScreen> {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
+          backgroundColor: AppTheme.redColor,
           title: const Text(
             'Nova despesa',
             style: TextStyle(color: AppTheme.whiteColor),

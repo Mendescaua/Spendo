@@ -63,6 +63,7 @@ class _NewReceitaScreenState extends ConsumerState<NewReceitaScreen> {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
+          backgroundColor: AppTheme.greenColor,
           title: const Text(
             'Nova receita',
             style: TextStyle(color: AppTheme.whiteColor),

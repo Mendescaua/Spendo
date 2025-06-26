@@ -51,4 +51,5 @@ class TransactionModel {
       'date': date.toIso8601String(),
     };
   }
+
 }

@@ -180,9 +180,9 @@ class TransactionContainer extends StatelessWidget {
     iconData = Iconsax.gameboy;
     break;
   default:
-    backgroundColor = Colors.grey;
+    backgroundColor = AppTheme.primaryColor;
     IconColor = Colors.white;
-    iconData = Iconsax.refresh_left_square;
+    iconData = Iconsax.graph;
 }
 
 

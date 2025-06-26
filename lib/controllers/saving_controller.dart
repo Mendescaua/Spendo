@@ -37,21 +37,28 @@ class SavingController extends StateNotifier<List<SavingModel>> {
   }
 
   Future<String?> addSaving({required SavingModel saving}) async {
-    final userId = ref.read(currentUserId);
-    if (userId == null) return 'Usuário não autenticado';
+    String? userId;
+    int tentativas = 0;
+
+    // Tenta pegar o userId até 10 vezes (com 100ms de delay entre cada uma)
+    while ((userId = ref.read(currentUserId)) == null && tentativas < 10) {
+      await Future.delayed(const Duration(milliseconds: 100));
+      tentativas++;
+    }
 
     if (saving.title!.isEmpty) return 'Adicione um título.';
     if (saving.goalValue! <= 0) return 'Adicione um valor de meta.';
     if (saving.picture!.isEmpty) return 'Adicione uma imagem de meta.';
 
     try {
-      final newSaving = SavingModel(
-          uuid: userId,
-          title: saving.title,
-          goalValue: saving.goalValue,
-          picture: saving.picture);
-      await _saving.addSaving(newSaving);
-      state = [...state, newSaving];
+      final newSaving = await _saving.addSaving(SavingModel(
+        uuid: userId,
+        title: saving.title,
+        goalValue: saving.goalValue,
+        picture: saving.picture,
+      ));
+
+      state = [...state, newSaving]; // agora newSaving TEM id e value
       return null;
     } catch (e) {
       print('Erro ao adicionar cofrinho: $e');

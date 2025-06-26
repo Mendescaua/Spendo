@@ -74,9 +74,19 @@ class SupabaseService {
         .toList();
   }
 
-  Future<void> addSaving(SavingModel model) async {
-    await supabase.from('SAVING').insert(model.toJson());
-  }
+
+  Future<SavingModel> addSaving(SavingModel saving) async {
+  final response = await supabase.from('SAVING').insert({
+    'uuid': saving.uuid,
+    'title': saving.title,
+    'goal_value': saving.goalValue,
+    'picture': saving.picture,
+    'value': 0,
+  }).select().single();
+
+  return SavingModel.fromJson(response);
+}
+
 
   Future<void> updateSavingValue({
     required int id,
@@ -84,6 +94,8 @@ class SupabaseService {
   }) async {
     await supabase.from('SAVING').update({'value': value}).eq('id', id);
   }
+
+  
 
   Future<void> deleteSaving(int id) async {
     await supabase.from('SAVING').delete().eq('id', id);
