@@ -1,29 +1,43 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:spendo/components/FloatingMessage.dart';
 import 'package:spendo/components/cards/BankCard.dart';
+import 'package:spendo/components/cards/MoneyCard.dart';
 import 'package:spendo/components/modals/ModalBank.dart';
-import 'package:spendo/controllers/bank_controller.dart';
+import 'package:spendo/controllers/money_card_controller.dart';
 import 'package:spendo/utils/theme.dart';
 
-class WalletScreen extends ConsumerWidget {
+class WalletScreen extends ConsumerStatefulWidget {
   WalletScreen({Key? key}) : super(key: key);
 
-  final List<Map<String, String>> cards = [
-    {
-      'number': '**** **** **** 1234',
-      'name': 'Visa',
-      'validity': '12/25',
-      'color': '0xFF1E88E5',
-    },
-    {
-      'number': '**** **** **** 5678',
-      'name': 'MasterCard',
-      'validity': '08/24',
-      'color': '0xFFD32F2F',
-    },
-  ];
+  @override
+  ConsumerState<WalletScreen> createState() => _WalletScreenState();
+}
+
+class _WalletScreenState extends ConsumerState<WalletScreen> {
+  bool _loading = false;
+  @override
+  void initState() {
+    super.initState();
+    Future.microtask(() => loadCards());
+  }
+
+  Future<void> loadCards() async {
+    if (_loading) return;
+
+    setState(() => _loading = true);
+
+    final controller = ref.read(moneyCardControllerProvider.notifier);
+    final result = await controller.getMoneyCard();
+
+    setState(() => _loading = false);
+
+    if (result != null) {
+      print('Erro: $result');
+    }
+  }
 
   void _openAddTransactionModal(BuildContext context) async {
     final result = await showModalBottomSheet(
@@ -63,121 +77,105 @@ class WalletScreen extends ConsumerWidget {
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
+    final cards = ref.watch(moneyCardControllerProvider);
     return Scaffold(
+      backgroundColor: AppTheme.primaryColor,
       appBar: AppBar(
-        title: const Text('Minha Carteira'),
+        backgroundColor: AppTheme.primaryColor,
+        elevation: 0,
+        title: const Text(
+          'Minha Carteira',
+          style: TextStyle(color: Colors.white),
+        ),
         automaticallyImplyLeading: false,
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            spacing: 16,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Cartões",
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  IconButton(
-                      onPressed: () {},
-                      icon: Icon(
-                        Iconsax.add,
-                        color: AppTheme.primaryColor,
-                        size: 26,
-                      ))
-                ],
+      body: Column(
+        children: [
+          const SizedBox(height: 16),
+          Expanded(
+            child: Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(16),
+              decoration: const BoxDecoration(
+                color: AppTheme.backgroundColor,
+                borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
               ),
-              SizedBox(
-                height: 150,
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: cards.length,
-                  itemBuilder: (context, index) {
-                    final card = cards[index];
-                    return Container(
-                      width: 250,
-                      margin: EdgeInsets.only(right: 16),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        color: Color(int.parse(card['color']!)),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black26,
-                            blurRadius: 6,
-                            offset: Offset(0, 4),
-                          ),
-                        ],
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Cartões
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        "Cartões",
+                        style: TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.bold),
                       ),
-                      padding: const EdgeInsets.all(20),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            card['name']!,
-                            style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold),
+                      IconButton(
+                        onPressed: () {
+                          Navigator.of(context).pushNamed('/money_card');
+                        },
+                        icon: Icon(Iconsax.add,
+                            color: AppTheme.primaryColor, size: 26),
+                      ),
+                    ],
+                  ),
+                  _loading
+                      ? Center(
+                          child: LoadingAnimationWidget.staggeredDotsWave(
+                            color: AppTheme.primaryColor,
+                            size: 64,
                           ),
-                          Text(
-                            card['number']!,
-                            style: const TextStyle(
-                              color: Colors.white70,
-                              fontSize: 18,
-                              letterSpacing: 2,
-                            ),
-                          ),
-                          Align(
-                            alignment: Alignment.bottomRight,
-                            child: Text(
-                              'Validade ${card['validity']}',
-                              style: const TextStyle(
-                                color: Colors.white70,
-                                fontSize: 14,
+                        )
+                      : cards.isEmpty
+                          ? const Center(
+                              child: Text(
+                                "Nenhum cartão encontrado",
+                                style: TextStyle(fontSize: 16),
+                              ),
+                            )
+                          : SizedBox(
+                              height: 170,
+                              child: ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                itemCount: cards.length,
+                                itemBuilder: (context, index) => Padding(
+                                  padding: EdgeInsets.only(
+                                      right: index == cards.length - 1
+                                          ? 0
+                                          : 16), // espaçamento só entre os cards, sem no último
+                                  child: MoneyCard(cards: cards[index]),
+                                ),
                               ),
                             ),
-                          ),
-                        ],
+
+                  const SizedBox(height: 16),
+                  // Contas
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        "Contas",
+                        style: TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.bold),
                       ),
-                    );
-                  },
-                ),
-              ),
-              const SizedBox(height: 16),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Contas",
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
+                      IconButton(
+                        onPressed: () {
+                          _openAddTransactionModal(context);
+                        },
+                        icon: Icon(Iconsax.add,
+                            color: AppTheme.primaryColor, size: 26),
+                      ),
+                    ],
                   ),
-                  IconButton(
-                      onPressed: () {
-                        _openAddTransactionModal(context);
-                      },
-                      icon: Icon(
-                        Iconsax.add,
-                        color: AppTheme.primaryColor,
-                        size: 26,
-                      ))
+                  BankCard(),
                 ],
               ),
-              BankCard(),
-            ],
+            ),
           ),
-        ),
+        ],
       ),
     );
   }

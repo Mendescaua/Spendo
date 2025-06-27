@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:month_year_picker/month_year_picker.dart';
+import 'package:spendo/ui/add_money_card_screen.dart';
 import 'package:spendo/controllers/auth_gate.dart';
 import 'package:spendo/core/supabse_client.dart';
 import 'package:spendo/ui/home_screen.dart';
 import 'package:spendo/ui/auth/login_screen.dart';
 import 'package:spendo/ui/main_screen.dart';
 import 'package:spendo/ui/auth/register_screen.dart';
+import 'package:spendo/ui/money_card_screen.dart';
 import 'package:spendo/ui/saving/saving_picker_image.dart';
 import 'package:spendo/ui/splash_screen.dart';
 import 'package:spendo/ui/transactionChart/category_chart.dart';
@@ -53,6 +55,8 @@ class MyApp extends StatelessWidget {
         '/menu': (context) => const MainScreen(),
         '/saving_picker_image': (context) => const ImagePickerScreen(),
         '/category_chart': (context) => const CategoryChart(),
+        '/money_card': (context) => const MoneyCardScreen(),
+        '/add_money_card': (context) => const AddMoneyCardScreen(),
       },
     );
   }

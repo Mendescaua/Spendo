@@ -1,6 +1,8 @@
+import 'package:flutter/material.dart';
 import 'package:spendo/core/supabse_client.dart';
 import 'package:spendo/models/bank_model.dart';
 import 'package:spendo/models/category_transaction_model.dart';
+import 'package:spendo/models/money_card_model.dart';
 import 'package:spendo/models/saving_model.dart';
 import 'package:spendo/models/subscription_model.dart';
 import 'package:spendo/models/transaction_model.dart';
@@ -74,19 +76,21 @@ class SupabaseService {
         .toList();
   }
 
-
   Future<SavingModel> addSaving(SavingModel saving) async {
-  final response = await supabase.from('SAVING').insert({
-    'uuid': saving.uuid,
-    'title': saving.title,
-    'goal_value': saving.goalValue,
-    'picture': saving.picture,
-    'value': 0,
-  }).select().single();
+    final response = await supabase
+        .from('SAVING')
+        .insert({
+          'uuid': saving.uuid,
+          'title': saving.title,
+          'goal_value': saving.goalValue,
+          'picture': saving.picture,
+          'value': 0,
+        })
+        .select()
+        .single();
 
-  return SavingModel.fromJson(response);
-}
-
+    return SavingModel.fromJson(response);
+  }
 
   Future<void> updateSavingValue({
     required int id,
@@ -94,8 +98,6 @@ class SupabaseService {
   }) async {
     await supabase.from('SAVING').update({'value': value}).eq('id', id);
   }
-
-  
 
   Future<void> deleteSaving(int id) async {
     await supabase.from('SAVING').delete().eq('id', id);
@@ -114,21 +116,46 @@ class SupabaseService {
     return urls;
   }
 
-   // pega os bancos cadastrado pelo usuario
-   Future<List<BanksModel>> getBanks(String userId) async {
+  //contas bancarias cadastrado pelo usuario
+  Future<List<BanksModel>> getBanks(String userId) async {
     final response = await supabase
         .from("BANKS")
         .select()
         .eq('uuid', userId)
         .order('created_at', ascending: false);
 
-    return (response as List)
-        .map((item) => BanksModel.fromJson(item))
-        .toList();
+    return (response as List).map((item) => BanksModel.fromJson(item)).toList();
   }
 
   Future<void> addBanks(BanksModel model) async {
     await supabase.from('BANKS').insert(model.toJson());
+  }
+
+  //Cartões criados pelo usuario
+  Future<List<MoneyCardModel>> getMoneyCard(String userId) async {
+    final response = await supabase
+        .from("CARDS")
+        .select()
+        .eq('uuid', userId)
+        .order('created_at', ascending: false);
+
+    return (response as List)
+        .map((item) => MoneyCardModel.fromJson(item))
+        .toList();
+  }
+
+  Future<void> addMoneyCard(MoneyCardModel model) async {
+    await supabase.from('CARDS').insert(model.toJson());
+  }
+
+  Future<void> deleteMoneyCard(int id) async {
+    await supabase.from('CARDS').delete().eq('id', id);
+  }
+
+  Future<void> updateCardOrder(int id, int order) async {
+    await supabase
+        .from('CARDS') // nome da sua tabela
+        .update({'order': order}).eq('id', id);
   }
 
   // Aqui eu uso apenas no categoriesField para carregar as categorias do banco

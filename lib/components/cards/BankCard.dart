@@ -36,12 +36,9 @@ class BankCard extends ConsumerWidget {
         itemCount: banks.length,
         itemBuilder: (context, index) {
           final bank = banks[index];
-          return Padding(
-            padding: const EdgeInsets.only(bottom: 16),
-            child: BankCardItem(
-              title: bank.name ?? '',
-              type: bank.type ?? '', // ou banco.url se tiver
-            ),
+          return BankCardItem(
+            title: bank.name ?? '',
+            type: bank.type ?? '', // ou banco.url se tiver
           );
         },
       ),
@@ -61,28 +58,31 @@ class BankCardItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Bankscontainer(name: title),
-        const SizedBox(width: 16),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              title,
-              style: const TextStyle(
-                fontSize: 16,
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: 8),
+      child: Row(
+        children: [
+          Bankscontainer(name: title),
+          const SizedBox(width: 10),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                title,
+                style: const TextStyle(
+                  fontSize: 16,
+                ),
               ),
-            ),
-            Text(
-              type, // Pode ser atualizado futuramente
-              style: TextStyle(
-                fontSize: 14,
+              Text(
+                type, // Pode ser atualizado futuramente
+                style: TextStyle(
+                  fontSize: 14,
+                ),
               ),
-            ),
-          ],
-        ),
-      ],
+            ],
+          ),
+        ],
+      ),
     );
   }
 }
