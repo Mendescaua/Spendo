@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:spendo/components/FloatingMessage.dart';
@@ -136,8 +139,10 @@ class _MoneyCardScreenState extends ConsumerState<MoneyCardScreen> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Expanded(
-                            child: ReorderableDragStartListener(
-                                index: index, child: MoneyCard(cards: card)),
+                            child: _HoldToDrag(
+                              index: index,
+                              child: MoneyCard(cards: card),
+                            ),
                           ),
                         ],
                       ),
@@ -159,6 +164,41 @@ class _MoneyCardScreenState extends ConsumerState<MoneyCardScreen> {
           color: Colors.white,
           size: 32,
         ),
+      ),
+    );
+  }
+}
+
+class _HoldToDrag extends StatelessWidget {
+  final Widget child;
+  final int index;
+
+  const _HoldToDrag({
+    required this.child,
+    required this.index,
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return LongPressDraggable<int>(
+      data: index,
+      axis: Axis.vertical,
+      delay: const Duration(seconds: 2), // Espera 2 segundos
+      onDragStarted: () {
+        HapticFeedback.mediumImpact(); // Vibra ao entrar no modo de arraste
+      },
+      feedback: Material(
+        color: Colors.transparent,
+        child: SizedBox(
+          width: MediaQuery.of(context).size.width - 32,
+          child: child,
+        ),
+      ),
+      childWhenDragging: const SizedBox.shrink(),
+      child: ReorderableDelayedDragStartListener(
+        index: index,
+        child: child,
       ),
     );
   }
