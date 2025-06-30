@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:spendo/components/cards/SavingCard.dart';
 import 'package:spendo/components/cards/TotalBalanceCard.dart';
 import 'package:spendo/components/cards/TransactionCard.dart';
@@ -101,7 +102,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                             Navigator.of(context).pushNamed('/transactions');
                           },
                           icon: Icon(
-                            Iconsax.more,
+                            PhosphorIcons.dotsThreeOutline(PhosphorIconsStyle.regular),
                             size: 26,
                           ))
                     ],
@@ -148,7 +149,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                     Navigator.of(context).pushNamed('/saving'),
                                 child: Row(
                                   children: [
-                                    Icon(Iconsax.archive_add, size: 20),
+                                    Icon(PhosphorIcons.handCoins(PhosphorIconsStyle.regular), size: 20),
                                     const SizedBox(width: 6),
                                     Text(
                                       "Minhas ",
@@ -171,7 +172,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                 onPressed: () {
                                   Navigator.of(context).pushNamed('/saving');
                                 },
-                                icon: Icon(Iconsax.more, size: 26),
+                                icon: Icon(PhosphorIcons.dotsThreeOutline(PhosphorIconsStyle.regular), size: 26),
                               ),
                             ],
                           ),

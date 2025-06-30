@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:spendo/controllers/user_controller.dart';
 import 'package:spendo/utils/base64.dart';
 import 'package:spendo/utils/theme.dart';
@@ -150,7 +151,7 @@ class HomeDrawer extends StatelessWidget {
                     ),
                     ListTile(
                       contentPadding: const EdgeInsets.symmetric(vertical: 4),
-                      leading: Icon(Iconsax.archive_add,
+                      leading: Icon(PhosphorIcons.handCoins(PhosphorIconsStyle.regular),
                           size: 28, color: AppTheme.primaryColor),
                       title: Text("Minhas metas",
                           style: const TextStyle(fontSize: 16)),

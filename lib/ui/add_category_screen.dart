@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:spendo/components/FloatingMessage.dart';
+import 'package:spendo/components/buttons/StyleButton.dart';
 import 'package:spendo/controllers/transaction_controller.dart';
 import 'package:spendo/models/category_transaction_model.dart';
 import 'package:spendo/utils/theme.dart';
@@ -20,39 +22,58 @@ class _CriarCategoriaScreenState extends ConsumerState<CriarCategoriaScreen> {
   String? tipoSelecionadoDialog;
   Color corSelecionadaDialog = AppTheme.primaryColor;
 
+
   final List<Map<String, dynamic>> iconesDisponiveis = [
-    {'icone': Iconsax.card, 'tipo': 'I00'},
-    {'icone': Iconsax.ticket_star, 'tipo': 'I01'},
-    {'icone': Iconsax.video, 'tipo': 'I02'},
-    {'icone': Iconsax.music, 'tipo': 'I03'},
-    {'icone': Iconsax.video_play, 'tipo': 'I04'},
-    {'icone': Iconsax.bank, 'tipo': 'I05'},
-    {'icone': Iconsax.briefcase, 'tipo': 'I06'},
-    {'icone': Iconsax.calendar, 'tipo': 'I07'},
-    {'icone': Iconsax.chart_1, 'tipo': 'I08'},
-    {'icone': Iconsax.chart_2, 'tipo': 'I09'},
-    {'icone': Iconsax.emoji_happy, 'tipo': 'I10'},
-    {'icone': Iconsax.game, 'tipo': 'I11'},
-    {'icone': Iconsax.gift, 'tipo': 'I12'},
-    {'icone': Iconsax.global, 'tipo': 'I13'},
-    {'icone': Iconsax.heart, 'tipo': 'I14'},
-    {'icone': Iconsax.home, 'tipo': 'I15'},
-    {'icone': Iconsax.security, 'tipo': 'I16'},
-    {'icone': Iconsax.shop, 'tipo': 'I17'},
-    {'icone': Iconsax.star, 'tipo': 'I18'},
-    {'icone': Iconsax.tag, 'tipo': 'I19'},
-    {'icone': Iconsax.trash, 'tipo': 'I20'},
-    {'icone': Iconsax.airplane, 'tipo': 'I21'},
-    {'icone': Iconsax.gas_station, 'tipo': 'I22'},
-    {'icone': Iconsax.shopping_cart, 'tipo': 'I23'},
-    {'icone': Iconsax.book, 'tipo': 'I24'},
-    {'icone': Iconsax.teacher, 'tipo': 'I25'},
-    {'icone': Iconsax.rulerpen, 'tipo': 'I26'},
-    {'icone': Iconsax.cake, 'tipo': 'I27'},
-    {'icone': Iconsax.coffee, 'tipo': 'I28'},
-    {'icone': Iconsax.pet, 'tipo': 'I29'},
-    {'icone': Iconsax.mobile, 'tipo': 'I30'},
-    {'icone': Iconsax.gameboy, 'tipo': 'I31'},
+    {'icone': PhosphorIcons.wallet(PhosphorIconsStyle.regular), 'tipo': 'I00'},
+  {'icone': PhosphorIcons.forkKnife(PhosphorIconsStyle.regular), 'tipo': 'I01'},
+  {'icone': PhosphorIcons.tShirt(PhosphorIconsStyle.regular), 'tipo': 'I02'},
+  {'icone': PhosphorIcons.shoppingCart(PhosphorIconsStyle.regular), 'tipo': 'I03'},
+  {'icone': PhosphorIcons.coffee(PhosphorIconsStyle.regular), 'tipo': 'I04'},
+  {'icone': PhosphorIcons.cake(PhosphorIconsStyle.regular), 'tipo': 'I05'},
+  {'icone': PhosphorIcons.gasPump(PhosphorIconsStyle.regular), 'tipo': 'I06'},
+  {'icone': PhosphorIcons.wallet(PhosphorIconsStyle.regular), 'tipo': 'I07'},
+  {'icone': PhosphorIcons.bank(PhosphorIconsStyle.regular), 'tipo': 'I08'},
+  {'icone': PhosphorIcons.gift(PhosphorIconsStyle.regular), 'tipo': 'I09'},
+  {'icone': PhosphorIcons.house(PhosphorIconsStyle.regular), 'tipo': 'I10'},
+  {'icone': PhosphorIcons.basket(PhosphorIconsStyle.regular), 'tipo': 'I11'},
+  {'icone': PhosphorIcons.bookOpen(PhosphorIconsStyle.regular), 'tipo': 'I12'},
+  {'icone': PhosphorIcons.chalkboardTeacher(PhosphorIconsStyle.regular), 'tipo': 'I13'},
+  {'icone': PhosphorIcons.pawPrint(PhosphorIconsStyle.regular), 'tipo': 'I14'},
+  {'icone': PhosphorIcons.airplaneTilt(PhosphorIconsStyle.regular), 'tipo': 'I15'},
+  {'icone': PhosphorIcons.briefcase(PhosphorIconsStyle.regular), 'tipo': 'I16'},
+  {'icone': PhosphorIcons.chartBar(PhosphorIconsStyle.regular), 'tipo': 'I17'},
+  {'icone': PhosphorIcons.heart(PhosphorIconsStyle.regular), 'tipo': 'I18'},
+  {'icone': PhosphorIcons.shieldCheck(PhosphorIconsStyle.regular), 'tipo': 'I19'},
+  {'icone': PhosphorIcons.hamburger(PhosphorIconsStyle.regular), 'tipo': 'I20'},
+  {'icone': PhosphorIcons.pizza(PhosphorIconsStyle.regular), 'tipo': 'I21'},
+  {'icone': PhosphorIcons.musicNote(PhosphorIconsStyle.regular), 'tipo': 'I22'},
+  {'icone': PhosphorIcons.videoCamera(PhosphorIconsStyle.regular), 'tipo': 'I23'},
+  {'icone': PhosphorIcons.ticket(PhosphorIconsStyle.regular), 'tipo': 'I24'},
+  {'icone': PhosphorIcons.globe(PhosphorIconsStyle.regular), 'tipo': 'I25'},
+  {'icone': PhosphorIcons.calendarBlank(PhosphorIconsStyle.regular), 'tipo': 'I26'},
+  {'icone': PhosphorIcons.penNib(PhosphorIconsStyle.regular), 'tipo': 'I27'},
+  {'icone': PhosphorIcons.deviceMobile(PhosphorIconsStyle.regular), 'tipo': 'I28'},
+  {'icone': PhosphorIcons.firstAidKit(PhosphorIconsStyle.regular), 'tipo': 'I29'},
+  {'icone': PhosphorIcons.plugCharging(PhosphorIconsStyle.regular), 'tipo': 'I30'},
+  {'icone': PhosphorIcons.trophy(PhosphorIconsStyle.regular), 'tipo': 'I31'},
+  {'icone': PhosphorIcons.treePalm(PhosphorIconsStyle.regular), 'tipo': 'I32'},
+  {'icone': PhosphorIcons.camera(PhosphorIconsStyle.regular), 'tipo': 'I33'},
+  {'icone': PhosphorIcons.bugBeetle(PhosphorIconsStyle.regular), 'tipo': 'I34'},
+  {'icone': PhosphorIcons.dress(PhosphorIconsStyle.regular), 'tipo': 'I35'},
+  {'icone': PhosphorIcons.armchair(PhosphorIconsStyle.regular), 'tipo': 'I36'},
+  {'icone': PhosphorIcons.trash(PhosphorIconsStyle.regular), 'tipo': 'I37'},
+  {'icone': PhosphorIcons.tag(PhosphorIconsStyle.regular), 'tipo': 'I38'},
+  {'icone': PhosphorIcons.currencyDollar(PhosphorIconsStyle.regular), 'tipo': 'I39'},
+  {'icone': PhosphorIcons.handCoins(PhosphorIconsStyle.regular), 'tipo': 'I40'},
+  {'icone': PhosphorIcons.shoppingBag(PhosphorIconsStyle.regular), 'tipo': 'I41'},
+  {'icone': PhosphorIcons.phoneCall(PhosphorIconsStyle.regular), 'tipo': 'I42'},
+  {'icone': PhosphorIcons.notePencil(PhosphorIconsStyle.regular), 'tipo': 'I43'},
+  {'icone': PhosphorIcons.coins(PhosphorIconsStyle.regular), 'tipo': 'I44'},
+  {'icone': PhosphorIcons.paintBrush(PhosphorIconsStyle.regular), 'tipo': 'I45'},
+  {'icone': PhosphorIcons.bus(PhosphorIconsStyle.regular), 'tipo': 'I46'},
+  {'icone': PhosphorIcons.wallet(PhosphorIconsStyle.regular), 'tipo': 'I47'},
+  {'icone': PhosphorIcons.currencyCircleDollar(PhosphorIconsStyle.regular), 'tipo': 'I48'},
+  {'icone': PhosphorIcons.package(PhosphorIconsStyle.regular), 'tipo': 'I49'},
   ];
 
   final List<Color> _coresDisponiveis = [
@@ -124,31 +145,18 @@ class _CriarCategoriaScreenState extends ConsumerState<CriarCategoriaScreen> {
         });
       },
       child: Container(
-        margin: const EdgeInsets.only(right: 12),
-        padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
-          color: isSelected
-              ? AppTheme.primaryColor.withOpacity(0.15)
-              : Colors.grey.shade100,
+          color: isSelected ? AppTheme.primaryColor : Colors.grey.shade100,
           borderRadius: BorderRadius.circular(14),
           border: Border.all(
             color: isSelected ? AppTheme.primaryColor : Colors.grey.shade300,
             width: 2,
           ),
-          boxShadow: isSelected
-              ? [
-                  BoxShadow(
-                    color: AppTheme.primaryColor.withOpacity(0.3),
-                    blurRadius: 10,
-                    offset: const Offset(0, 4),
-                  )
-                ]
-              : [],
         ),
         child: Icon(
           icone,
           size: 30,
-          color: isSelected ? AppTheme.primaryColor : Colors.grey[700],
+          color: isSelected ? AppTheme.whiteColor : Colors.grey[700],
         ),
       ),
     );
@@ -165,24 +173,15 @@ class _CriarCategoriaScreenState extends ConsumerState<CriarCategoriaScreen> {
       },
       child: Container(
         margin: const EdgeInsets.only(right: 12),
-        width: 36,
+        width: 40,
         height: 36,
         decoration: BoxDecoration(
           color: cor,
-          shape: BoxShape.circle,
+          borderRadius: BorderRadius.circular(16),
           border: Border.all(
             color: isSelected ? Colors.black : Colors.white,
             width: 2,
           ),
-          boxShadow: isSelected
-              ? [
-                  BoxShadow(
-                    color: cor.withOpacity(0.5),
-                    blurRadius: 8,
-                    offset: const Offset(0, 3),
-                  )
-                ]
-              : [],
         ),
       ),
     );
@@ -227,41 +226,15 @@ class _CriarCategoriaScreenState extends ConsumerState<CriarCategoriaScreen> {
                             fontSize: 18, fontWeight: FontWeight.bold)),
                     const SizedBox(height: 12),
                     SizedBox(
-                      height: 70,
-                      child: ListView(
+                      height: 150, // altura maior para acomodar duas linhas
+                      child: GridView.count(
+                        crossAxisCount: 2, // DUAS linhas
                         scrollDirection: Axis.horizontal,
-                        children: [
-                          ...iconesDisponiveis.map(_iconeCarouselItem),
-                          GestureDetector(
-                            onTap: () => showModalBottomSheet(
-                              context: context,
-                              shape: const RoundedRectangleBorder(
-                                borderRadius: BorderRadius.vertical(
-                                    top: Radius.circular(20)),
-                              ),
-                              builder: (_) => Padding(
-                                padding: const EdgeInsets.all(16),
-                                child: Wrap(
-                                  spacing: 10,
-                                  runSpacing: 10,
-                                  children: iconesDisponiveis
-                                      .map((item) => _iconeCarouselItem(item))
-                                      .toList(),
-                                ),
-                              ),
-                            ),
-                            child: Container(
-                              margin: const EdgeInsets.only(right: 12),
-                              padding: const EdgeInsets.all(12),
-                              decoration: BoxDecoration(
-                                color: AppTheme.primaryColor,
-                                borderRadius: BorderRadius.circular(14),
-                              ),
-                              child: const Icon(Iconsax.more,
-                                  color: Colors.white, size: 30),
-                            ),
-                          )
-                        ],
+                        mainAxisSpacing: 10,
+                        crossAxisSpacing: 10,
+                        childAspectRatio: 1,
+                        children:
+                            iconesDisponiveis.map(_iconeCarouselItem).toList(),
                       ),
                     ),
                     const SizedBox(height: 24),
@@ -278,16 +251,11 @@ class _CriarCategoriaScreenState extends ConsumerState<CriarCategoriaScreen> {
                       ),
                     ),
                     const SizedBox(height: 36),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        TextButton(
-                          onPressed: () => Navigator.pop(context),
-                          child: const Text('Cancelar'),
-                        ),
-                        const SizedBox(width: 12),
-                        ElevatedButton(
-                          onPressed: () async {
+                    Container(
+                      width: double.infinity,
+                      child: StyleButton(
+                          text: 'Salvar',
+                          onClick: () async {
                             if (nomeNovaCategoria.isEmpty ||
                                 tipoSelecionadoDialog == null ||
                                 iconeSelecionado == null) {
@@ -306,18 +274,8 @@ class _CriarCategoriaScreenState extends ConsumerState<CriarCategoriaScreen> {
                                 tipoSelecionadoDialog!, corHex);
 
                             Navigator.pop(context, true);
-                          },
-                          style: ElevatedButton.styleFrom(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 32, vertical: 12),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                          ),
-                          child: const Text('Salvar'),
-                        ),
-                      ],
-                    ),
+                          }),
+                    )
                   ],
                 ),
               ),

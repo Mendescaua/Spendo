@@ -9,9 +9,7 @@ import 'package:spendo/ui/configuration_screen.dart';
 import 'package:spendo/ui/home_screen.dart';
 import 'package:spendo/ui/saving/saving_screen.dart';
 import 'package:spendo/ui/subscription_screen.dart';
-import 'package:spendo/ui/transactionChart/category_chart.dart';
 import 'package:spendo/ui/transactionChart/transaction_chart_tab.dart';
-import 'package:spendo/ui/transaction/transaction_screen.dart';
 import 'package:spendo/ui/wallet_screen.dart';
 import 'package:spendo/utils/theme.dart';
 
@@ -49,6 +47,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
     ];
 
     final items = <IconData>[
+      
       Iconsax.home,
       Iconsax.chart_square,
       Iconsax.empty_wallet,
