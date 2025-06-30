@@ -33,7 +33,6 @@ class TransactionCard extends StatelessWidget {
                   transaction.title,
                   style: TextStyle(
                     overflow: TextOverflow.ellipsis,
-                    
                     fontWeight: FontWeight.bold,
                     fontSize: 14,
                     color: Colors.black,
@@ -44,7 +43,9 @@ class TransactionCard extends StatelessWidget {
                         transaction.description!.isEmpty
                     ? const SizedBox.shrink()
                     : Text(
-                        transaction.description ?? '',
+                        Customtext.capitalizeFirstLetter(
+                            Customtext.limitarDescricao(
+                                transaction.description ?? '')),
                         style: TextStyle(
                           color: Colors.grey,
                           fontSize: 14,

@@ -29,8 +29,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   }
 
   Future<void> loadTransactions() async {
-    
-    if (_loading) return;
+    // Verifica se já está carregando ou se as transações já foram carregadas
+    // para evitar consultas desnecessárias toda vez que a tela for aberta.
+    final currentTransactions = ref.read(transactionControllerProvider);
+    if (_loading || currentTransactions.isNotEmpty) return;
 
     setState(() => _loading = true);
 
@@ -38,7 +40,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     final result = await controller.getTransaction();
 
     setState(() => _loading = false);
-    print("Result transactions: $result");
 
     if (result != null) {
       print('Erro: $result');
@@ -46,7 +47,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   }
 
   Future<void> loadSavings() async {
-    if (_loading) return;
+    final currentSavings = ref.read(savingControllerProvider);
+    if (_loading || currentSavings.isNotEmpty) return;
 
     setState(() => _loading = true);
 
@@ -54,7 +56,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     final result = await controller.getSaving();
 
     setState(() => _loading = false);
-    print("Result metas: $result");
 
     if (result != null) {
       print('Erro: $result');
@@ -84,15 +85,25 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        "Transações",
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
+                      GestureDetector(
+                        onTap: () =>
+                            Navigator.of(context).pushNamed('/transactions'),
+                        child: Text(
+                          "Transações",
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                       IconButton(
-                          onPressed: () {}, icon: Icon(Iconsax.setting_4))
+                          onPressed: () {
+                            Navigator.of(context).pushNamed('/transactions');
+                          },
+                          icon: Icon(
+                            Iconsax.more,
+                            size: 26,
+                          ))
                     ],
                   ),
                   _loading
@@ -132,31 +143,35 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Row(
-                                children: [
-                                  Icon(Iconsax.archive_add, size: 20),
-                                  const SizedBox(width: 6),
-                                  Text(
-                                    "Minhas ",
-                                    style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.w400,
+                              GestureDetector(
+                                onTap: () =>
+                                    Navigator.of(context).pushNamed('/saving'),
+                                child: Row(
+                                  children: [
+                                    Icon(Iconsax.archive_add, size: 20),
+                                    const SizedBox(width: 6),
+                                    Text(
+                                      "Minhas ",
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w400,
+                                      ),
                                     ),
-                                  ),
-                                  Text(
-                                    "metas",
-                                    style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
+                                    Text(
+                                      "metas",
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
                               IconButton(
                                 onPressed: () {
-                                  // ação do botão +
+                                  Navigator.of(context).pushNamed('/saving');
                                 },
-                                icon: Icon(Iconsax.add, size: 20),
+                                icon: Icon(Iconsax.more, size: 26),
                               ),
                             ],
                           ),

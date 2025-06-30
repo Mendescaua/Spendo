@@ -25,6 +25,11 @@ class _WalletScreenState extends ConsumerState<WalletScreen> {
   }
 
   Future<void> loadCards() async {
+    // Verifica se já está carregando ou se as transações já foram carregadas
+    // para evitar consultas desnecessárias toda vez que a tela for aberta.
+    final currentTransactions = ref.read(moneyCardControllerProvider);
+    if (_loading || currentTransactions.isNotEmpty) return;
+
     if (_loading) return;
 
     setState(() => _loading = true);

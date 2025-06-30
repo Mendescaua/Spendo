@@ -21,7 +21,7 @@ class Homebar extends ConsumerWidget implements PreferredSizeWidget {
         onPressed: () => Scaffold.of(context).openDrawer(),
         icon: Icon(
           Iconsax.category,
-          size: 22,
+          size: 26,
           color: AppTheme.whiteColor,
         ),
       ),
