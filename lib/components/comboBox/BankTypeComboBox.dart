@@ -32,7 +32,7 @@ class _BankTypeComboBoxState extends State<BankTypeComboBox> {
   showModalBottomSheet(
     context: context,
     isScrollControlled: true,
-    backgroundColor: Colors.white,
+    backgroundColor: AppTheme.dynamicBackgroundColor(context),
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
     ),

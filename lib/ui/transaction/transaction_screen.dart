@@ -228,8 +228,8 @@ class _TransactionScreenState extends ConsumerState<TransactionScreen> {
             child: Container(
               width: double.infinity,
               padding: const EdgeInsets.all(16),
-              decoration: const BoxDecoration(
-                color: AppTheme.backgroundColor,
+              decoration: BoxDecoration(
+                color: AppTheme.dynamicBackgroundColor(context),
                 borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
               ),
               child: datasOrdenadas.isEmpty
