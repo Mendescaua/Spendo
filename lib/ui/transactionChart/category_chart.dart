@@ -51,8 +51,7 @@ class _CategoryChartState extends ConsumerState<CategoryChart> {
     return Expanded(
       child: Container(
         width: double.infinity,
-        decoration: const BoxDecoration(
-          color: AppTheme.backgroundColor,
+        decoration: BoxDecoration(
           borderRadius: BorderRadius.vertical(
             top: Radius.circular(24),
           ),
@@ -187,7 +186,7 @@ class categoryCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppTheme.dynamicCardColor(context),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Row(

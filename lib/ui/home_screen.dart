@@ -30,11 +30,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   }
 
   Future<void> loadTransactions() async {
-    // Verifica se já está carregando ou se as transações já foram carregadas
-    // para evitar consultas desnecessárias toda vez que a tela for aberta.
-    final currentTransactions = ref.read(transactionControllerProvider);
-    if (_loading || currentTransactions.isNotEmpty) return;
-
     setState(() => _loading = true);
 
     final controller = ref.read(transactionControllerProvider.notifier);
@@ -48,9 +43,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   }
 
   Future<void> loadSavings() async {
-    final currentSavings = ref.read(savingControllerProvider);
-    if (_loading || currentSavings.isNotEmpty) return;
-
     setState(() => _loading = true);
 
     final controller = ref.read(savingControllerProvider.notifier);
@@ -130,7 +122,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                               },
                             ),
                   Card(
-                    color: AppTheme.whiteColor,
+                    color: AppTheme.dynamicCardColor(context),
                     margin: const EdgeInsets.only(bottom: 16),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16),

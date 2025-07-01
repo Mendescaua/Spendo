@@ -59,8 +59,8 @@ class _TransactionChartTabState extends ConsumerState<TransactionChartTab> {
             child: Container(
               width: double.infinity,
               padding: const EdgeInsets.all(16),
-              decoration: const BoxDecoration(
-                color: AppTheme.backgroundColor,
+              decoration: BoxDecoration(
+                color: AppTheme.dynamicBackgroundColor(context),
                 borderRadius: BorderRadius.vertical(
                   top: Radius.circular(24),
                 ),
@@ -93,7 +93,7 @@ class TabNavigation extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppTheme.dynamicBackgroundColor(context),
         borderRadius: BorderRadius.circular(16),
       ),
       child: Row(

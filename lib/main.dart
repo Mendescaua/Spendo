@@ -27,14 +27,22 @@ void main() {
   );
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  ThemeMode _themeMode = ThemeMode.system;
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Spendo',
-      theme: AppTheme.appTheme,
+      theme: AppTheme.lightTheme,
+      darkTheme: AppTheme.darkTheme,
+      themeMode: _themeMode,
       debugShowCheckedModeBanner: false,
       home: AuthGate(),
       locale: const Locale('pt', 'BR'), // para funcionar a localização
@@ -54,7 +62,9 @@ class MyApp extends StatelessWidget {
         '/register': (context) => const RegisterScreen(),
         '/home': (context) => const HomeScreen(),
         '/menu': (context) => const MainScreen(),
-        '/transactions': (context) => const TransactionScreen(),
+        '/transactions': (context) => const TransactionScreen(type: 'all',),
+        '/transactions_despesa': (context) => const TransactionScreen(type: 'd',),
+        '/transactions_receita': (context) => const TransactionScreen(type: 'r',),
         '/saving_picker_image': (context) => const ImagePickerScreen(),
         '/category_chart': (context) => const CategoryChart(),
         '/money_card': (context) => const MoneyCardScreen(),

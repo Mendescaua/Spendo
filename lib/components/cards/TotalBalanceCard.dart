@@ -69,15 +69,21 @@ class _SaldoGeralCardState extends ConsumerState<SaldoGeralCard> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Count(
-                title: 'Receitas',
-                type: 'receita',
-                isHidden: _isHidden, // passa para o Count
+              GestureDetector(
+                onTap: () => Navigator.pushNamed(context, '/transactions_receita'),
+                child: Count(
+                  title: 'Receitas',
+                  type: 'receita',
+                  isHidden: _isHidden, // passa para o Count
+                ),
               ),
-              Count(
-                title: 'Despesas',
-                type: 'despesa',
-                isHidden: _isHidden, // passa para o Count
+              GestureDetector(
+                onTap: () => Navigator.pushNamed(context, '/transactions_despesa'),
+                child: Count(
+                  title: 'Despesas',
+                  type: 'despesa',
+                  isHidden: _isHidden, // passa para o Count
+                ),
               ),
             ],
           ),
@@ -159,7 +165,7 @@ class Count extends ConsumerWidget {
                 const SizedBox(height: 4),
                 AutoSizeText(
                   displayValue(),
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.bold,
                     color: AppTheme.whiteColor,

@@ -102,8 +102,8 @@ class _SavingScreenState extends ConsumerState<SavingScreen> {
               margin: const EdgeInsets.only(top: 16),
               padding:
                   const EdgeInsets.symmetric(horizontal: 16, vertical: 32),
-              decoration: const BoxDecoration(
-                color: AppTheme.backgroundColor,
+              decoration: BoxDecoration(
+                color: AppTheme.dynamicBackgroundColor(context),
                 borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
               ),
               child: _loading

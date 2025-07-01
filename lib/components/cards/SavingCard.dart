@@ -33,7 +33,7 @@ class MetaCard extends StatelessWidget {
       child: Container(
         margin: const EdgeInsets.only(bottom: 16),
         decoration: BoxDecoration(
-          color: AppTheme.whiteColor,
+          color: AppTheme.dynamicCardColor(context),
           borderRadius: BorderRadius.circular(16),
           border:
               Border.all(color: Colors.grey.shade300, width: 1), // Borda fina

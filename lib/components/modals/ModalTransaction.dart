@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:spendo/components/buttons/OutlineButton.dart';
 import 'package:spendo/ui/transaction/new_despesa_screen.dart';
 import 'package:spendo/ui/transaction/new_receita_screen.dart';
+import 'package:spendo/utils/theme.dart';
 
 class ModalTransaction extends StatelessWidget {
   const ModalTransaction({super.key});
@@ -11,6 +12,13 @@ class ModalTransaction extends StatelessWidget {
     Size size = MediaQuery.of(context).size;
     return SafeArea(
       child: Container(
+        decoration: BoxDecoration(
+          color: AppTheme.dynamicModalColor(context),
+          borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(24),
+            topRight: Radius.circular(24),
+          ),
+        ),
         padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 24),
         width: double.infinity,
         height: size.height * 0.38,

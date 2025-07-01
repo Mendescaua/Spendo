@@ -151,7 +151,7 @@ class _SplashScreenState extends State<SplashScreen> {
                       textAlign: TextAlign.center,
                       style: const TextStyle(
                         fontSize: 14,
-                        color: AppTheme.shadowTextColor,
+                        color: AppTheme.textColor,
                       ),
                     ),
                     const SizedBox(height: 20),

@@ -5,6 +5,7 @@ import 'package:spendo/components/FloatingMessage.dart';
 import 'package:spendo/components/buttons/StyleButton.dart';
 import 'package:spendo/controllers/saving_controller.dart';
 import 'package:spendo/models/saving_model.dart';
+import 'package:spendo/utils/theme.dart';
 
 class Modalsaving extends ConsumerStatefulWidget {
   SavingModel? saving;
@@ -65,6 +66,13 @@ class _ModalsavingState extends ConsumerState<Modalsaving> {
             bottom: MediaQuery.of(context).viewInsets.bottom + 24,
           ),
             child: Container(
+              decoration: BoxDecoration(
+          color: AppTheme.dynamicModalColor(context),
+          borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(24),
+            topRight: Radius.circular(24),
+          ),
+        ),
                 padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 24),
                 width: double.infinity,
                 height: size.height * 0.40,

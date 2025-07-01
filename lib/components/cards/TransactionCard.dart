@@ -15,7 +15,7 @@ class TransactionCard extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppTheme.dynamicCardColor(context),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Row(
@@ -35,7 +35,7 @@ class TransactionCard extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                     fontWeight: FontWeight.bold,
                     fontSize: 14,
-                    color: Colors.black,
+                    color: AppTheme.dynamicTextColor(context),
                   ),
                 ),
                 SizedBox(height: 4),

@@ -89,7 +89,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
               height: 90,
               padding: EdgeInsets.only(bottom: 20),
               decoration: BoxDecoration(
-                color: AppTheme.whiteColor,
+                color: AppTheme.dynamicNavBarColor(context),
                 borderRadius: const BorderRadius.only(
                   topLeft: Radius.circular(40),
                   topRight: Radius.circular(40),

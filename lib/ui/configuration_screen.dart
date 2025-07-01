@@ -5,6 +5,7 @@ import 'package:spendo/controllers/auth_controller.dart';
 import 'package:spendo/controllers/user_controller.dart';
 import 'package:spendo/utils/base64.dart';
 import 'package:spendo/utils/customText.dart';
+import 'package:spendo/utils/theme.dart';
 
 class ConfiguracoesScreen extends ConsumerStatefulWidget {
   const ConfiguracoesScreen({Key? key}) : super(key: key);
@@ -45,7 +46,7 @@ class _ConfiguracoesScreenState extends ConsumerState<ConfiguracoesScreen> {
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: AppTheme.dynamicCardColor(context),
               borderRadius: BorderRadius.circular(16),
               boxShadow: [
                 BoxShadow(
@@ -145,7 +146,7 @@ class _ConfiguracoesScreenState extends ConsumerState<ConfiguracoesScreen> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppTheme.dynamicCardColor(context),
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(color: Colors.black12, blurRadius: 6, offset: Offset(0, 2))
@@ -156,7 +157,7 @@ class _ConfiguracoesScreenState extends ConsumerState<ConfiguracoesScreen> {
         children: [
           Text(title,
               style:
-                  const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                 TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: AppTheme.dynamicTextColor(context))),
           const SizedBox(height: 8),
           ...children,
         ],
@@ -167,10 +168,10 @@ class _ConfiguracoesScreenState extends ConsumerState<ConfiguracoesScreen> {
   Widget _buildTile(IconData icon, String title, VoidCallback onTap,
       {Color? color}) {
     return ListTile(
-      leading: Icon(icon, color: color ?? Colors.black),
+      leading: Icon(icon, color: color ?? AppTheme.dynamicTextColor(context)),
       title: Text(title,
           style: TextStyle(
-              color: color ?? Colors.black, fontWeight: FontWeight.w500)),
+              color: color ?? AppTheme.dynamicTextColor(context), fontWeight: FontWeight.w500)),
       onTap: onTap,
       contentPadding: const EdgeInsets.symmetric(horizontal: 0),
     );

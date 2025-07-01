@@ -54,6 +54,13 @@ class _ModalSubscriptionState extends ConsumerState<ModalSubscription> {
     return SafeArea(
       child: SingleChildScrollView(
         child: Container(
+          decoration: BoxDecoration(
+          color: AppTheme.dynamicModalColor(context),
+          borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(24),
+            topRight: Radius.circular(24),
+          ),
+        ),
           padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 24),
           width: double.infinity,
           height: size.height * 0.60,

@@ -19,7 +19,7 @@ final time = subscription.time == "1"
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppTheme.dynamicCardColor(context),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Row(
@@ -47,7 +47,6 @@ final time = subscription.time == "1"
                     overflow: TextOverflow.ellipsis,
                     fontWeight: FontWeight.bold,
                     fontSize: 14,
-                    color: Colors.black,
                   ),
                 ),
                 SizedBox(height: 4),
