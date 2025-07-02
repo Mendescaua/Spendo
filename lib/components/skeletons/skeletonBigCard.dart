@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:spendo/utils/theme.dart';
 
-Widget SkeletonBigCard() {
+Widget SkeletonBigCard(BuildContext context) {
   return Shimmer.fromColors(
-    baseColor: Colors.grey.shade300,
+    baseColor: AppTheme.dynamicSkeletonColor(context),
     highlightColor: Colors.grey.shade100,
     child: Container(
       margin: const EdgeInsets.only(bottom: 16),

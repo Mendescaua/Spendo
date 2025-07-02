@@ -50,7 +50,7 @@ class AppTheme {
 
   static Color dynamicRedColor(BuildContext context) {
     return Theme.of(context).brightness == Brightness.dark
-        ? const Color.fromARGB(255, 255, 97, 97)
+        ? const Color(0xFFFF6161)
         : redColor;
   }
 
@@ -58,6 +58,12 @@ class AppTheme {
     return Theme.of(context).brightness == Brightness.dark
         ? const Color.fromARGB(255, 32, 32, 32)
         : Colors.grey.shade300;
+  }
+
+  static Color dynamicSkeletonColor(BuildContext context) {
+    return Theme.of(context).brightness == Brightness.dark
+        ? Color(0xFF2E2E2E) // white adaptado para dark
+        : Colors.grey.shade300; // branco real para light
   }
 
   static ThemeData get lightTheme => ThemeData(

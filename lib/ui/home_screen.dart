@@ -100,7 +100,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   ),
                   _loading
                       ? Column(
-                          children: List.generate(3, (_) => SkeletonCard()),
+                          children: List.generate(3, (_) => SkeletonCard(context: context)),
                         )
                       : transactions.isEmpty
                           ? Center(
@@ -173,7 +173,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                           _loading
                               ? Column(
                                   children: List.generate(
-                                      3, (_) => SkeletonBigCard()),
+                                      3, (_) => SkeletonBigCard(context)),
                                 )
                               : savings.isEmpty
                                   ? Center(
@@ -185,7 +185,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                   : savings == null
                                       ? Column(
                                           children: List.generate(
-                                              3, (_) => SkeletonBigCard()))
+                                              3, (_) => SkeletonBigCard(context)),)
                                       : savings.isEmpty
                                           ? const Center(
                                               child: Text(

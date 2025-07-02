@@ -15,7 +15,6 @@ import 'package:spendo/ui/money_card_screen.dart';
 import 'package:spendo/ui/saving/saving_picker_image.dart';
 import 'package:spendo/ui/saving/saving_screen.dart';
 import 'package:spendo/ui/splash_screen.dart';
-import 'package:spendo/ui/transaction/transaction_info_screen.dart';
 import 'package:spendo/ui/transaction/transaction_screen.dart';
 import 'package:spendo/ui/transactionChart/category_chart.dart';
 import 'package:spendo/utils/theme.dart';

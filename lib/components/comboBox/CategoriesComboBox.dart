@@ -335,7 +335,7 @@ void _abrirModalCategorias() {
                     style: TextStyle(
                       fontSize: 16,
                       color: categoriaSelecionada != null
-                          ? Colors.black
+                          ? AppTheme.dynamicTextColor(context)
                           : AppTheme.dynamicTextColor(context),
                     ),
                   ),
