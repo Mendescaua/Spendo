@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:month_year_picker/month_year_picker.dart';
+import 'package:spendo/providers/theme_provider.dart';
 import 'package:spendo/ui/add_money_card_screen.dart';
 import 'package:spendo/controllers/auth_gate.dart';
 import 'package:spendo/core/supabse_client.dart';
@@ -28,22 +29,18 @@ void main() {
   );
 }
 
-class MyApp extends StatefulWidget {
+class MyApp extends ConsumerWidget {
   const MyApp({super.key});
 
   @override
-  State<MyApp> createState() => _MyAppState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+  final themeMode = ref.watch(themeModeProvider);
 
-class _MyAppState extends State<MyApp> {
-  ThemeMode _themeMode = ThemeMode.system;
-  @override
-  Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Spendo',
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
-      themeMode: _themeMode,
+      themeMode: themeMode,
       debugShowCheckedModeBanner: false,
       home: AuthGate(),
       locale: const Locale('pt', 'BR'), // para funcionar a localização

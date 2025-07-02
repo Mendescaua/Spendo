@@ -87,7 +87,8 @@ class _NewDespesaScreenState extends ConsumerState<NewDespesaScreen> {
         ),
       ),
       backgroundColor: AppTheme.redColor,
-      body: SafeArea(
+      body: GestureDetector(
+        onTap: () => FocusScope.of(context).unfocus(),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -104,7 +105,7 @@ class _NewDespesaScreenState extends ConsumerState<NewDespesaScreen> {
                 ],
               ),
             ),
-
+        
             // TextField sem borda nenhuma
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -128,16 +129,16 @@ class _NewDespesaScreenState extends ConsumerState<NewDespesaScreen> {
                 ),
               ),
             ),
-
+        
             const SizedBox(height: 32),
-
+        
             // Container branco ocupando toda a largura
             Expanded(
               child: Container(
                 padding: EdgeInsets.all(24),
                 width: double.infinity,
-                decoration: const BoxDecoration(
-                  color: AppTheme.backgroundColor,
+                decoration: BoxDecoration(
+                  color: AppTheme.dynamicBackgroundColor(context),
                   borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
                 ),
                 child: SingleChildScrollView(
@@ -196,6 +197,10 @@ class _NewDespesaScreenState extends ConsumerState<NewDespesaScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           ChoiceChip(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            selectedColor: AppTheme.primaryColor,
                             label: Text('Hoje'),
                             selected: isSameDate(selectedDate, DateTime.now()),
                             onSelected: (selected) {
@@ -208,6 +213,10 @@ class _NewDespesaScreenState extends ConsumerState<NewDespesaScreen> {
                           ),
                           SizedBox(width: 8),
                           ChoiceChip(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            selectedColor: AppTheme.primaryColor,
                             label: Text('Ontem'),
                             selected: isSameDate(selectedDate,
                                 DateTime.now().subtract(Duration(days: 1))),
@@ -222,6 +231,10 @@ class _NewDespesaScreenState extends ConsumerState<NewDespesaScreen> {
                           ),
                           SizedBox(width: 8),
                           ChoiceChip(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            selectedColor: AppTheme.primaryColor,
                             label: Text(selectedDate.isAfter(DateTime.now()
                                         .subtract(Duration(days: 1))) &&
                                     !isSameDate(selectedDate, DateTime.now())

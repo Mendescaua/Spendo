@@ -67,7 +67,7 @@ class TransactionCard extends StatelessWidget {
               style: TextStyle(
                 color: transaction.type == 'r'
                     ? AppTheme.greenColor
-                    : AppTheme.redColor,
+                    : AppTheme.dynamicRedColor(context),
                 fontWeight: FontWeight.bold,
                 fontSize: 14,
               ),

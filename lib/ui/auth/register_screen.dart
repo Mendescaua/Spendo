@@ -215,7 +215,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
-                          color: AppTheme.textColor,
                         ),
                       ),
                       TextButton(

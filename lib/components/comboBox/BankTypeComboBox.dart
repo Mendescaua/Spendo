@@ -100,7 +100,7 @@ class _BankTypeComboBoxState extends State<BankTypeComboBox> {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
         decoration: BoxDecoration(
-          border: Border.all(color: const Color.fromARGB(127, 0, 0, 0)),
+          border: Border.all(color: AppTheme.dynamicTextColor(context),),
           borderRadius: BorderRadius.circular(16),
         ),
         child: Row(

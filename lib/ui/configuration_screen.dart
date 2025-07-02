@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:spendo/components/modals/ModalTheme.dart';
 import 'package:spendo/controllers/auth_controller.dart';
 import 'package:spendo/controllers/user_controller.dart';
 import 'package:spendo/utils/base64.dart';
@@ -131,6 +133,9 @@ class _ConfiguracoesScreenState extends ConsumerState<ConfiguracoesScreen> {
           _buildCard(
             title: 'Outros',
             children: [
+              _buildTile(PhosphorIcons.sun(PhosphorIconsStyle.regular), 'Tema', () {
+                showThemeSelectionModal(context, ref);
+              }),
               _buildTile(Iconsax.info_circle, 'Sobre o app', () {}),
               _buildTile(Iconsax.logout, 'Sair', () {
                 logout();

@@ -133,7 +133,7 @@ final Map<String, IconData> iconesPorTipo = {
     await showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: Colors.white,
+      backgroundColor: AppTheme.dynamicModalColor(context),
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
@@ -269,7 +269,7 @@ final Map<String, IconData> iconesPorTipo = {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(16),
               border: Border.all(
-                color: Colors.grey.shade600,
+                color: AppTheme.dynamicTextColor(context),
                 width: 1,
               ),
             ),
@@ -302,7 +302,7 @@ final Map<String, IconData> iconesPorTipo = {
                       fontSize: 16,
                       color: categoriaSelecionada != null
                           ? Colors.black
-                          : Colors.grey.shade800,
+                          : AppTheme.dynamicTextColor(context),
                     ),
                   ),
                 ),

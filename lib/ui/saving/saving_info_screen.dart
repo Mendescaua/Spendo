@@ -162,8 +162,8 @@ class _SavingInfoScreenState extends ConsumerState<SavingInfoScreen> {
               top: 186, // altura da imagem menos um pouco para sobrepor
               child: Container(
                 padding: const EdgeInsets.all(16),
-                decoration: const BoxDecoration(
-                  color: AppTheme.backgroundColor,
+                decoration: BoxDecoration(
+                  color: AppTheme.dynamicBackgroundColor(context),
                   borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
                   boxShadow: [
                     BoxShadow(
@@ -187,7 +187,6 @@ class _SavingInfoScreenState extends ConsumerState<SavingInfoScreen> {
                               style: const TextStyle(
                                 fontSize: 26,
                                 fontWeight: FontWeight.bold,
-                                color: Colors.black87,
                               ),
                             ),
                             const SizedBox(height: 30),
@@ -216,7 +215,7 @@ class _SavingInfoScreenState extends ConsumerState<SavingInfoScreen> {
                                     const Text(
                                       'concluído',
                                       style: TextStyle(
-                                          fontSize: 14, color: Colors.black54),
+                                          fontSize: 14),
                                     ),
                                   ],
                                 ),
@@ -234,7 +233,6 @@ class _SavingInfoScreenState extends ConsumerState<SavingInfoScreen> {
                                   label: 'Acumulado',
                                   value: Customtext.formatMoeda(
                                       currentSaving.value ?? 0),
-                                  valueColor: Colors.black87,
                                 ),
                                 _InfoColumn(
                                   icon: Iconsax.wallet_money,
@@ -242,7 +240,6 @@ class _SavingInfoScreenState extends ConsumerState<SavingInfoScreen> {
                                   value: Customtext.formatMoeda(
                                       (currentSaving.goalValue ?? 0) -
                                           (currentSaving.value ?? 0)),
-                                  valueColor: Colors.grey[700]!,
                                 ),
                               ],
                             ),
@@ -293,14 +290,12 @@ class _InfoColumn extends StatelessWidget {
   final IconData icon;
   final String label;
   final String value;
-  final Color valueColor;
 
   const _InfoColumn({
     Key? key,
     required this.icon,
     required this.label,
     required this.value,
-    required this.valueColor,
   }) : super(key: key);
 
   @override
@@ -325,7 +320,6 @@ class _InfoColumn extends StatelessWidget {
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 18,
-                color: valueColor,
               ),
             ),
           ],

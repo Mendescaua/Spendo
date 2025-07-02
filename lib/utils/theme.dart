@@ -48,6 +48,18 @@ class AppTheme {
         : textColor;
   }
 
+  static Color dynamicRedColor(BuildContext context) {
+    return Theme.of(context).brightness == Brightness.dark
+        ? const Color.fromARGB(255, 255, 97, 97)
+        : redColor;
+  }
+
+  static Color dynamicBorderSavingColor(BuildContext context) {
+    return Theme.of(context).brightness == Brightness.dark
+        ? const Color.fromARGB(255, 32, 32, 32)
+        : Colors.grey.shade300;
+  }
+
   static ThemeData get lightTheme => ThemeData(
         brightness: Brightness.light,
         fontFamily: 'Poppins',

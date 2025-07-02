@@ -36,7 +36,7 @@ class MetaCard extends StatelessWidget {
           color: AppTheme.dynamicCardColor(context),
           borderRadius: BorderRadius.circular(16),
           border:
-              Border.all(color: Colors.grey.shade300, width: 1), // Borda fina
+              Border.all(color: AppTheme.dynamicBorderSavingColor(context), width: 1), // Borda fina
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

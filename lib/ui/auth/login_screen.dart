@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:spendo/controllers/auth_controller.dart';
 import 'package:spendo/components/FloatingMessage.dart';
 import 'package:spendo/components/buttons/StyleButton.dart';
@@ -70,7 +71,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           borderRadius: BorderRadius.circular(16),
                         ),
                         child: IconButton(
-                          icon: const Icon(Iconsax.arrow_left),
+                          icon: Icon(PhosphorIcons.arrowLeft(PhosphorIconsStyle.regular)),
                           color: AppTheme.whiteColor,
                           iconSize: 26,
                           onPressed: () {
@@ -150,7 +151,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w600,
-                            color: AppTheme.textColor,
+                            color: AppTheme.dynamicTextColor(context),
                           ),
                         ),
                       ),
@@ -169,7 +170,6 @@ class _LoginScreenState extends State<LoginScreen> {
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
-                          color: AppTheme.textColor,
                         ),
                       ),
                       TextButton(

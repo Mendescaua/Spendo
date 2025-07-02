@@ -95,8 +95,8 @@ class _TransactionInfoScreenState extends ConsumerState<TransactionInfoScreen> {
             top: 200,
             child: Container(
               padding: const EdgeInsets.all(24),
-              decoration: const BoxDecoration(
-                color: AppTheme.backgroundColor,
+              decoration: BoxDecoration(
+                color: AppTheme.dynamicBackgroundColor(context),
                 borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
                 boxShadow: [
                   BoxShadow(
@@ -116,7 +116,6 @@ class _TransactionInfoScreenState extends ConsumerState<TransactionInfoScreen> {
                       style: const TextStyle(
                         fontSize: 26,
                         fontWeight: FontWeight.bold,
-                        color: Colors.black87,
                       ),
                     ),
                     const SizedBox(height: 16),
@@ -148,7 +147,6 @@ class _TransactionInfoScreenState extends ConsumerState<TransactionInfoScreen> {
                                   maxLines: null,
                                   style: const TextStyle(
                                     fontSize: 14,
-                                    color: Colors.black87,
                                     fontWeight: FontWeight.bold,
                                   ),
                                   decoration: InputDecoration(
@@ -232,7 +230,6 @@ class InfoTile extends StatelessWidget {
                   content,
                   style: const TextStyle(
                     fontSize: 14,
-                    color: Colors.black87,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
