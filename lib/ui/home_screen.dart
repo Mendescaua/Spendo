@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:iconsax/iconsax.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:spendo/components/cards/SavingCard.dart';
 import 'package:spendo/components/cards/TotalBalanceCard.dart';

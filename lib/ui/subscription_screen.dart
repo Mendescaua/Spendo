@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
-import 'package:month_year_picker/month_year_picker.dart';
 import 'package:spendo/components/FloatingMessage.dart';
 import 'package:spendo/components/MonthPicker.dart';
 import 'package:spendo/components/cards/SubscriptionCard.dart';

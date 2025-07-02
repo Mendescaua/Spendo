@@ -7,7 +7,6 @@ import 'package:spendo/components/buttons/StyleButton.dart';
 import 'package:spendo/components/comboBox/BankComboBox.dart';
 import 'package:spendo/components/comboBox/BankFlagComboBox.dart';
 import 'package:spendo/controllers/money_card_controller.dart';
-import 'package:spendo/controllers/subscription_controller.dart';
 import 'package:spendo/models/money_card_model.dart';
 import 'package:spendo/components/cards/MoneyCard.dart';
 import 'package:spendo/utils/theme.dart';

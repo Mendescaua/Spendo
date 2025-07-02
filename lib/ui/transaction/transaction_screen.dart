@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:intl/intl.dart';
 import 'package:month_picker_dialog/month_picker_dialog.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:spendo/components/cards/TransactionCard.dart';
@@ -63,8 +64,13 @@ class _TransactionScreenState extends ConsumerState<TransactionScreen> {
       }).toList();
     }
 
-    final despesas = ref.watch(totalDespesasProvider);
-    final receitas = ref.watch(totalReceitasProvider);
+    final receitas = transactionsFiltradas
+        .where((t) => t.type == 'r')
+        .fold(0.0, (sum, t) => sum + t.value);
+
+    final despesas = transactionsFiltradas
+        .where((t) => t.type == 'd')
+        .fold(0.0, (sum, t) => sum + t.value);
 
     final transacoesAgrupadas = _agruparPorData(transactionsFiltradas);
 
@@ -186,7 +192,8 @@ class _TransactionScreenState extends ConsumerState<TransactionScreen> {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  Customtext.formatMoeda(_valorTotal(filtro, receitas, despesas)),
+                  Customtext.formatMoeda(
+                      _valorTotal(filtro, receitas, despesas)),
                   style: const TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
@@ -194,36 +201,36 @@ class _TransactionScreenState extends ConsumerState<TransactionScreen> {
                   ),
                 ),
                 const SizedBox(height: 16),
-
-                // Campo para selecionar mês
                 GestureDetector(
                   onTap: () => _selectMonth(context),
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12),
-                      color: Colors.white24,
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          _formatMesAno(_selectedMonth),
-                          style: const TextStyle(color: Colors.white, fontSize: 16),
+                  child: Row(
+                    children: [
+                      Text(
+                        _selectedMonth == null
+                            ? 'Todos os meses'
+                            : toBeginningOfSentenceCase(
+                                  DateFormat("MMMM", 'pt_BR')
+                                      .format(_selectedMonth!),
+                                ) ??
+                                '',
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: AppTheme.whiteColor,
                         ),
-                        const SizedBox(width: 8),
-                        Icon(
-                          PhosphorIcons.caretDown(PhosphorIconsStyle.regular),
-                          color: Colors.white,
-                        )
-                      ],
-                    ),
+                      ),
+                      const SizedBox(width: 4),
+                      Icon(
+                        Icons.arrow_drop_down,
+                        color: AppTheme.whiteColor,
+                      ),
+                    ],
                   ),
                 ),
               ],
             ),
           ),
-          const SizedBox(height: 32),
+          const SizedBox(height: 16),
           Expanded(
             child: Container(
               width: double.infinity,
