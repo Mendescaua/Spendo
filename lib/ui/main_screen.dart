@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:spendo/components/HomeBar.dart';
 import 'package:spendo/components/modals/ModalTransaction.dart';
 import 'package:spendo/controllers/bank_controller.dart';
@@ -47,7 +48,6 @@ class _MainScreenState extends ConsumerState<MainScreen> {
     ];
 
     final items = <IconData>[
-      
       Iconsax.home,
       Iconsax.chart_square,
       Iconsax.empty_wallet,

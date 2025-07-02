@@ -7,7 +7,6 @@ import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:spendo/components/cards/TransactionCard.dart';
 import 'package:spendo/controllers/transaction_controller.dart';
 import 'package:spendo/models/transaction_model.dart';
-import 'package:spendo/providers/transactions_provider.dart';
 import 'package:spendo/utils/customText.dart';
 import 'package:spendo/utils/theme.dart';
 
@@ -113,24 +112,6 @@ class _TransactionScreenState extends ConsumerState<TransactionScreen> {
       }
     }
 
-    String _formatMesAno(DateTime? date) {
-      if (date == null) return "Todos os meses";
-      const meses = [
-        'Janeiro',
-        'Fevereiro',
-        'Março',
-        'Abril',
-        'Maio',
-        'Junho',
-        'Julho',
-        'Agosto',
-        'Setembro',
-        'Outubro',
-        'Novembro',
-        'Dezembro'
-      ];
-      return "${meses[date.month - 1]} de ${date.year}";
-    }
 
     return Scaffold(
       appBar: AppBar(

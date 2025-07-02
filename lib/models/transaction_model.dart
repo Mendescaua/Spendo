@@ -1,4 +1,5 @@
 class TransactionModel {
+  final int? id;
   final String? uuid;
   final String type; // 'r' ou 'd'
   final double value;
@@ -6,6 +7,7 @@ class TransactionModel {
   final String? description;
   final String category;
   final DateTime date;
+  final DateTime? createdAt;
 
   // Campos opcionais da categoria, podem ser null se não vierem da junção
   final String? categoryName;
@@ -13,6 +15,7 @@ class TransactionModel {
   final String? categoryColor;
 
   TransactionModel({
+    this.id,
     this.uuid,
     required this.type,
     required this.value,
@@ -20,6 +23,7 @@ class TransactionModel {
     this.description,
     required this.category,
     required this.date,
+    this.createdAt,
     this.categoryName,
     this.categoryType,
     this.categoryColor,
@@ -27,6 +31,7 @@ class TransactionModel {
 
   factory TransactionModel.fromJson(Map<String, dynamic> json) {
     return TransactionModel(
+      id: json['id'] as int?,
       uuid: json['uuid'] as String?,
       type: json['type'] as String,
       value: (json['value'] as num).toDouble(),
@@ -34,6 +39,7 @@ class TransactionModel {
       description: json['description'] as String?,
       category: json['category'] as String,
       date: DateTime.parse(json['date'] as String),
+      createdAt: DateTime.parse(json['created_at'] as String),
       categoryName: json['category_name'] as String?,
       categoryType: json['category_type'] as String?,
       categoryColor: json['category_color'] as String?,

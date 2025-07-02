@@ -36,6 +36,16 @@ class Customtext {
     return Color(int.parse("0x$colorString"));
   }
 
+ static String formatarDataHora(DateTime data) {
+  // Nome do dia da semana em pt_BR (ex: segunda)
+  final diaSemana = DateFormat.EEEE('pt_BR').format(data);
+  // Formata a data e hora
+  final dataHora = DateFormat('dd/MM/yyyy \'às\' HH:mm', 'pt_BR').format(data);
+  // Combina tudo com inicial minúscula
+  return '${capitalizeFirstLetter(diaSemana)}, $dataHora';
+}
+
+  // ex: 02 JUL
   static String formatarData(dynamic data) {
     try {
       DateTime? date;
