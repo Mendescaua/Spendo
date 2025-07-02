@@ -6,6 +6,7 @@ import 'package:spendo/providers/theme_provider.dart';
 import 'package:spendo/ui/add_money_card_screen.dart';
 import 'package:spendo/controllers/auth_gate.dart';
 import 'package:spendo/core/supabse_client.dart';
+import 'package:spendo/ui/category_screen.dart';
 import 'package:spendo/ui/home_screen.dart';
 import 'package:spendo/ui/auth/login_screen.dart';
 import 'package:spendo/ui/main_screen.dart';
@@ -68,6 +69,7 @@ class MyApp extends ConsumerWidget {
         '/money_card': (context) => const MoneyCardScreen(),
         '/add_money_card': (context) => const AddMoneyCardScreen(),
         '/saving': (context) => const SavingScreen(),
+        '/category': (context) => const CategoryScreen(),
       },
     );
   }

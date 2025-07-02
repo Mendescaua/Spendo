@@ -129,120 +129,154 @@ final Map<String, IconData> iconesPorTipo = {
     return AppTheme.primaryColor;
   }
 
-  void _abrirModalCategorias() async {
-    await showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: AppTheme.dynamicModalColor(context),
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
-      builder: (_) {
+void _abrirModalCategorias() {
+  TextEditingController searchController = TextEditingController();
+  List<CategoryTransactionModel> categoriasFiltradas = [...categoriasBanco];
+
+  showModalBottomSheet(
+    context: context,
+    isScrollControlled: true,
+    backgroundColor: AppTheme.dynamicModalColor(context),
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+    ),
+    builder: (_) => StatefulBuilder(
+      builder: (context, setModalState) {
+        void filtrar(String valor) {
+          setModalState(() {
+            categoriasFiltradas = categoriasBanco
+                .where((cat) =>
+                    cat.name.toLowerCase().contains(valor.toLowerCase()))
+                .toList();
+          });
+        }
+
         return Padding(
-          padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const SizedBox(height: 10),
-              Container(
-                width: 40,
-                height: 5,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8),
-                  color: Colors.grey.shade300,
+          padding: EdgeInsets.only(
+            bottom: MediaQuery.of(context).viewInsets.bottom,
+          ),
+          child: SizedBox(
+            height: 400,
+            child: Column(
+              children: [
+                // Barra de arrastar
+                Container(
+                  width: 40,
+                  height: 5,
+                  margin: const EdgeInsets.symmetric(vertical: 12),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8),
+                    color: Colors.grey.shade300,
+                  ),
                 ),
-              ),
-              const SizedBox(height: 16),
-              const Text(
-                'Selecionar categoria',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 16),
-              Flexible(
-                child: ListView.separated(
-                  shrinkWrap: true,
-                  physics: const AlwaysScrollableScrollPhysics(),
-                  itemCount: categoriasBanco.length + 1, // +1 para o botão
-                  separatorBuilder: (_, __) =>
-                      Divider(color: Colors.grey.shade300),
-                  itemBuilder: (_, index) {
-                    if (index < categoriasBanco.length) {
-                      final cat = categoriasBanco[index];
-                      final nome = cat.name;
-                      final tipo = cat.type;
-                      final cor = obterCorCategoria(nome);
-                      final icone = iconesPorTipo[tipo] ?? Iconsax.note;
+                // Título
+                const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 4),
+                  child: Text(
+                    'Selecionar categoria',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                ),
+                // Campo busca
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextField(
+                    controller: searchController,
+                    decoration: InputDecoration(
+                      hintText: 'Buscar categoria...',
+                      prefixIcon: const Icon(Icons.search),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    onChanged: filtrar,
+                  ),
+                ),
+                // Lista
+                Expanded(
+                  child: ListView.separated(
+                    physics: const BouncingScrollPhysics(),
+                    itemCount: categoriasFiltradas.length + 1, // +1 para botão adicionar
+                    separatorBuilder: (_, __) =>
+                        Divider(color: Colors.grey.shade300),
+                    itemBuilder: (_, index) {
+                      if (index < categoriasFiltradas.length) {
+                        final cat = categoriasFiltradas[index];
+                        final nome = cat.name;
+                        final tipo = cat.type;
+                        final cor = obterCorCategoria(nome);
+                        final icone = iconesPorTipo[tipo] ?? Iconsax.note;
 
-                      return ListTile(
-                        onTap: () {
-                          setState(() {
-                            categoriaSelecionada = nome;
-                            tipoSelecionado = tipo;
-                          });
-                          widget.onCategoriaSelecionada(nome, tipo, cor);
-                          Navigator.pop(context);
-                        },
-                        leading: Container(
-                          width: 36,
-                          height: 36,
-                          decoration: BoxDecoration(
-                            color: cor,
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: Icon(icone, color: Colors.white),
-                        ),
-                        title: Text(nome),
-                        trailing: categoriaSelecionada == nome
-                            ? const Icon(Icons.check_circle,
-                                color: Colors.green)
-                            : null,
-                      );
-                    } else {
-                      // Último item: botão "Adicionar categoria"
-                      return ListTile(
-                        onTap: () async {
-                          Navigator.pop(context); // Fecha modal seleção
-
-                          final resultado =
-                              await Navigator.of(context).push<bool>(
-                            MaterialPageRoute(
-                              builder: (_) => const CriarCategoriaScreen(),
+                        return ListTile(
+                          onTap: () {
+                            setState(() {
+                              categoriaSelecionada = nome;
+                              tipoSelecionado = tipo;
+                            });
+                            widget.onCategoriaSelecionada(nome, tipo, cor);
+                            Navigator.pop(context);
+                          },
+                          leading: Container(
+                            width: 36,
+                            height: 36,
+                            decoration: BoxDecoration(
+                              color: cor,
+                              borderRadius: BorderRadius.circular(12),
                             ),
-                          );
-
-                          if (resultado == true) {
-                            await carregarCategoriasBanco();
-                            // Reabre modal seleção para continuar com a nova categoria visível
-                            _abrirModalCategorias();
-                          }
-                        },
-                        leading: Container(
-                          width: 36,
-                          height: 36,
-                          decoration: BoxDecoration(
-                            color: AppTheme.primaryColor,
-                            borderRadius: BorderRadius.circular(12),
+                            child: Icon(icone, color: Colors.white),
                           ),
-                          child: const Icon(Icons.add, color: Colors.white),
-                        ),
-                        title: const Text(
-                          'Adicionar nova categoria',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: AppTheme.primaryColor,
+                          title: Text(nome),
+                          trailing: categoriaSelecionada == nome
+                              ? const Icon(Icons.check_circle,
+                                  color: Colors.green)
+                              : null,
+                        );
+                      }
+                      if (index == categoriasFiltradas.length) {
+                        return ListTile(
+                          onTap: () async {
+                            Navigator.pop(context);
+                            final resultado =
+                                await Navigator.of(context).push<bool>(
+                              MaterialPageRoute(
+                                builder: (_) => const CriarCategoriaScreen(),
+                              ),
+                            );
+                            if (resultado == true) {
+                              await carregarCategoriasBanco();
+                              _abrirModalCategorias();
+                            }
+                          },
+                          leading: Container(
+                            width: 36,
+                            height: 36,
+                            decoration: BoxDecoration(
+                              color: AppTheme.primaryColor,
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: const Icon(Icons.add, color: Colors.white),
                           ),
-                        ),
-                      );
-                    }
-                  },
+                          title: const Text(
+                            'Adicionar nova categoria',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: AppTheme.primaryColor,
+                            ),
+                          ),
+                        );
+                      }
+                      return const SizedBox.shrink();
+                    },
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         );
       },
-    );
-  }
+    ),
+  );
+}
 
   Future<void> _abrirTelaCriarCategoria() async {
     final resultado = await Navigator.of(context).push(

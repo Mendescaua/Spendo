@@ -348,8 +348,8 @@ class _CriarCategoriaScreenState extends ConsumerState<CriarCategoriaScreen> {
             child: Container(
               padding: const EdgeInsets.all(20),
               width: double.infinity,
-              decoration: const BoxDecoration(
-                color: AppTheme.backgroundColor,
+              decoration: BoxDecoration(
+                color: AppTheme.dynamicBackgroundColor(context),
                 borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
               ),
               child: SingleChildScrollView(

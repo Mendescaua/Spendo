@@ -111,7 +111,7 @@ class _ConfiguracoesScreenState extends ConsumerState<ConfiguracoesScreen> {
             title: 'Gerenciar',
             children: [
               _buildTile(Iconsax.bank, 'Contas', () {}),
-              _buildTile(Iconsax.save_2, 'Categorias', () {}),
+              _buildTile(Iconsax.save_2, 'Categorias', () {Navigator.of(context).pushNamed('/category');},),
             ],
           ),
 
