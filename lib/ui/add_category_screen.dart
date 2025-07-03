@@ -269,6 +269,7 @@ class _CriarCategoriaScreenState extends ConsumerState<CriarCategoriaScreen> {
     } else {
       FloatingMessage(
           context, 'Categoria adicionada com sucesso', 'success', 2);
+      Navigator.pop(context, true);
     }
   }
 
@@ -419,7 +420,7 @@ class _CriarCategoriaScreenState extends ConsumerState<CriarCategoriaScreen> {
                             await onSave(nomeNovaCategoria,
                                 tipoSelecionadoDialog!, corHex);
 
-                            Navigator.pop(context, true);
+                            
                           }),
                     )
                   ],

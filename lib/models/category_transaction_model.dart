@@ -31,4 +31,5 @@ class CategoryTransactionModel {
       'color': color,
     };
   }
+  
 }

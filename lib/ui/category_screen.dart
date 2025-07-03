@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:spendo/components/cards/CategoryCard.dart';
-import 'package:spendo/components/skeletons/skeletonCard.dart';
+import 'package:spendo/components/modals/ModalCategory.dart';
 import 'package:spendo/controllers/transaction_controller.dart';
 import 'package:spendo/models/category_transaction_model.dart';
 import 'package:spendo/utils/theme.dart';
@@ -80,7 +80,9 @@ class _CategoryScreenState extends ConsumerState<CategoryScreen> {
                               itemCount: categoriasBanco.length,
                               itemBuilder: (context, index) {
                                 return CategoryCard(
-                                    category: categoriasBanco[index]);
+                                    category: categoriasBanco[index],
+                                    onEditar: () => ModalCategory(context, category: categoriasBanco[index]),
+                                    );
                               },
                             ),
             ),

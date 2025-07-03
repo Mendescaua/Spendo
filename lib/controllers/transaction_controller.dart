@@ -5,7 +5,8 @@ import 'package:spendo/models/transaction_model.dart';
 import 'package:spendo/providers/auth_provider.dart';
 import 'package:spendo/services/supabase_service.dart';
 
-final transactionControllerProvider = StateNotifierProvider<TransactionController, List<TransactionModel>>((ref) {
+final transactionControllerProvider =
+    StateNotifierProvider<TransactionController, List<TransactionModel>>((ref) {
   return TransactionController(ref);
 });
 
@@ -68,8 +69,6 @@ class TransactionController extends StateNotifier<List<TransactionModel>> {
     }
   }
 
-
-
   // Aqui eu uso apenas no categoriesField para carregar as categorias do banco
   Future<String?> getCategoryTransaction() async {
     final userId = ref.read(currentUserId);
@@ -85,23 +84,39 @@ class TransactionController extends StateNotifier<List<TransactionModel>> {
     }
   }
 
-  Future<String?> addCategoryTransaction(
-      {required CategoryTransactionModel transaction}) async {
+  Future<String?> addCategoryTransaction({
+    required CategoryTransactionModel transaction,
+  }) async {
     final userId = ref.read(currentUserId);
     if (userId == null) return 'Usuário não autenticado';
 
     if (transaction.name.isEmpty) {
       return 'Adicione um nome para a categoria.';
     }
+
     try {
+      // Garante que as categorias estejam carregadas
+      if (categories.isEmpty) {
+        final result = await getCategoryTransaction();
+        if (result != null) return result;
+      }
+
+      // Verifica se já existe uma categoria com o mesmo nome (case sensitive)
+      final jaExiste = categories.any((c) => c.name == transaction.name);
+
+      if (jaExiste) {
+        return 'Essa categoria já existe.';
+      }
+
       final newCategory = CategoryTransactionModel(
         uuid: userId,
         name: transaction.name,
         type: transaction.type,
         color: transaction.color,
       );
+
       await _transaction.addCategoryTransaction(newCategory);
-      // Atualiza o estado com a nova transação adicionada
+
       categories = [...categories, newCategory];
       return null;
     } catch (e) {
