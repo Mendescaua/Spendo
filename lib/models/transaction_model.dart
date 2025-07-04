@@ -58,4 +58,33 @@ class TransactionModel {
     };
   }
 
+  TransactionModel copyWith({
+    int? id,
+    String? uuid,
+    String? type,
+    double? value,
+    String? title,
+    String? description,
+    String? category,
+    DateTime? date,
+    DateTime? createdAt,
+    String? categoryName,
+    String? categoryType,
+    String? categoryColor,
+  }) {
+    return TransactionModel(
+      id: id ?? this.id,
+      uuid: uuid ?? this.uuid,
+      type: type ?? this.type,
+      value: value ?? this.value,
+      title: title ?? this.title,
+      description: description ?? this.description,
+      category: category ?? this.category,
+      date: date ?? this.date,
+      createdAt: createdAt ?? this.createdAt,
+      categoryName: categoryName ?? this.categoryName,
+      categoryType: categoryType ?? this.categoryType,
+      categoryColor: categoryColor ?? this.categoryColor,
+    );
+  }
 }

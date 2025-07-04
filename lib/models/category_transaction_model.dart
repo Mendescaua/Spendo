@@ -31,5 +31,20 @@ class CategoryTransactionModel {
       'color': color,
     };
   }
-  
+
+  CategoryTransactionModel copyWith({
+    int? id,
+    String? uuid,
+    String? name,
+    String? type,
+    String? color,
+  }) {
+    return CategoryTransactionModel(
+      id: id ?? this.id,
+      uuid: uuid ?? this.uuid,
+      name: name ?? this.name,
+      type: type ?? this.type,
+      color: color ?? this.color,
+    );
+  }
 }

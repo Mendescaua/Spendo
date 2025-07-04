@@ -124,4 +124,88 @@ class TransactionController extends StateNotifier<List<TransactionModel>> {
       return 'Erro inesperado: $e';
     }
   }
+
+  Future<String?> updateCategoryTransaction({
+    required CategoryTransactionModel category,
+    String? newName,
+    String? newColor,
+    String? newType,
+  }) async {
+    final userId = ref.read(currentUserId);
+    if (userId == null) return 'Usuário não autenticado';
+
+    if (newName == null || newName.trim().isEmpty) {
+      return 'Adicione um nome para a categoria.';
+    }
+    if (newColor == null || newColor.trim().isEmpty) {
+      return 'Adicione uma cor para a categoria.';
+    }
+    if (newType == null || newType.trim().isEmpty) {
+      return 'Adicione um tipo para a categoria.';
+    }
+
+    // Garante que as categorias estão carregadas
+    if (categories.isEmpty) {
+      final result = await getCategoryTransaction();
+      if (result != null) return result;
+    }
+
+    try {
+      final updatedCategory = category.copyWith(
+        name: newName,
+        color: newColor,
+        type: newType,
+      );
+
+      // Atualiza categoria na tabela categories
+      await _transaction.updateCategoryTransaction(
+          updatedCategory, category.id!);
+
+      // Atualiza a lista local
+      categories = categories.map((c) {
+        return c.id == category.id ? updatedCategory : c;
+      }).toList();
+
+      final nameChanged = category.name != newName;
+
+      // Atualiza as transações se o nome da categoria mudou
+      if (nameChanged) {
+        final affectedTransactions = state
+            .where((t) =>
+                t.category.trim().toLowerCase() ==
+                category.name.trim().toLowerCase())
+            .toList();
+
+        print('Transações a atualizar: ${affectedTransactions.length}');
+
+        for (var oldTransaction in affectedTransactions) {
+          final transactionUuid = oldTransaction.uuid ?? userId;
+
+          if (transactionUuid == null) {
+            print('UUID nulo para transação ID: ${oldTransaction.id}');
+            continue;
+          }
+
+          final updatedTransaction = oldTransaction.copyWith(category: newName);
+
+          // Atualiza a transação na tabela transactions
+          await _transaction.updateTransactionCategoryOnly(
+            oldCategoryName: category.name,
+            newCategoryName: newName,
+            userUuid: userId,
+          );
+
+          // Atualiza o estado local
+          state = state.map((t) {
+            return t.id == oldTransaction.id ? updatedTransaction : t;
+          }).toList();
+        }
+      }
+
+      return null;
+    } catch (e) {
+      print('Erro ao atualizar categoria: $e');
+      return 'Erro inesperado: $e';
+    }
+  }
 }

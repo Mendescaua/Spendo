@@ -15,39 +15,67 @@ class CategoryScreen extends ConsumerStatefulWidget {
 }
 
 class _CategoryScreenState extends ConsumerState<CategoryScreen> {
-  bool _loading = false;
-  List<CategoryTransactionModel> categoriasBanco = [];
-  
+  bool _isLoading = false;
+
   @override
   void initState() {
     super.initState();
-    Future.microtask(() async {
-      await loadCategory();
-    });
+    _loadCategories();
   }
 
-  Future<void> loadCategory() async {
-    setState(() => _loading = true);
-
+  Future<void> _loadCategories() async {
+    setState(() => _isLoading = true);
     final controller = ref.read(transactionControllerProvider.notifier);
-    final result = await controller.getCategoryTransaction();
+    await controller.getCategoryTransaction();
+    setState(() => _isLoading = false);
+  }
 
-    categoriasBanco = controller.categories;
+  Future<void> _openCategoryModal(
+      BuildContext context, CategoryTransactionModel category) async {
+    await showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      useRootNavigator: true,
+      builder: (context) => ScaffoldMessenger(
+        child: Scaffold(
+          backgroundColor: Colors.transparent,
+          body: GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onTap: () => Navigator.of(context).pop(),
+            child: SafeArea(
+              top: false,
+              child: Align(
+                alignment: Alignment.bottomCenter,
+                child: GestureDetector(
+                  onTap: () {},
+                  child: Material(
+                    borderRadius:
+                        const BorderRadius.vertical(top: Radius.circular(20)),
+                    clipBehavior: Clip.antiAlias,
+                    child: ModalCategory(
+                      category: category,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
 
-    setState(() => _loading = false);
-
-    if (result != null) {
-      print('Erro: $result');
-    }
+    await _loadCategories(); // recarrega após fechar modal
   }
 
   @override
   Widget build(BuildContext context) {
-        return Scaffold(
+    final categorias =
+        ref.watch(transactionControllerProvider.notifier).categories;
+
+    return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'Minhas categorias',
-        ),
+        title: const Text('Minhas categorias'),
       ),
       backgroundColor: AppTheme.primaryColor,
       body: Column(
@@ -59,32 +87,34 @@ class _CategoryScreenState extends ConsumerState<CategoryScreen> {
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
                 color: AppTheme.dynamicBackgroundColor(context),
-                borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+                borderRadius:
+                    const BorderRadius.vertical(top: Radius.circular(24)),
               ),
-              child: _loading
-                      ? Center(
-                        child: LoadingAnimationWidget.staggeredDotsWave(
-                          color: AppTheme.primaryColor, size: 64,
+              child: _isLoading
+                  ? Center(
+                      child: LoadingAnimationWidget.staggeredDotsWave(
+                        color: AppTheme.primaryColor,
+                        size: 64,
+                      ),
+                    )
+                  : categorias.isEmpty
+                      ? const Center(
+                          child: Text(
+                            "Nenhuma transação encontrada",
+                            style: TextStyle(fontSize: 16),
+                          ),
+                        )
+                      : SingleChildScrollView(
+                          child: Column(
+                            children: categorias.map((category) {
+                              return CategoryCard(
+                                category: category,
+                                onEditar: () =>
+                                    _openCategoryModal(context, category),
+                              );
+                            }).toList(),
+                          ),
                         ),
-                      )
-                      : categoriasBanco.isEmpty
-                          ? Center(
-                              child: Text(
-                                "Nenhuma transação encontrada",
-                                style: TextStyle(fontSize: 16),
-                              ),
-                            )
-                          : ListView.builder(
-                              shrinkWrap: true,
-                              physics: const NeverScrollableScrollPhysics(),
-                              itemCount: categoriasBanco.length,
-                              itemBuilder: (context, index) {
-                                return CategoryCard(
-                                    category: categoriasBanco[index],
-                                    onEditar: () => ModalCategory(context, category: categoriasBanco[index]),
-                                    );
-                              },
-                            ),
             ),
           ),
         ],
