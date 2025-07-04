@@ -39,4 +39,12 @@ class AuthService {
         .map((item) => UsersModel.fromJson(item))
         .toList();
   }
+
+    Future<User?> changePassword(String newPassword) async {
+    final response = await supabase.auth.updateUser(
+      UserAttributes(password: newPassword),
+    );
+
+    return response.user; // só retorna o usuário (ou null se erro)
+  }
 }

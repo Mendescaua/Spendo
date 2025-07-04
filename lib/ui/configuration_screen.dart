@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:spendo/components/modals/ModalChangePassword.dart';
 import 'package:spendo/components/modals/ModalTheme.dart';
 import 'package:spendo/controllers/auth_controller.dart';
 import 'package:spendo/controllers/user_controller.dart';
@@ -29,6 +30,42 @@ class _ConfiguracoesScreenState extends ConsumerState<ConfiguracoesScreen> {
 
     Navigator.of(context).pop();
   }
+
+  void _openChangePasswordModal(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      useRootNavigator: true,
+      builder: (context) => ScaffoldMessenger(
+        child: Scaffold(
+          backgroundColor: Colors.transparent,
+          body: GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onTap: () => Navigator.of(context).pop(),
+            child: SafeArea(
+              top: false,
+              child: Align(
+                alignment: Alignment.bottomCenter,
+                child: GestureDetector(
+                  onTap: () {},
+                  child: Material(
+                    borderRadius:
+                        const BorderRadius.vertical(top: Radius.circular(20)),
+                    clipBehavior: Clip.antiAlias,
+                    child: ModalChangePassword(
+                      
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -111,7 +148,13 @@ class _ConfiguracoesScreenState extends ConsumerState<ConfiguracoesScreen> {
             title: 'Gerenciar',
             children: [
               _buildTile(Iconsax.bank, 'Contas', () {}),
-              _buildTile(Iconsax.save_2, 'Categorias', () {Navigator.of(context).pushNamed('/category');},),
+              _buildTile(
+                Iconsax.save_2,
+                'Categorias',
+                () {
+                  Navigator.of(context).pushNamed('/category');
+                },
+              ),
             ],
           ),
 
@@ -121,7 +164,9 @@ class _ConfiguracoesScreenState extends ConsumerState<ConfiguracoesScreen> {
           _buildCard(
             title: 'Segurança',
             children: [
-              _buildTile(Iconsax.security_safe, 'Alterar senha', () {}),
+              _buildTile(Iconsax.security_safe, 'Alterar senha', () {
+                _openChangePasswordModal(context);
+              }),
               _buildTile(
                   Iconsax.finger_cricle, 'Autenticação biométrica', () {}),
             ],
@@ -133,7 +178,8 @@ class _ConfiguracoesScreenState extends ConsumerState<ConfiguracoesScreen> {
           _buildCard(
             title: 'Outros',
             children: [
-              _buildTile(PhosphorIcons.sun(PhosphorIconsStyle.regular), 'Tema', () {
+              _buildTile(PhosphorIcons.sun(PhosphorIconsStyle.regular), 'Tema',
+                  () {
                 showThemeSelectionModal(context, ref);
               }),
               _buildTile(Iconsax.info_circle, 'Sobre o app', () {}),
@@ -161,8 +207,10 @@ class _ConfiguracoesScreenState extends ConsumerState<ConfiguracoesScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(title,
-              style:
-                 TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: AppTheme.dynamicTextColor(context))),
+              style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                  color: AppTheme.dynamicTextColor(context))),
           const SizedBox(height: 8),
           ...children,
         ],
@@ -176,7 +224,8 @@ class _ConfiguracoesScreenState extends ConsumerState<ConfiguracoesScreen> {
       leading: Icon(icon, color: color ?? AppTheme.dynamicTextColor(context)),
       title: Text(title,
           style: TextStyle(
-              color: color ?? AppTheme.dynamicTextColor(context), fontWeight: FontWeight.w500)),
+              color: color ?? AppTheme.dynamicTextColor(context),
+              fontWeight: FontWeight.w500)),
       onTap: onTap,
       contentPadding: const EdgeInsets.symmetric(horizontal: 0),
     );

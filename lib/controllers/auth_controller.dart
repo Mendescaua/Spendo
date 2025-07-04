@@ -73,4 +73,23 @@ class AuthController {
   }
 }
 
+Future<String?> changePassword(String password) async {
+    if (password.isEmpty) return 'Informe a nova senha';
+    if (password.length < 6) return 'A senha deve ter ao menos 6 caracteres';
+
+    try {
+      final user = await _authService.changePassword(password);
+
+      if (user != null) {
+        return null; // sucesso
+      } else {
+        return 'Erro ao alterar senha.';
+      }
+    } on AuthException catch (e) {
+      return e.message;
+    } catch (e) {
+      return 'Erro inesperado: $e';
+    }
+  }
+
 }
