@@ -45,25 +45,17 @@ class SupabaseService {
     await supabase.from(table).update(transaction.toJson()).eq('id', id);
   }
 
-Future<void> updateTransactionCategoryOnly({
-  required String oldCategoryName,
-  required String newCategoryName,
-  required String userUuid,
-}) async {
-  try {
+  Future<void> updateTransactionCategoryOnly({
+    required String oldCategoryName,
+    required String newCategoryName,
+    required String userUuid,
+  }) async {
     final response = await supabase
         .from('TRANSACTIONS')
         .update({'category': newCategoryName})
         .eq('category', oldCategoryName)
         .eq('uuid', userUuid);
-
-    print('Update realizado. Resposta: ${response}');
-  } catch (e) {
-    print('Erro ao atualizar categoria da transação: $e');
-    rethrow;
   }
-}
-
 
   // Subscriptions services
   Future<List<SubscriptionModel>> getSubscription(String userId) async {
@@ -206,5 +198,12 @@ Future<void> updateTransactionCategoryOnly({
       'color': category.color,
       'type': category.type,
     }).eq('id', id);
+  }
+
+  Future<void> updateCategoryIsArchived(
+      CategoryTransactionModel category, int id) async {
+    final response = await supabase
+        .from('CATEGORY_TRANSACTIONS')
+        .update({'is_archived': category.isArchived}).eq('id', id);
   }
 }

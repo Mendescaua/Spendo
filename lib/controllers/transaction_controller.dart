@@ -71,18 +71,25 @@ class TransactionController extends StateNotifier<List<TransactionModel>> {
 
   // Aqui eu uso apenas no categoriesField para carregar as categorias do banco
   Future<String?> getCategoryTransaction() async {
-    final userId = ref.read(currentUserId);
-    if (userId == null) return 'Usuário não autenticado';
+  final userId = ref.read(currentUserId);
+  if (userId == null) return 'Usuário não autenticado';
 
-    try {
-      final categoriesList = await _transaction.getCategoryTransaction(userId);
-      categories = categoriesList; // Guarda categorias numa variável separada
-      return null;
-    } catch (e) {
-      print('Erro ao obter categoria: $e');
-      return 'Erro inesperado: $e';
-    }
+  try {
+    final categoriesList = await _transaction.getCategoryTransaction(userId);
+
+    categories = categoriesList;
+
+
+    return null;
+  } catch (e) {
+    print('Erro ao obter categoria: $e');
+    return 'Erro inesperado: $e';
   }
+}
+
+List<CategoryTransactionModel> getArchivedCategories() =>
+    categories.where((cat) => cat.isArchived == true).toList();
+
 
   Future<String?> addCategoryTransaction({
     required CategoryTransactionModel transaction,
@@ -208,4 +215,33 @@ class TransactionController extends StateNotifier<List<TransactionModel>> {
       return 'Erro inesperado: $e';
     }
   }
+
+  Future<String?> updateCategoryIsArchived({
+  required CategoryTransactionModel category,
+  required bool isArchived,
+}) async {
+  final userId = ref.read(currentUserId);
+  if (userId == null) return 'Usuário não autenticado';
+
+  try {
+    // Cria uma nova categoria com o valor isArchived atualizado
+    final updatedCategory = category.copyWith(
+      isArchived: isArchived,
+    );
+
+    // Atualiza no banco (implementação no SupabaseService)
+    await _transaction.updateCategoryIsArchived(updatedCategory, category.id!);
+
+    // Atualiza localmente a lista categories
+    categories = categories.map((c) {
+      return c.id == category.id ? updatedCategory : c;
+    }).toList();
+
+    return null;
+  } catch (e) {
+    print('Erro ao atualizar status arquivado da categoria: $e');
+    return 'Erro inesperado: $e';
+  }
+}
+
 }

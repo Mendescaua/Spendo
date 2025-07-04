@@ -94,17 +94,20 @@ final Map<String, IconData> iconesPorTipo = {
   }
 
   Future<void> carregarCategoriasBanco() async {
-    final controller = ref.read(transactionControllerProvider.notifier);
-    final res = await controller.getCategoryTransaction();
-    if (res == null) {
-      setState(() {
-        categoriasBanco = controller.categories;
-      });
-    } else {
-      print('Erro ao carregar categorias do banco: $res');
-      FloatingMessage(context, 'Erro ao carregar categorias', 'error', 2);
-    }
+  final controller = ref.read(transactionControllerProvider.notifier);
+  final res = await controller.getCategoryTransaction();
+  if (res == null) {
+    setState(() {
+      categoriasBanco = controller.categories
+          .where((cat) => cat.isArchived != true)
+          .toList(); // aplica o filtro aqui
+    });
+  } else {
+    print('Erro ao carregar categorias do banco: $res');
+    FloatingMessage(context, 'Erro ao carregar categorias', 'error', 2);
   }
+}
+
 
   Color hexToColor(String hexColor) {
     hexColor = hexColor.replaceAll('#', '');

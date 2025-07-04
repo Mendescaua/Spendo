@@ -4,6 +4,7 @@ import 'package:iconsax/iconsax.dart';
 import 'package:spendo/components/HomeBar.dart';
 import 'package:spendo/components/modals/ModalTransaction.dart';
 import 'package:spendo/controllers/bank_controller.dart';
+import 'package:spendo/controllers/transaction_controller.dart';
 import 'package:spendo/controllers/user_controller.dart';
 import 'package:spendo/ui/configuration_screen.dart';
 import 'package:spendo/ui/home_screen.dart';

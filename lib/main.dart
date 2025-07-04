@@ -3,6 +3,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:month_year_picker/month_year_picker.dart';
 import 'package:spendo/providers/theme_provider.dart';
+import 'package:spendo/ui/add_category_screen.dart';
 import 'package:spendo/ui/add_money_card_screen.dart';
 import 'package:spendo/controllers/auth_gate.dart';
 import 'package:spendo/core/supabse_client.dart';
@@ -69,6 +70,7 @@ class MyApp extends ConsumerWidget {
         '/add_money_card': (context) => const AddMoneyCardScreen(),
         '/saving': (context) => const SavingScreen(),
         '/category': (context) => const CategoryScreen(),
+        '/add_category': (context) => const CriarCategoriaScreen(),
       },
     );
   }

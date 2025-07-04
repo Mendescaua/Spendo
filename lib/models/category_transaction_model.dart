@@ -4,6 +4,7 @@ class CategoryTransactionModel {
   final String name;
   final String type;
   final String color;
+  final bool? isArchived;
 
   CategoryTransactionModel({
     this.id,
@@ -11,6 +12,7 @@ class CategoryTransactionModel {
     required this.name,
     required this.type,
     required this.color,
+    this.isArchived,
   });
 
   factory CategoryTransactionModel.fromJson(Map<String, dynamic> json) {
@@ -20,6 +22,7 @@ class CategoryTransactionModel {
       name: json['name'] as String,
       type: json['type'] as String,
       color: json['color'] as String? ?? '#FFFFFF',
+      isArchived: json['is_archived'] ?? false,
     );
   }
 
@@ -38,6 +41,7 @@ class CategoryTransactionModel {
     String? name,
     String? type,
     String? color,
+    bool? isArchived,
   }) {
     return CategoryTransactionModel(
       id: id ?? this.id,
@@ -45,6 +49,7 @@ class CategoryTransactionModel {
       name: name ?? this.name,
       type: type ?? this.type,
       color: color ?? this.color,
+      isArchived: isArchived ?? this.isArchived,
     );
   }
 }
