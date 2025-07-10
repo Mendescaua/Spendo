@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:animated_toggle_switch/animated_toggle_switch.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:spendo/providers/theme_provider.dart';
 import 'package:spendo/utils/theme.dart';
 
@@ -40,10 +41,10 @@ void showThemeSelectionModal(BuildContext context, WidgetRef ref) {
                 },
                 iconBuilder: (mode, selected) {
                   final icon = mode == ThemeMode.light
-                      ? Iconsax.sun_1
+                      ? PhosphorIcons.sun(PhosphorIconsStyle.regular)
                       : mode == ThemeMode.dark
-                          ? Iconsax.moon
-                          : Iconsax.magic_star;
+                          ? PhosphorIcons.moon(PhosphorIconsStyle.regular)
+                          : Icons.brightness_auto_rounded;
                   return Icon(icon, size: 24, color: selected
                       ? Theme.of(context).colorScheme.primary
                       : Theme.of(context).iconTheme.color);

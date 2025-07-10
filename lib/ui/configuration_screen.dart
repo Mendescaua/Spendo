@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:local_auth/local_auth.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:spendo/components/FloatingMessage.dart';
 import 'package:spendo/components/modals/ModalChangePassword.dart';
 import 'package:spendo/components/modals/ModalEditPerfil.dart';
 import 'package:spendo/components/modals/ModalTheme.dart';
@@ -21,6 +24,26 @@ class ConfiguracoesScreen extends ConsumerStatefulWidget {
 
 class _ConfiguracoesScreenState extends ConsumerState<ConfiguracoesScreen> {
   final AuthController _authController = AuthController();
+  bool autenticacaoAtivada = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _carregarPreferenciaAutenticacao();
+  }
+
+  void _carregarPreferenciaAutenticacao() async {
+    final prefs = await SharedPreferences.getInstance();
+    final ativada = prefs.getBool('autenticacao_ativada') ?? false;
+    setState(() {
+      autenticacaoAtivada = ativada;
+    });
+  }
+
+  Future<void> _salvarPreferenciaAutenticacao(bool ativada) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('autenticacao_ativada', ativada);
+  }
 
   void logout() async {
     ref
@@ -132,8 +155,46 @@ class _ConfiguracoesScreenState extends ConsumerState<ConfiguracoesScreen> {
               _buildTile(Iconsax.security_safe, 'Alterar senha', () {
                 _openChangePasswordModal(context);
               }),
-              _buildTile(
-                  Iconsax.finger_cricle, 'Autenticação biométrica', () {}),
+              SwitchListTile(
+                contentPadding: EdgeInsets.zero,
+                title: Text(
+                  'Exigir autenticação ao abrir o app',
+                  style: TextStyle(
+                    color: AppTheme.dynamicTextColor(context),
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                secondary: Icon(Iconsax.security_user,
+                    color: AppTheme.dynamicTextColor(context)),
+                value: autenticacaoAtivada,
+                onChanged: (value) async {
+                  final auth = LocalAuthentication();
+                  bool suportado = await auth.isDeviceSupported();
+                  if (!suportado) {
+                    FloatingMessage(context, 'Seu dispositivo não suporta autenticação.', 'info', 2);
+                    return;
+                  }
+
+                  // Autentica com biometria ou método do sistema
+                  bool autenticado = await auth.authenticate(
+                    localizedReason: value
+                        ? 'Autentique-se para ativar a proteção de entrada'
+                        : 'Autentique-se para desativar a proteção',
+                    options: const AuthenticationOptions(
+                      biometricOnly:
+                          false, // <- permite biometria OU senha/padrão/PIN
+                      stickyAuth: true,
+                    ),
+                  );
+
+                  if (autenticado) {
+                    await _salvarPreferenciaAutenticacao(value);
+                    setState(() {
+                      autenticacaoAtivada = value;
+                    });
+                  }
+                },
+              )
             ],
           ),
 
@@ -196,7 +257,7 @@ class _ConfiguracoesScreenState extends ConsumerState<ConfiguracoesScreen> {
     );
   }
 
-void _openEditPerfilModal(BuildContext context) {
+  void _openEditPerfilModal(BuildContext context) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -215,11 +276,10 @@ void _openEditPerfilModal(BuildContext context) {
                 child: GestureDetector(
                   onTap: () {},
                   child: Material(
-                    borderRadius:
-                        const BorderRadius.vertical(top: Radius.circular(20)),
-                    clipBehavior: Clip.antiAlias,
-                    child: ModalEditPerfil()
-                  ),
+                      borderRadius:
+                          const BorderRadius.vertical(top: Radius.circular(20)),
+                      clipBehavior: Clip.antiAlias,
+                      child: ModalEditPerfil()),
                 ),
               ),
             ),
@@ -251,9 +311,7 @@ void _openEditPerfilModal(BuildContext context) {
                     borderRadius:
                         const BorderRadius.vertical(top: Radius.circular(20)),
                     clipBehavior: Clip.antiAlias,
-                    child: ModalChangePassword(
-                      
-                    ),
+                    child: ModalChangePassword(),
                   ),
                 ),
               ),
@@ -263,5 +321,4 @@ void _openEditPerfilModal(BuildContext context) {
       ),
     );
   }
-
 }

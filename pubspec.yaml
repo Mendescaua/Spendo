@@ -56,6 +56,8 @@ dependencies:
   flutter_speed_dial: ^7.0.0
   animated_toggle_switch: ^0.8.5
   image_picker: ^1.1.2
+  shared_preferences: ^2.5.3
+  local_auth: ^2.3.0
 
 dev_dependencies:
   flutter_test:
