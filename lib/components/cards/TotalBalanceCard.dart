@@ -2,6 +2,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:spendo/providers/transactions_provider.dart';
 import 'package:spendo/utils/customText.dart';
 import 'package:spendo/utils/theme.dart';
@@ -14,7 +15,28 @@ class SaldoGeralCard extends ConsumerStatefulWidget {
 }
 
 class _SaldoGeralCardState extends ConsumerState<SaldoGeralCard> {
-  bool _isHidden = false; // controle do estado de ocultar/mostrar
+  bool _isHidden = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadHiddenState();
+  }
+
+  Future<void> _loadHiddenState() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _isHidden = prefs.getBool('isSaldoHidden') ?? false;
+    });
+  }
+
+  Future<void> _toggleHiddenState() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _isHidden = !_isHidden;
+    });
+    await prefs.setBool('isSaldoHidden', _isHidden);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,11 +77,7 @@ class _SaldoGeralCardState extends ConsumerState<SaldoGeralCard> {
                 ),
               ),
               IconButton(
-                onPressed: () {
-                  setState(() {
-                    _isHidden = !_isHidden;
-                  });
-                },
+                onPressed: _toggleHiddenState,
                 icon: Icon(_isHidden ? Iconsax.eye : Iconsax.eye_slash),
                 color: AppTheme.whiteColor,
               )
@@ -70,19 +88,21 @@ class _SaldoGeralCardState extends ConsumerState<SaldoGeralCard> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               GestureDetector(
-                onTap: () => Navigator.pushNamed(context, '/transactions_receita'),
+                onTap: () =>
+                    Navigator.pushNamed(context, '/transactions_receita'),
                 child: Count(
                   title: 'Receitas',
                   type: 'receita',
-                  isHidden: _isHidden, // passa para o Count
+                  isHidden: _isHidden,
                 ),
               ),
               GestureDetector(
-                onTap: () => Navigator.pushNamed(context, '/transactions_despesa'),
+                onTap: () =>
+                    Navigator.pushNamed(context, '/transactions_despesa'),
                 child: Count(
                   title: 'Despesas',
                   type: 'despesa',
-                  isHidden: _isHidden, // passa para o Count
+                  isHidden: _isHidden,
                 ),
               ),
             ],
@@ -93,7 +113,6 @@ class _SaldoGeralCardState extends ConsumerState<SaldoGeralCard> {
     );
   }
 }
-
 class Count extends ConsumerWidget {
   final String title;
   final String type;

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:intl/intl.dart'; // Import para formatar datas
 import 'package:spendo/components/FloatingMessage.dart';
 import 'package:spendo/components/buttons/StyleButton.dart';
 import 'package:spendo/controllers/subscription_controller.dart';
@@ -33,13 +34,26 @@ class _ModalSubscriptionState extends ConsumerState<ModalSubscription> {
         ref.read(subscriptionControllerProvider.notifier);
 
     void onSave() async {
+      DateTime now = DateTime.now();
+      DateTime endDate = DateTime(
+        now.year + ((now.month + selectedDuration - 1) ~/ 12),
+        ((now.month + selectedDuration - 1) % 12) + 1,
+        now.day,
+      );
+
+      final formatter = DateFormat('dd/MM/yyyy');
+      String startStr = formatter.format(now);
+      String endStr = formatter.format(endDate);
+
+      String rangeStr = '$startStr até $endStr';
+
       final response = await subscriptionController.addSubscription(
         subscription: SubscriptionModel(
           name: _titlecontroller.text,
           value: _valuecontroller.text.isEmpty
               ? 0.0
               : double.parse(_valuecontroller.text),
-          time: selectedDuration.toString(),
+          time: rangeStr, // salva como "10/07/2025 até 10/11/2025"
         ),
       );
       if (response != null) {
@@ -55,12 +69,12 @@ class _ModalSubscriptionState extends ConsumerState<ModalSubscription> {
       child: SingleChildScrollView(
         child: Container(
           decoration: BoxDecoration(
-          color: AppTheme.dynamicModalColor(context),
-          borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(24),
-            topRight: Radius.circular(24),
+            color: AppTheme.dynamicModalColor(context),
+            borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(24),
+              topRight: Radius.circular(24),
+            ),
           ),
-        ),
           padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 24),
           width: double.infinity,
           height: size.height * 0.60,
@@ -78,9 +92,9 @@ class _ModalSubscriptionState extends ConsumerState<ModalSubscription> {
                   ),
                 ),
               ),
-              SizedBox(height: 16),
-              Center(
-                child: const Text(
+              const SizedBox(height: 16),
+              const Center(
+                child: Text(
                   'Adicionar nova assinatura',
                   style: TextStyle(
                     fontSize: 16,
@@ -88,7 +102,7 @@ class _ModalSubscriptionState extends ConsumerState<ModalSubscription> {
                   ),
                 ),
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               const Text(
                 'Título',
                 style: TextStyle(
@@ -109,7 +123,7 @@ class _ModalSubscriptionState extends ConsumerState<ModalSubscription> {
                   ),
                 ),
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               const Text(
                 'Valor',
                 style: TextStyle(
@@ -119,6 +133,7 @@ class _ModalSubscriptionState extends ConsumerState<ModalSubscription> {
               ),
               TextField(
                 controller: _valuecontroller,
+                keyboardType: TextInputType.numberWithOptions(decimal: true),
                 decoration: InputDecoration(
                   prefixIcon: const Icon(Iconsax.dollar_circle),
                   hintText: 'Valor',
@@ -130,7 +145,7 @@ class _ModalSubscriptionState extends ConsumerState<ModalSubscription> {
                   ),
                 ),
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               const Text(
                 'Duração',
                 style: TextStyle(
@@ -160,12 +175,13 @@ class _ModalSubscriptionState extends ConsumerState<ModalSubscription> {
                   );
                 }).toList(),
               ),
-              SizedBox(height: 32),
+              const SizedBox(height: 32),
               StyleButton(
-                  text: 'Adicionar',
-                  onClick: () {
-                    onSave();
-                  }),
+                text: 'Adicionar',
+                onClick: () {
+                  onSave();
+                },
+              ),
             ],
           ),
         ),

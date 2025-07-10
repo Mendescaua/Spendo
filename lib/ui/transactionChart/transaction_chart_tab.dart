@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:spendo/ui/transactionChart/category_chart.dart';
+import 'package:spendo/ui/transactionChart/transaction_chart.dart';
 import 'package:spendo/utils/theme.dart';
 
 class TransactionChartTab extends ConsumerStatefulWidget {
@@ -23,10 +25,7 @@ class _TransactionChartTabState extends ConsumerState<TransactionChartTab> {
   Widget build(BuildContext context) {
     final List<Widget> tabContents = [
       const CategoryChart(),
-      const Center(
-          child: Text(
-        "Gráfico de desempenho",
-      )),
+      const IncomeExpenseBarChart(),
       const Center(
           child: Text(
         "Estatísticas",
@@ -88,7 +87,7 @@ class TabNavigation extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final icons = [Iconsax.graph, Icons.show_chart, Icons.bar_chart];
+    final icons = [PhosphorIcons.chartDonut(PhosphorIconsStyle.regular), PhosphorIcons.chartBar(PhosphorIconsStyle.regular), Icons.bar_chart];
 
     return Container(
       padding: const EdgeInsets.all(10),

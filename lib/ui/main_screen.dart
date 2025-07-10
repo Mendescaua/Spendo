@@ -54,6 +54,23 @@ class _MainScreenState extends ConsumerState<MainScreen> {
       Iconsax.setting,
     ];
 
+    
+  void _openMenuModal() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => HomeMenuModal(
+        onItemSelected: (index) {
+          setState(() {
+            currentTab = index;
+          });
+          Navigator.of(context).pop(); // fecha o modal
+        },
+      ),
+    );
+  }
+
     void _openAddTransactionModal(BuildContext context) {
       showModalBottomSheet(
         context: context,
@@ -75,13 +92,14 @@ class _MainScreenState extends ConsumerState<MainScreen> {
               },
             )
           : null,
-      drawer: HomeDrawer(
-        onItemSelected: (index) {
-          setState(() {
-            currentTab = index;
-          });
-        },
-      ),
+          
+      // drawer: HomeDrawer(
+      //   onItemSelected: (index) {
+      //     setState(() {
+      //       currentTab = index;
+      //     });
+      //   },
+      // ),
       body: screens[currentTab],
       bottomNavigationBar: currentTab == 3 || currentTab == 4
           ? null

@@ -4,6 +4,7 @@ import 'package:iconsax/iconsax.dart';
 import 'package:intl/intl.dart';
 import 'package:month_picker_dialog/month_picker_dialog.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:spendo/components/MonthPicker2.dart';
 import 'package:spendo/components/cards/TransactionCard.dart';
 import 'package:spendo/controllers/transaction_controller.dart';
 import 'package:spendo/models/transaction_model.dart';
@@ -30,21 +31,7 @@ class _TransactionScreenState extends ConsumerState<TransactionScreen> {
       ref.read(filtroTransacaoProvider.notifier).state = widget.type ?? 'all';
     });
   }
-
-  Future<void> _selectMonth(BuildContext context) async {
-    final selected = await showMonthPicker(
-      context: context,
-      initialDate: _selectedMonth ?? DateTime.now(),
-      firstDate: DateTime(2000),
-      lastDate: DateTime(DateTime.now().year + 5),
-    );
-    if (selected != null) {
-      setState(() {
-        _selectedMonth = selected;
-      });
-    }
-  }
-
+  
   @override
   Widget build(BuildContext context) {
     final filtro = ref.watch(filtroTransacaoProvider);
@@ -111,7 +98,6 @@ class _TransactionScreenState extends ConsumerState<TransactionScreen> {
           return receitas - despesas;
       }
     }
-
 
     return Scaffold(
       appBar: AppBar(
@@ -182,31 +168,14 @@ class _TransactionScreenState extends ConsumerState<TransactionScreen> {
                   ),
                 ),
                 const SizedBox(height: 16),
-                GestureDetector(
-                  onTap: () => _selectMonth(context),
-                  child: Row(
-                    children: [
-                      Text(
-                        _selectedMonth == null
-                            ? 'Todos os meses'
-                            : toBeginningOfSentenceCase(
-                                  DateFormat("MMMM", 'pt_BR')
-                                      .format(_selectedMonth!),
-                                ) ??
-                                '',
-                        style: const TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: AppTheme.whiteColor,
-                        ),
-                      ),
-                      const SizedBox(width: 4),
-                      Icon(
-                        Icons.arrow_drop_down,
-                        color: AppTheme.whiteColor,
-                      ),
-                    ],
-                  ),
+                Monthpicker2(
+                  selectedMonth: _selectedMonth,
+                  onMonthSelected: (mes) {
+                    setState(() {
+                      _selectedMonth = mes;
+                    });
+                  },
+                  textColor: AppTheme.whiteColor,
                 ),
               ],
             ),

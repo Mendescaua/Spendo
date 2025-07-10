@@ -19,7 +19,14 @@ class Homebar extends ConsumerWidget implements PreferredSizeWidget {
       elevation: 0,
       automaticallyImplyLeading: false,
       leading: IconButton(
-        onPressed: () => Scaffold.of(context).openDrawer(),
+        onPressed: () {
+          showModalBottomSheet(
+            context: context,
+            backgroundColor: Colors.transparent,
+            isScrollControlled: true,
+            builder: (_) => HomeMenuModal(onItemSelected: onItemSelected),
+          );
+        },
         icon: Icon(
           Iconsax.category,
           size: 26,
@@ -69,122 +76,131 @@ class Homebar extends ConsumerWidget implements PreferredSizeWidget {
   Size get preferredSize => Size.fromHeight(kToolbarHeight);
 }
 
-class HomeDrawer extends StatelessWidget {
+class HomeMenuModal extends StatelessWidget {
   final void Function(int)? onItemSelected;
-  const HomeDrawer({super.key, this.onItemSelected});
+  const HomeMenuModal({super.key, this.onItemSelected});
 
   @override
   Widget build(BuildContext context) {
-    return Drawer(
-      child: SafeArea(
-        child: Column(
-          children: [
-            // HEADER
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-              child: Row(
-                children: const [
-                  Expanded(
-                    child: Text(
-                      'Menu',
-                      style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                    ),
+    // Lista de opções para mapear
+    final items = [
+      {
+        'id': 0,
+        'icon': Iconsax.home,
+        'label': 'Início',
+      },
+      {
+        'id': 1,
+        'icon': Iconsax.chart_square,
+        'label': 'Gráficos',
+      },
+      {
+        'id': 2,
+        'icon': Iconsax.empty_wallet,
+        'label': 'Carteira',
+      },
+      {
+        'id': 3,
+        'icon': Iconsax.card,
+        'label': 'Assinaturas',
+      },
+      {
+        'id': 4,
+        'icon': PhosphorIcons.handCoins(PhosphorIconsStyle.regular),
+        'label': 'Minhas metas',
+      },
+      {
+        'id': 5,
+        'icon': Iconsax.setting,
+        'label': 'Configurações',
+      },
+    ];
+
+   return SafeArea(
+  child: Container(
+    padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
+    decoration: BoxDecoration(
+      color: AppTheme.dynamicBackgroundColor(context),
+      borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+    ),
+    child: Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Container(
+          height: 4,
+          width: 40,
+          margin: const EdgeInsets.only(bottom: 16),
+          decoration: BoxDecoration(
+            color: Colors.grey[400],
+            borderRadius: BorderRadius.circular(2),
+          ),
+        ),
+        const Text(
+          'Menu',
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        const SizedBox(height: 24),
+
+        Wrap(
+          spacing: 12,
+          runSpacing: 12,
+          children: items.map((item) {
+            return GestureDetector(
+              onTap: () {
+                Navigator.of(context).pop();
+                if (onItemSelected != null) {
+                  onItemSelected!(item['id'] as int);
+                }
+              },
+              child: Container(
+                width: (MediaQuery.of(context).size.width - 64) / 3,
+                height: 100,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(
+                    color: AppTheme.primaryColor.withOpacity(0.2),
                   ),
-                  // Removido ToggleButtons
-                ],
-              ),
-            ),
-            const Divider(),
-            // CONTENT
-            Expanded(
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.all(16),
+                ),
+                padding: const EdgeInsets.all(12),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    _buildSectionTitle('Categorias'),
-                    const SizedBox(height: 12),
-                    ListTile(
-                      contentPadding: const EdgeInsets.symmetric(vertical: 4),
-                      leading: Icon(Iconsax.home,
-                          size: 28, color: AppTheme.primaryColor),
-                      title:
-                          Text("Inicio", style: const TextStyle(fontSize: 16)),
-                      onTap: () {
-                        Navigator.of(context).pop();
-                      },
+                    // Ícone no topo esquerdo
+                    item.containsKey('icon')
+                        ? Icon(
+                            item['icon'] as IconData,
+                            size: 24,
+                            color: AppTheme.primaryColor,
+                          )
+                        : SizedBox(
+                            width: 24,
+                            height: 24,
+                            child: item['iconWidget'] as Widget,
+                          ),
+
+                    // Texto embaixo à esquerda
+                    Text(
+                      item['label'] as String,
+                      style: const TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
-                    ListTile(
-                      contentPadding: const EdgeInsets.symmetric(vertical: 4),
-                      leading: Icon(Iconsax.chart_square,
-                          size: 28, color: AppTheme.primaryColor),
-                      title: Text("Gráficos",
-                          style: const TextStyle(fontSize: 16)),
-                      onTap: () {
-                        Navigator.of(context).pop();
-                        onItemSelected?.call(1);
-                      },
-                    ),
-                    ListTile(
-                      contentPadding: const EdgeInsets.symmetric(vertical: 4),
-                      leading: Icon(Iconsax.empty_wallet,
-                          size: 28, color: AppTheme.primaryColor),
-                      title: Text("Carteira",
-                          style: const TextStyle(fontSize: 16)),
-                      onTap: () {
-                        Navigator.of(context).pop();
-                        onItemSelected?.call(2);
-                      },
-                    ),
-                    ListTile(
-                      contentPadding: const EdgeInsets.symmetric(vertical: 4),
-                      leading: Icon(Iconsax.card,
-                          size: 28, color: AppTheme.primaryColor),
-                      title: Text("Assinaturas",
-                          style: const TextStyle(fontSize: 16)),
-                      onTap: () {
-                        Navigator.of(context).pop();
-                        onItemSelected?.call(3);
-                      },
-                    ),
-                    ListTile(
-                      contentPadding: const EdgeInsets.symmetric(vertical: 4),
-                      leading: Icon(PhosphorIcons.handCoins(PhosphorIconsStyle.regular),
-                          size: 28, color: AppTheme.primaryColor),
-                      title: Text("Minhas metas",
-                          style: const TextStyle(fontSize: 16)),
-                      onTap: () {
-                        Navigator.of(context).pop();
-                        onItemSelected?.call(4);
-                      },
-                    ),
-                    ListTile(
-                      contentPadding: const EdgeInsets.symmetric(vertical: 4),
-                      leading: Icon(Iconsax.setting,
-                          size: 28, color: AppTheme.primaryColor),
-                      title: Text("Configurações",
-                          style: const TextStyle(fontSize: 16)),
-                      onTap: () {
-                        Navigator.of(context).pop();
-                        onItemSelected?.call(5);
-                      },
-                    ),
-                    const SizedBox(height: 40),
                   ],
                 ),
               ),
-            ),
-          ],
+            );
+          }).toList(),
         ),
-      ),
-    );
-  }
 
-  Widget _buildSectionTitle(String title) {
-    return Text(
-      title,
-      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-    );
+        const SizedBox(height: 32),
+      ],
+    ),
+  ),
+);
   }
 }
