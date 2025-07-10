@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:spendo/components/CircleImage.dart';
+import 'package:spendo/components/FloatingMessage.dart';
 import 'package:spendo/components/buttons/StyleButton.dart';
 import 'package:spendo/controllers/user_controller.dart';
+import 'package:spendo/models/users_model.dart';
 import 'package:spendo/utils/theme.dart';
 
 class ModalEditPerfil extends ConsumerStatefulWidget {
@@ -15,12 +17,43 @@ class ModalEditPerfil extends ConsumerStatefulWidget {
 
 class _ModalEditPerfilState extends ConsumerState<ModalEditPerfil> {
   final TextEditingController _usercontroller = TextEditingController();
+  String? picture;
+  
+    @override
+  void initState() {
+    super.initState();
+
+    // Aguarda o build e depois preenche os dados do usuário
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final user = ref.read(userControllerProvider).firstOrNull;
+      if (user != null) {
+        _usercontroller.text = user.name;
+        picture = user.picture;
+      }
+    });
+  }
+
+  void onUpdate() {
+    final controller = ref.read(userControllerProvider.notifier);
+    controller.updateUser(
+      name: _usercontroller.text,
+      picture: picture,
+    );
+    FloatingMessage(context, 'Valor adicionado com sucesso', 'success', 2);
+    Navigator.of(context).pop();
+  }
+
+  @override
+  void dispose() {
+    _usercontroller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
+    Size size = MediaQuery.of(context).size;    
     final users = ref.watch(userControllerProvider).firstOrNull;
-
+   
     return SafeArea(
       child: SingleChildScrollView(
         child: Container(
@@ -61,9 +94,10 @@ class _ModalEditPerfilState extends ConsumerState<ModalEditPerfil> {
               SizedBox(height: 16),
               Center(
                   child: CircleImage(
-                initialBase64: users?.picture ?? null, // ou passe base64 inicial
+                initialBase64:
+                    users?.picture ?? null, // ou passe base64 inicial
                 onImageSelected: (base64) {
-                  print('Imagem em base64: $base64');
+                  picture = base64;
                 },
               )),
               SizedBox(height: 16),
@@ -75,7 +109,7 @@ class _ModalEditPerfilState extends ConsumerState<ModalEditPerfil> {
                 ),
               ),
               TextField(
-                controller: _usercontroller..text = users?.name ?? '',
+                controller: _usercontroller,
                 decoration: InputDecoration(
                   prefixIcon: const Icon(Iconsax.user),
                   hintText: 'Usuário',
@@ -110,7 +144,7 @@ class _ModalEditPerfilState extends ConsumerState<ModalEditPerfil> {
                 ),
               ),
               SizedBox(height: 32),
-              StyleButton(text: 'Salvar', onClick: () {}),
+              StyleButton(text: 'Salvar', onClick: () {onUpdate();}),
             ],
           ),
         ),

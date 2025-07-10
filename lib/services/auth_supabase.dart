@@ -47,4 +47,16 @@ class AuthService {
 
     return response.user; // só retorna o usuário (ou null se erro)
   }
+
+  Future<void> updateUserData({required UsersModel user}) async {
+  final supabase = Supabase.instance.client;
+
+  await supabase
+      .from('USERS')
+      .update({
+        'name': user.name,
+        'picture': user.picture,
+      })
+      .eq('uuid', user.uuid.toString());
+}
 }

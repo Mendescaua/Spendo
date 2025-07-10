@@ -25,5 +25,19 @@ class UsersModel {
         'name': name,
         'email': email,
         'picture': picture,
-      };
+  };
+
+  UsersModel copyWith({
+    String? uuid,
+    String? name,
+    String? email,
+    String? picture,
+  }) {
+    return UsersModel(
+      uuid: uuid ?? this.uuid,
+      name: name ?? this.name,
+      email: email ?? this.email,
+      picture: picture ?? this.picture,
+    );
+  }
 }
