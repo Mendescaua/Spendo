@@ -116,6 +116,12 @@ class _CategoryScreenState extends ConsumerState<CategoryScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Minhas categorias'),
+        leading: IconButton(
+          icon: const Icon(Iconsax.arrow_left),
+          color: AppTheme.whiteColor,
+          onPressed: () => Navigator.of(context).pop(),
+          tooltip: 'Voltar',
+        ),
         actions: [
           IconButton(
             icon: Icon(PhosphorIcons.boxArrowDown(PhosphorIconsStyle.regular)),

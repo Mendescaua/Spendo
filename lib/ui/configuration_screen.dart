@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:spendo/components/modals/ModalChangePassword.dart';
+import 'package:spendo/components/modals/ModalEditPerfil.dart';
 import 'package:spendo/components/modals/ModalTheme.dart';
 import 'package:spendo/controllers/auth_controller.dart';
 import 'package:spendo/controllers/user_controller.dart';
@@ -30,42 +31,6 @@ class _ConfiguracoesScreenState extends ConsumerState<ConfiguracoesScreen> {
 
     Navigator.of(context).pop();
   }
-
-  void _openChangePasswordModal(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      useRootNavigator: true,
-      builder: (context) => ScaffoldMessenger(
-        child: Scaffold(
-          backgroundColor: Colors.transparent,
-          body: GestureDetector(
-            behavior: HitTestBehavior.opaque,
-            onTap: () => Navigator.of(context).pop(),
-            child: SafeArea(
-              top: false,
-              child: Align(
-                alignment: Alignment.bottomCenter,
-                child: GestureDetector(
-                  onTap: () {},
-                  child: Material(
-                    borderRadius:
-                        const BorderRadius.vertical(top: Radius.circular(20)),
-                    clipBehavior: Clip.antiAlias,
-                    child: ModalChangePassword(
-                      
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
 
   @override
   Widget build(BuildContext context) {
@@ -134,7 +99,7 @@ class _ConfiguracoesScreenState extends ConsumerState<ConfiguracoesScreen> {
                 IconButton(
                   icon: const Icon(Iconsax.edit, color: Colors.grey),
                   onPressed: () {
-                    // ação de editar
+                    _openEditPerfilModal(context);
                   },
                 )
               ],
@@ -230,4 +195,73 @@ class _ConfiguracoesScreenState extends ConsumerState<ConfiguracoesScreen> {
       contentPadding: const EdgeInsets.symmetric(horizontal: 0),
     );
   }
+
+void _openEditPerfilModal(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      useRootNavigator: true,
+      builder: (context) => ScaffoldMessenger(
+        child: Scaffold(
+          backgroundColor: Colors.transparent,
+          body: GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onTap: () => Navigator.of(context).pop(),
+            child: SafeArea(
+              top: false,
+              child: Align(
+                alignment: Alignment.bottomCenter,
+                child: GestureDetector(
+                  onTap: () {},
+                  child: Material(
+                    borderRadius:
+                        const BorderRadius.vertical(top: Radius.circular(20)),
+                    clipBehavior: Clip.antiAlias,
+                    child: ModalEditPerfil()
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _openChangePasswordModal(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      useRootNavigator: true,
+      builder: (context) => ScaffoldMessenger(
+        child: Scaffold(
+          backgroundColor: Colors.transparent,
+          body: GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onTap: () => Navigator.of(context).pop(),
+            child: SafeArea(
+              top: false,
+              child: Align(
+                alignment: Alignment.bottomCenter,
+                child: GestureDetector(
+                  onTap: () {},
+                  child: Material(
+                    borderRadius:
+                        const BorderRadius.vertical(top: Radius.circular(20)),
+                    clipBehavior: Clip.antiAlias,
+                    child: ModalChangePassword(
+                      
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
 }

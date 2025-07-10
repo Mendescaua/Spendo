@@ -192,13 +192,10 @@ Future<String?> updateCategoryTransaction({
               category.name.trim().toLowerCase())
           .toList();
 
-      print('Transações a atualizar: ${affectedTransactions.length}');
-
       for (var oldTransaction in affectedTransactions) {
         final transactionUuid = oldTransaction.uuid ?? userId;
 
         if (transactionUuid == null) {
-          print('UUID nulo para transação ID: ${oldTransaction.id}');
           continue;
         }
 
