@@ -58,6 +58,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   Widget build(BuildContext context) {
     final transactions = ref.watch(
         transactionControllerProvider); // basicamente vc usa isso para ver oque a consulta carregou no provider e reconstruir a tela com os dados carregados
+
     final savings = ref.watch(savingControllerProvider);
     final filteredSavings =
         savings.where((saving) => saving.value != saving.goalValue).toList();
@@ -93,33 +94,54 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                             Navigator.of(context).pushNamed('/transactions');
                           },
                           icon: Icon(
-                            PhosphorIcons.dotsThreeOutline(PhosphorIconsStyle.regular),
+                            PhosphorIcons.dotsThreeOutline(
+                                PhosphorIconsStyle.regular),
                             size: 26,
                           ))
                     ],
                   ),
                   _loading
                       ? Column(
-                          children: List.generate(3, (_) => SkeletonCard(context: context)),
+                          children: List.generate(
+                              3, (_) => SkeletonCard(context: context)),
                         )
-                      : transactions.isEmpty
-                          ? Center(
+                      : (() {
+                          final now = DateTime.now();
+                          final transactionsThisMonth = transactions
+                              .where((t) =>
+                                  t.createdAt?.year == now.year &&
+                                  t.createdAt?.month == now.month)
+                              .toList()
+                            ..sort((a, b) {
+                              final aDate = a.createdAt;
+                              final bDate = b.createdAt;
+                              if (aDate == null && bDate == null) return 0;
+                              if (aDate == null) return 1;
+                              if (bDate == null) return -1;
+                              return bDate.compareTo(aDate);
+                            }); // mais recentes
+
+                          if (transactionsThisMonth.isEmpty) {
+                            return Center(
                               child: Text(
                                 "Nenhuma transação encontrada",
                                 style: TextStyle(fontSize: 16),
                               ),
-                            )
-                          : ListView.builder(
-                              shrinkWrap: true,
-                              physics: const NeverScrollableScrollPhysics(),
-                              itemCount: transactions.length >= 3
-                                  ? 3
-                                  : transactions.length,
-                              itemBuilder: (context, index) {
-                                return TransactionCard(
-                                    transaction: transactions[index]);
-                              },
-                            ),
+                            );
+                          }
+
+                          return ListView.builder(
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemCount: transactionsThisMonth.length >= 3
+                                ? 3
+                                : transactionsThisMonth.length,
+                            itemBuilder: (context, index) {
+                              return TransactionCard(
+                                  transaction: transactionsThisMonth[index]);
+                            },
+                          );
+                        })(),
                   Card(
                     color: AppTheme.dynamicCardColor(context),
                     margin: const EdgeInsets.only(bottom: 16),
@@ -140,7 +162,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                     Navigator.of(context).pushNamed('/saving'),
                                 child: Row(
                                   children: [
-                                    Icon(PhosphorIcons.handCoins(PhosphorIconsStyle.regular), size: 20),
+                                    Icon(
+                                        PhosphorIcons.handCoins(
+                                            PhosphorIconsStyle.regular),
+                                        size: 20),
                                     const SizedBox(width: 6),
                                     Text(
                                       "Minhas ",
@@ -163,7 +188,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                 onPressed: () {
                                   Navigator.of(context).pushNamed('/saving');
                                 },
-                                icon: Icon(PhosphorIcons.dotsThreeOutline(PhosphorIconsStyle.regular), size: 26),
+                                icon: Icon(
+                                    PhosphorIcons.dotsThreeOutline(
+                                        PhosphorIconsStyle.regular),
+                                    size: 26),
                               ),
                             ],
                           ),
@@ -184,8 +212,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                     )
                                   : savings == null
                                       ? Column(
-                                          children: List.generate(
-                                              3, (_) => SkeletonBigCard(context)),)
+                                          children: List.generate(3,
+                                              (_) => SkeletonBigCard(context)),
+                                        )
                                       : savings.isEmpty
                                           ? const Center(
                                               child: Text(

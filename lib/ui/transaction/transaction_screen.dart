@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:intl/intl.dart';
-import 'package:month_picker_dialog/month_picker_dialog.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:spendo/components/MonthPicker2.dart';
 import 'package:spendo/components/cards/TransactionCard.dart';
@@ -22,32 +21,32 @@ class TransactionScreen extends ConsumerStatefulWidget {
 }
 
 class _TransactionScreenState extends ConsumerState<TransactionScreen> {
-  DateTime? _selectedMonth;
+  late DateTime _selectedMonth;
 
   @override
   void initState() {
     super.initState();
+    _selectedMonth = DateTime(DateTime.now().year, DateTime.now().month);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.read(filtroTransacaoProvider.notifier).state = widget.type ?? 'all';
     });
   }
-  
+
   @override
   Widget build(BuildContext context) {
     final filtro = ref.watch(filtroTransacaoProvider);
     final transactions = ref.watch(transactionControllerProvider);
 
-    // Filtra as transações conforme filtro selecionado
-    var transactionsFiltradas = filtro == 'all'
-        ? transactions
-        : transactions.where((t) => t.type == filtro).toList();
+    // Filtra por mês atual (ou selecionado)
+    var transactionsFiltradas = transactions.where((t) {
+      return t.date.year == _selectedMonth.year &&
+          t.date.month == _selectedMonth.month;
+    }).toList();
 
-    // Filtra as transações conforme mês selecionado, se houver
-    if (_selectedMonth != null) {
-      transactionsFiltradas = transactionsFiltradas.where((t) {
-        return t.date.year == _selectedMonth!.year &&
-            t.date.month == _selectedMonth!.month;
-      }).toList();
+    // Filtra por tipo, se necessário
+    if (filtro != 'all') {
+      transactionsFiltradas =
+          transactionsFiltradas.where((t) => t.type == filtro).toList();
     }
 
     final receitas = transactionsFiltradas
@@ -69,7 +68,6 @@ class _TransactionScreenState extends ConsumerState<TransactionScreen> {
           return 'Minhas receitas';
         case 'd':
           return 'Minhas despesas';
-        case 'all':
         default:
           return 'Minhas transações';
       }
@@ -81,7 +79,6 @@ class _TransactionScreenState extends ConsumerState<TransactionScreen> {
           return 'Total de receitas';
         case 'd':
           return 'Total de despesas';
-        case 'all':
         default:
           return 'Saldo total';
       }
@@ -93,7 +90,6 @@ class _TransactionScreenState extends ConsumerState<TransactionScreen> {
           return receitas;
         case 'd':
           return despesas;
-        case 'all':
         default:
           return receitas - despesas;
       }
@@ -120,10 +116,6 @@ class _TransactionScreenState extends ConsumerState<TransactionScreen> {
                 ref.read(filtroTransacaoProvider.notifier).state = value;
               },
               itemBuilder: (context) => const [
-                PopupMenuItem(
-                  value: 'all',
-                  child: Text('Transações'),
-                ),
                 PopupMenuItem(
                   value: 'r',
                   child: Text('Receitas'),
@@ -172,7 +164,7 @@ class _TransactionScreenState extends ConsumerState<TransactionScreen> {
                   selectedMonth: _selectedMonth,
                   onMonthSelected: (mes) {
                     setState(() {
-                      _selectedMonth = mes;
+                      _selectedMonth = mes!;
                     });
                   },
                   textColor: AppTheme.whiteColor,
@@ -187,7 +179,9 @@ class _TransactionScreenState extends ConsumerState<TransactionScreen> {
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
                 color: AppTheme.dynamicBackgroundColor(context),
-                borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+                borderRadius: const BorderRadius.vertical(
+                  top: Radius.circular(24),
+                ),
               ),
               child: datasOrdenadas.isEmpty
                   ? const Center(

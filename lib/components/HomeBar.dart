@@ -118,6 +118,7 @@ class HomeMenuModal extends StatelessWidget {
 
    return SafeArea(
   child: Container(
+    width: double.infinity,
     padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
     decoration: BoxDecoration(
       color: AppTheme.dynamicBackgroundColor(context),

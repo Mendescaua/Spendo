@@ -54,6 +54,12 @@ class AppTheme {
         : redColor;
   }
 
+  static Color dynamicDespesaColor(BuildContext context) {
+    return Theme.of(context).brightness == Brightness.dark
+        ? const Color.fromARGB(255, 141, 12, 36)
+        : redColor;
+  }
+
   static Color dynamicBorderSavingColor(BuildContext context) {
     return Theme.of(context).brightness == Brightness.dark
         ? const Color.fromARGB(255, 32, 32, 32)

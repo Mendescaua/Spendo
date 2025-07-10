@@ -73,7 +73,7 @@ class _NewDespesaScreenState extends ConsumerState<NewDespesaScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: AppTheme.redColor,
+        backgroundColor: AppTheme.dynamicDespesaColor(context),
         title: const Text(
           'Nova despesa',
           style: TextStyle(color: AppTheme.whiteColor),
@@ -86,7 +86,7 @@ class _NewDespesaScreenState extends ConsumerState<NewDespesaScreen> {
           onPressed: () => Navigator.of(context).pushReplacementNamed('/menu'),
         ),
       ),
-      backgroundColor: AppTheme.redColor,
+      backgroundColor: AppTheme.dynamicDespesaColor(context),
       body: GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),
         child: Column(
@@ -180,8 +180,8 @@ class _NewDespesaScreenState extends ConsumerState<NewDespesaScreen> {
                           hintText: 'Digite um descrição',
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(16),
-                            borderSide: const BorderSide(
-                              color: AppTheme.redColor,
+                            borderSide: BorderSide(
+                              color: AppTheme.dynamicDespesaColor(context),
                             ),
                           ),
                         ),
@@ -283,7 +283,7 @@ class _NewDespesaScreenState extends ConsumerState<NewDespesaScreen> {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(30),
         ),
-        backgroundColor: AppTheme.redColor,
+        backgroundColor: AppTheme.dynamicDespesaColor(context),
         child: const Icon(
           Iconsax.add,
           color: Colors.white,

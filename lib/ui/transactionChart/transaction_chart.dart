@@ -55,7 +55,7 @@ class _IncomeExpenseBarChartState extends ConsumerState<IncomeExpenseBarChart> {
           const Text(
             'Receita vs Despesa',
             style: TextStyle(
-              fontSize: 26,
+              fontSize: 20,
               fontWeight: FontWeight.bold,
             ),
           ),
@@ -92,24 +92,24 @@ class _IncomeExpenseBarChartState extends ConsumerState<IncomeExpenseBarChart> {
                       barRods: [
                         BarChartRodData(
                           toY: totalReceita,
-                          color: const Color(0xff2972ff), // azul forte, como na imagem
+                          color: AppTheme.greenColor, // azul forte, como na imagem
                           width: 32,
                           borderRadius: BorderRadius.circular(6),
                           backDrawRodData: BackgroundBarChartRodData(
                             show: true,
                             toY: maxValor,
-                            color: const Color(0xffb3d1ff).withOpacity(0.3),
+                            color: AppTheme.softGreenColor,
                           ),
                         ),
                         BarChartRodData(
                           toY: totalDespesa,
-                          color: const Color(0xffff9727), // laranja forte
+                          color: AppTheme.dynamicRedColor(context), // laranja forte
                           width: 32,
                           borderRadius: BorderRadius.circular(6),
                           backDrawRodData: BackgroundBarChartRodData(
                             show: true,
                             toY: maxValor,
-                            color: const Color(0xffffc997).withOpacity(0.3),
+                            color: AppTheme.softRedColor,
                           ),
                         ),
                       ],
