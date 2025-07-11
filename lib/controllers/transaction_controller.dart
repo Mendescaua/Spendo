@@ -36,6 +36,7 @@ class TransactionController extends StateNotifier<List<TransactionModel>> {
         description: transaction.description,
         category: transaction.category,
         date: transaction.date,
+        repeat: transaction.repeat,
       );
       await _transaction.addTransacao(newTransaction);
       // Atualiza o estado com a nova transação adicionada

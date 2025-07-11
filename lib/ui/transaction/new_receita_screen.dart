@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_masked_text2/flutter_masked_text2.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:intl/intl.dart';
+import 'package:spendo/components/ExpandedComp.dart';
 import 'package:spendo/components/comboBox/CategoriesComboBox.dart';
 import 'package:spendo/components/FloatingMessage.dart';
 import 'package:spendo/controllers/transaction_controller.dart';
@@ -25,18 +26,34 @@ class _NewReceitaScreenState extends ConsumerState<NewReceitaScreen> {
   );
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
+  int _repeatCount = 1;
   DateTime selectedDate = DateTime.now();
   final DateFormat dateFormat = DateFormat('dd/MM/yyyy');
   String categoria = '';
   final FocusNode _valorFocusNode = FocusNode();
+  final FocusNode _tituloFocusNode = FocusNode();
+  List<TransactionModel> filteredSuggestions = [];
 
   @override
   void initState() {
     super.initState();
 
-    // Dá o foco após o build
     Future.delayed(Duration.zero, () {
       _valorFocusNode.requestFocus();
+      final allReceitas =
+          ref.read(transactionControllerProvider).where((t) => t.type == 'r');
+
+      final grouped = <String, List<TransactionModel>>{};
+      for (final t in allReceitas) {
+        grouped.putIfAbsent(t.title.toLowerCase(), () => []).add(t);
+      }
+
+      final sorted = grouped.entries.toList()
+        ..sort((a, b) => b.value.length.compareTo(a.value.length));
+
+      setState(() {
+        filteredSuggestions = sorted.map((e) => e.value.first).toList();
+      });
     });
   }
 
@@ -54,6 +71,7 @@ class _NewReceitaScreenState extends ConsumerState<NewReceitaScreen> {
           description: _descriptionController.text,
           category: categoria,
           date: selectedDate,
+          repeat: _repeatCount,
         ),
       );
       if (response != null) {
@@ -65,6 +83,10 @@ class _NewReceitaScreenState extends ConsumerState<NewReceitaScreen> {
       }
     }
 
+    final transactions = ref.watch(transactionControllerProvider);
+    // Pegue só receitas
+    final receitas = transactions.where((t) => t.type == 'r').toList();
+
     bool isSameDate(DateTime date1, DateTime date2) {
       return date1.year == date2.year &&
           date1.month == date2.month &&
@@ -73,7 +95,7 @@ class _NewReceitaScreenState extends ConsumerState<NewReceitaScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: AppTheme.greenColor,
+        backgroundColor: AppTheme.dynamicReceitaColor(context),
         title: const Text(
           'Nova receita',
           style: TextStyle(color: AppTheme.whiteColor),
@@ -86,7 +108,7 @@ class _NewReceitaScreenState extends ConsumerState<NewReceitaScreen> {
           onPressed: () => Navigator.of(context).pushReplacementNamed('/menu'),
         ),
       ),
-      backgroundColor: AppTheme.greenColor,
+      backgroundColor: AppTheme.dynamicReceitaColor(context),
       body: GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),
         child: Column(
@@ -153,18 +175,155 @@ class _NewReceitaScreenState extends ConsumerState<NewReceitaScreen> {
                           fontWeight: FontWeight.w600,
                         ),
                       ),
-                      TextField(
-                        controller: _titleController,
-                        decoration: InputDecoration(
-                          prefixIcon: const Icon(Iconsax.text_block),
-                          hintText: 'Digite um título',
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(16),
-                            borderSide: const BorderSide(
-                              color: AppTheme.greenColor,
+                      RawAutocomplete<TransactionModel>(
+                        textEditingController: _titleController,
+                        focusNode: _tituloFocusNode,
+                        optionsBuilder: (TextEditingValue textEditingValue) {
+                          final allReceitas = ref
+                              .read(transactionControllerProvider)
+                              .where((t) => t.type == 'r');
+
+                          if (!_tituloFocusNode.hasFocus ||
+                              textEditingValue.text.trim().isEmpty) {
+                            return const Iterable<TransactionModel>.empty();
+                          }
+
+                          // Agrupa as transações pelo título e conta quantas vezes cada uma aparece
+                          final Map<String, List<TransactionModel>> grouped =
+                              {};
+
+                          for (var t in allReceitas) {
+                            final key = t.title.toLowerCase().trim();
+                            if (grouped.containsKey(key)) {
+                              grouped[key]!.add(t);
+                            } else {
+                              grouped[key] = [t];
+                            }
+                          }
+
+                          // Filtra os grupos que aparecem pelo menos 3 vezes
+                          final frequentTitles = grouped.entries
+                              .where((entry) => entry.value.length >= 2)
+                              .map((entry) => entry.value.first)
+                              .toList();
+
+                          // Agora filtra pelo que foi digitado
+                          return frequentTitles.where((t) => t.title
+                              .toLowerCase()
+                              .contains(textEditingValue.text.toLowerCase()));
+                        },
+                        displayStringForOption: (TransactionModel option) =>
+                            option.title,
+                        fieldViewBuilder:
+                            (context, controller, focusNode, onFieldSubmitted) {
+                          return TextField(
+                            controller: controller,
+                            focusNode: focusNode,
+                            style: const TextStyle(fontSize: 16),
+                            decoration: InputDecoration(
+                              prefixIcon: const Icon(Iconsax.text_block),
+                              hintText: 'Digite um título',
+                              filled: true,
+                              fillColor:
+                                  AppTheme.dynamicBackgroundColor(context),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(16),
+                                borderSide: BorderSide(
+                                  color: AppTheme.dynamicReceitaColor(context),
+                                ),
+                              ),
                             ),
-                          ),
-                        ),
+                          );
+                        },
+                        optionsViewBuilder: (context, onSelected, options) {
+                          return Align(
+                            alignment: Alignment.topLeft,
+                            child: Material(
+                              color: AppTheme.dynamicModalColor(context),
+                              child: Container(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 8),
+                                decoration: BoxDecoration(
+                                  color:
+                                      AppTheme.dynamicBackgroundColor(context),
+                                  borderRadius: BorderRadius.circular(16),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.black.withOpacity(0.08),
+                                      blurRadius: 12,
+                                      offset: const Offset(0, 4),
+                                    )
+                                  ],
+                                ),
+                                child: ListView.builder(
+                                  shrinkWrap: true,
+                                  itemCount: options.length,
+                                  itemBuilder: (context, index) {
+                                    final option = options.elementAt(index);
+                                    return ListTile(
+                                      contentPadding:
+                                          const EdgeInsets.symmetric(
+                                              horizontal: 16, vertical: 4),
+                                      leading: const Icon(Iconsax.repeat),
+                                      title: Text(
+                                        option.title,
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 16),
+                                      ),
+                                      subtitle: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          if (option.description != null &&
+                                              option.description!.isNotEmpty)
+                                            Text(
+                                              option.description!,
+                                              style:
+                                                  const TextStyle(fontSize: 13),
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                          Text(
+                                            'R\$ ${option.value.toStringAsFixed(2).replaceAll('.', ',')}',
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              color:
+                                                  AppTheme.dynamicReceitaColor(
+                                                      context),
+                                              fontSize: 14,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      onTap: () {
+                                        onSelected(option);
+                                      },
+                                    );
+                                  },
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                        onSelected: (TransactionModel selected) {
+                          setState(() {
+                            _titleController.text = selected.title;
+                            _descriptionController.text =
+                                selected.description ?? '';
+                            _moneyController.updateValue(selected.value);
+                          });
+
+                          // Fecha teclado corretamente
+                          _tituloFocusNode.unfocus();
+                          FocusScope.of(context).unfocus();
+
+                          FloatingMessage(
+                            context,
+                            'Campos preenchidos com base em "${selected.title}"',
+                            'info',
+                            2,
+                          );
+                        },
                       ),
                       const Text(
                         'Descrição',
@@ -180,8 +339,8 @@ class _NewReceitaScreenState extends ConsumerState<NewReceitaScreen> {
                           hintText: 'Digite um descrição',
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(16),
-                            borderSide: const BorderSide(
-                              color: AppTheme.greenColor,
+                            borderSide: BorderSide(
+                              color: AppTheme.dynamicReceitaColor(context),
                             ),
                           ),
                         ),
@@ -201,7 +360,16 @@ class _NewReceitaScreenState extends ConsumerState<NewReceitaScreen> {
                               borderRadius: BorderRadius.circular(12),
                             ),
                             selectedColor: AppTheme.primaryColor,
-                            label: Text('Hoje'),
+                            backgroundColor:
+                                AppTheme.dynamicBackgroundColor(context),
+                            label: Text(
+                              'Hoje',
+                              style: TextStyle(
+                                color: isSameDate(selectedDate, DateTime.now())
+                                    ? Colors.white
+                                    : AppTheme.dynamicTextColor(context),
+                              ),
+                            ),
                             selected: isSameDate(selectedDate, DateTime.now()),
                             onSelected: (selected) {
                               if (selected) {
@@ -217,7 +385,19 @@ class _NewReceitaScreenState extends ConsumerState<NewReceitaScreen> {
                               borderRadius: BorderRadius.circular(12),
                             ),
                             selectedColor: AppTheme.primaryColor,
-                            label: Text('Ontem'),
+                            backgroundColor:
+                                AppTheme.dynamicBackgroundColor(context),
+                            label: Text(
+                              'Ontem',
+                              style: TextStyle(
+                                color: isSameDate(
+                                        selectedDate,
+                                        DateTime.now()
+                                            .subtract(Duration(days: 1)))
+                                    ? Colors.white
+                                    : AppTheme.dynamicTextColor(context),
+                              ),
+                            ),
                             selected: isSameDate(selectedDate,
                                 DateTime.now().subtract(Duration(days: 1))),
                             onSelected: (selected) {
@@ -235,11 +415,25 @@ class _NewReceitaScreenState extends ConsumerState<NewReceitaScreen> {
                               borderRadius: BorderRadius.circular(12),
                             ),
                             selectedColor: AppTheme.primaryColor,
-                            label: Text(selectedDate.isAfter(DateTime.now()
-                                        .subtract(Duration(days: 1))) &&
-                                    !isSameDate(selectedDate, DateTime.now())
-                                ? '${dateFormat.format(selectedDate)}'
-                                : 'Outro dia'),
+                            backgroundColor:
+                                AppTheme.dynamicBackgroundColor(context),
+                            label: Text(
+                              selectedDate.isAfter(DateTime.now()
+                                          .subtract(Duration(days: 1))) &&
+                                      !isSameDate(selectedDate, DateTime.now())
+                                  ? '${dateFormat.format(selectedDate)}'
+                                  : 'Outro dia',
+                              style: TextStyle(
+                                color: !(isSameDate(
+                                            selectedDate, DateTime.now()) ||
+                                        isSameDate(
+                                            selectedDate,
+                                            DateTime.now()
+                                                .subtract(Duration(days: 1))))
+                                    ? Colors.white
+                                    : AppTheme.dynamicTextColor(context),
+                              ),
+                            ),
                             selected:
                                 !(isSameDate(selectedDate, DateTime.now()) ||
                                     isSameDate(
@@ -268,6 +462,14 @@ class _NewReceitaScreenState extends ConsumerState<NewReceitaScreen> {
                           categoria = nome;
                         },
                       ),
+                      Center(
+                        child: Expandedcomp(
+                          onRepetirChanged: (qtd) {
+                            _repeatCount = qtd;
+                          },
+                        ),
+                      ),
+                      SizedBox(height: 30),
                     ],
                   ),
                 ),
@@ -283,7 +485,7 @@ class _NewReceitaScreenState extends ConsumerState<NewReceitaScreen> {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(30),
         ),
-        backgroundColor: AppTheme.greenColor,
+        backgroundColor: AppTheme.dynamicReceitaColor(context),
         child: const Icon(
           Iconsax.add,
           color: Colors.white,

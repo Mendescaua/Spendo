@@ -327,7 +327,7 @@ void _abrirModalCategorias() {
                     categoriaSelecionada != null
                         ? (iconesPorTipo[tipoSelecionado ?? ''] ?? Iconsax.note)
                         : Iconsax.category,
-                    color: AppTheme.whiteColor,
+                    color: AppTheme.darkBackgroundColor,
                     size: 20,
                   ),
                 ),

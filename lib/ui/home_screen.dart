@@ -29,30 +29,35 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   }
 
   Future<void> loadTransactions() async {
-    setState(() => _loading = true);
+  if (!mounted) return;
+  setState(() => _loading = true);
 
-    final controller = ref.read(transactionControllerProvider.notifier);
-    final result = await controller.getTransaction();
+  final controller = ref.read(transactionControllerProvider.notifier);
+  final result = await controller.getTransaction();
 
-    setState(() => _loading = false);
+  if (!mounted) return;
+  setState(() => _loading = false);
 
-    if (result != null) {
-      print('Erro: $result');
-    }
+  if (result != null) {
+    print('Erro: $result');
   }
+}
 
-  Future<void> loadSavings() async {
-    setState(() => _loading = true);
+Future<void> loadSavings() async {
+  if (!mounted) return;
+  setState(() => _loading = true);
 
-    final controller = ref.read(savingControllerProvider.notifier);
-    final result = await controller.getSaving();
+  final controller = ref.read(savingControllerProvider.notifier);
+  final result = await controller.getSaving();
 
-    setState(() => _loading = false);
+  if (!mounted) return;
+  setState(() => _loading = false);
 
-    if (result != null) {
-      print('Erro: $result');
-    }
+  if (result != null) {
+    print('Erro: $result');
   }
+}
+
 
   @override
   Widget build(BuildContext context) {
