@@ -146,6 +146,10 @@ class SupabaseService {
     await supabase.from('BANKS').insert(model.toJson());
   }
 
+  Future<void> deleteBanks(int id) async {
+    await supabase.from('BANKS').delete().eq('id', id);
+  }
+
   //Cartões criados pelo usuario
   Future<List<MoneyCardModel>> getMoneyCard(String userId) async {
     final response = await supabase

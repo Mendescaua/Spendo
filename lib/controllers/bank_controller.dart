@@ -70,19 +70,19 @@ class BankController extends StateNotifier<List<BanksModel>> {
 }
 
 
-//   Future<String?> deleteBank({required int id}) async {
-//   try {
-//     await _banks.deleteBank(id);
+  Future<String?> deleteBank({required int id}) async {
+  try {
+    await _banks.deleteBanks(id);
 
-//     // Remove do estado
-//     state = state.where((item) => item.id != id).toList();
+    // Remove do estado
+    state = state.where((item) => item.id != id).toList();
 
-//     return null;
-//   } catch (e) {
-//     print('Erro ao deletar assinatura: $e');
-//     return 'Erro inesperado: $e';
-//   }
-// }
+    return null;
+  } catch (e) {
+    print('Erro ao deletar assinatura: $e');
+    return 'Erro inesperado: $e';
+  }
+}
 
   void clear() {
     state = [];

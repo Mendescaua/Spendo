@@ -1,0 +1,57 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:spendo/components/banksContainer.dart';
+import 'package:spendo/models/bank_model.dart';
+import 'package:spendo/utils/customText.dart';
+import 'package:spendo/utils/theme.dart';
+
+class BankLoadedCard extends ConsumerWidget {
+  final BanksModel banks;
+
+  const BankLoadedCard({
+    Key? key,
+    required this.banks,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 12),
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: AppTheme.dynamicCardColor(context),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Row(
+        children: [
+          Bankscontainer(name: banks.name),
+          const SizedBox(width: 16),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  Customtext.capitalizeFirstLetter(banks.name),
+                  style: TextStyle(
+                    overflow: TextOverflow.ellipsis,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 14,
+                    color: AppTheme.dynamicTextColor(context),
+                  ),
+                ),
+                Text(
+                  Customtext.capitalizeFirstLetter(banks.type),
+                  style: TextStyle(
+                    overflow: TextOverflow.ellipsis,
+                    fontSize: 14,
+                    color: AppTheme.dynamicTextColor(context),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
