@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
-import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:spendo/controllers/bank_controller.dart';
 import 'package:spendo/models/bank_model.dart';
 import 'package:spendo/utils/customText.dart';

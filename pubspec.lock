@@ -89,22 +89,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.0"
-  base58check:
-    dependency: transitive
-    description:
-      name: base58check
-      sha256: "6c300dfc33e598d2fe26319e13f6243fea81eaf8204cb4c6b69ef20a625319a5"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.0.0"
-  bech32:
-    dependency: transitive
-    description:
-      name: bech32
-      sha256: "156cbace936f7720c79a79d16a03efad343b1ef17106716e04b8b8e39f99f7f7"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.2.2"
   boolean_selector:
     dependency: transitive
     description:
@@ -153,14 +137,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.19.1"
-  convert:
-    dependency: transitive
-    description:
-      name: convert
-      sha256: b30acd5944035672bc15c6b7a8b47d773e41e2f17de064350988c5d02adb1c68
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.1.2"
   cross_file:
     dependency: transitive
     description:
@@ -307,14 +283,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.9.1"
-  flutter_multi_formatter:
-    dependency: "direct main"
-    description:
-      name: flutter_multi_formatter
-      sha256: "01e8ba4cfae4b52377d1c83e57293da24eb64696d7c2df064acc4ae97bb4a157"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.13.7"
   flutter_native_splash:
     dependency: "direct main"
     description:
@@ -987,13 +955,13 @@ packages:
     source: hosted
     version: "2.2.2"
   url_launcher:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: url_launcher
-      sha256: "9d06212b1362abc2f0f0d78e6f09f726608c74e3b9462e8368bb03314aa8d603"
+      sha256: f6a7e5c4835bb4e3026a04793a4199ca2d14c739ec378fdfe23fc8075d0439f8
       url: "https://pub.dev"
     source: hosted
-    version: "6.3.1"
+    version: "6.3.2"
   url_launcher_android:
     dependency: transitive
     description:

@@ -50,7 +50,7 @@ class _ConfirmDeleteDialogState extends State<ConfirmDeleteDialog> {
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(
-            'Digite para "${widget.label}" a exclusão:',
+            'Digite "${widget.label}" para excluir:',
             style: TextStyle(fontSize: 14),
           ),
           const SizedBox(height: 16),

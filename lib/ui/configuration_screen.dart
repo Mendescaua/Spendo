@@ -222,7 +222,9 @@ class _ConfiguracoesScreenState extends ConsumerState<ConfiguracoesScreen> {
                   () {
                 showThemeSelectionModal(context, ref);
               }),
-              _buildTile(Iconsax.info_circle, 'Sobre o app', () {}),
+              _buildTile(Iconsax.info_circle, 'Sobre o app', () {
+                Navigator.of(context).pushNamed('/about');
+              }),
               _buildTile(Iconsax.logout, 'Sair', () {
                 logout();
               }, color: Colors.red),

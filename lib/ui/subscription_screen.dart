@@ -92,7 +92,6 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
 
     setState(() {});
   }
-
   void onDelete(int id) async {
     final controller = ref.read(subscriptionControllerProvider.notifier);
     final response = await controller.deleteSubscription(id: id);
@@ -246,7 +245,7 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
                                       return confirmed ?? false;
                                     },
                                     onDismissed: (direction) {
-                                      onDelete(sub[index].id!);
+                                      onDelete(sub.id!);
                                     },
                                     background: Container(
                                       margin: const EdgeInsets.only(
@@ -261,6 +260,7 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
                                       child: const Icon(Iconsax.trash,
                                           color: Colors.white),
                                     ),
+
                                     child: SubscriptionCard(subscription: sub),
                                   );
                                 },

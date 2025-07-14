@@ -127,45 +127,46 @@ class TransactionController extends StateNotifier<List<TransactionModel>> {
       categories.where((cat) => cat.isArchived == true).toList();
 
   Future<String?> addCategoryTransaction({
-    required CategoryTransactionModel transaction,
-  }) async {
-    final userId = ref.read(currentUserId);
-    if (userId == null) return 'Usuário não autenticado';
+  required CategoryTransactionModel transaction,
+}) async {
+  final userId = ref.read(currentUserId);
+  if (userId == null) return 'Usuário não autenticado';
 
-    if (transaction.name.isEmpty) {
-      return 'Adicione um nome para a categoria.';
-    }
-
-    try {
-      // Garante que as categorias estejam carregadas
-      if (categories.isEmpty) {
-        final result = await getCategoryTransaction();
-        if (result != null) return result;
-      }
-
-      // Verifica se já existe uma categoria com o mesmo nome (case sensitive)
-      final jaExiste = categories.any((c) => c.name == transaction.name);
-
-      if (jaExiste) {
-        return 'Essa categoria já existe.';
-      }
-
-      final newCategory = CategoryTransactionModel(
-        uuid: userId,
-        name: transaction.name,
-        type: transaction.type,
-        color: transaction.color,
-      );
-
-      await _transaction.addCategoryTransaction(newCategory);
-
-      categories = [...categories, newCategory];
-      return null;
-    } catch (e) {
-      print('Erro ao adicionar categoria: $e');
-      return 'Erro inesperado: $e';
-    }
+  if (transaction.name.isEmpty) {
+    return 'Adicione um nome para a categoria.';
   }
+
+  try {
+    // Garante que as categorias estejam carregadas
+    if (categories.isEmpty) {
+      final result = await getCategoryTransaction();
+      if (result != null) return result;
+    }
+
+    // Verifica se já existe uma categoria com o mesmo nome para o mesmo usuário (uuid)
+    final jaExiste = categories.any((c) => c.uuid == userId && c.name == transaction.name);
+
+    if (jaExiste) {
+      return 'Essa categoria já existe.';
+    }
+
+    final newCategory = CategoryTransactionModel(
+      uuid: userId,
+      name: transaction.name,
+      type: transaction.type,
+      color: transaction.color,
+    );
+
+    await _transaction.addCategoryTransaction(newCategory);
+
+    categories = [...categories, newCategory];
+    return null;
+  } catch (e) {
+    print('Erro ao adicionar categoria: $e');
+    return 'Erro inesperado: $e';
+  }
+}
+
 
   Future<String?> updateCategoryTransaction({
     required CategoryTransactionModel category,

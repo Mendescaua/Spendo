@@ -47,7 +47,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
     if (result == null) {
       FloatingMessage(context, "Cadastro realizado com sucesso", "success", 2);
-      Navigator.of(context).pop();
+      Navigator.of(context).pushReplacementNamed('/onboarding');
     } else {
       FloatingMessage(context, result.toString(), "error", 2);
     }
@@ -204,6 +204,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     height: 16,
                   ),
                   StyleButton(
+                    isLoading: isLoading,
                     text: 'Cadastrar',
                     onClick: isLoading ? null : register,
                   ),

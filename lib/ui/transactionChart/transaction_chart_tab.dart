@@ -28,7 +28,7 @@ class _TransactionChartTabState extends ConsumerState<TransactionChartTab> {
       const IncomeExpenseBarChart(),
       const Center(
           child: Text(
-        "Estatísticas",
+        "Em breve na versão 2.0",
       )),
     ];
 

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:spendo/components/ConfirmAlertDialog.dart';
 import 'package:spendo/components/FloatingMessage.dart';
 import 'package:spendo/components/cards/MoneyCard.dart';
 import 'package:spendo/controllers/money_card_controller.dart';
@@ -91,31 +92,20 @@ class _MoneyCardScreenState extends ConsumerState<MoneyCardScreen> {
                     key: Key(card.id.toString()),
                     direction: DismissDirection.endToStart,
                     confirmDismiss: (direction) async {
-                      return await showDialog<bool>(
+                      bool? confirmed = await showDialog<bool>(
                         context: context,
-                        builder: (context) {
-                          return AlertDialog(
-                            title: const Text('Confirmar exclusão'),
-                            content: const Text(
-                                'Você realmente deseja excluir esse cartão?'),
-                            actions: [
-                              TextButton(
-                                onPressed: () =>
-                                    Navigator.of(context).pop(false),
-                                child: const Text('Cancelar'),
-                              ),
-                              TextButton(
-                                onPressed: () =>
-                                    Navigator.of(context).pop(true),
-                                child: const Text(
-                                  'Excluir',
-                                  style: TextStyle(color: Colors.red),
-                                ),
-                              ),
-                            ],
-                          );
-                        },
+                        builder: (_) => ConfirmDeleteDialog(
+                          label: 'Cartão',
+                          onConfirm: () {
+                            Navigator.of(context)
+                                .pop(true); // Retorna true para o Dismissible
+                          },
+                        ),
                       );
+                      return confirmed ?? false;
+                    },
+                    onDismissed: (direction) {
+                      onDelete(card.id!);
                     },
                     background: Container(
                       margin:
@@ -128,9 +118,6 @@ class _MoneyCardScreenState extends ConsumerState<MoneyCardScreen> {
                       alignment: Alignment.centerRight,
                       child: const Icon(Icons.delete, color: Colors.white),
                     ),
-                    onDismissed: (direction) {
-                      onDelete(card.id!);
-                    },
                     child: Container(
                       key: ValueKey(card.id),
                       margin: const EdgeInsets.only(bottom: 16),
