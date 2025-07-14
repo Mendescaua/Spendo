@@ -51,7 +51,7 @@ class Monthpicker2 extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 4),
-          Icon(Icons.arrow_drop_down, color: textColor),
+          Icon(Icons.keyboard_arrow_down, color: textColor),
         ],
       ),
     );

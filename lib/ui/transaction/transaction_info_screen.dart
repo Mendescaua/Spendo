@@ -1,9 +1,13 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:spendo/components/FloatingMessage.dart';
+import 'package:spendo/controllers/transaction_controller.dart';
 import 'package:spendo/models/transaction_model.dart';
 import 'package:spendo/utils/customText.dart';
 import 'package:spendo/utils/theme.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class TransactionInfoScreen extends ConsumerStatefulWidget {
   final TransactionModel transaction;
@@ -16,6 +20,7 @@ class TransactionInfoScreen extends ConsumerStatefulWidget {
 
 class _TransactionInfoScreenState extends ConsumerState<TransactionInfoScreen> {
   late TextEditingController _descriptionController;
+  Timer? _debounce;
 
   @override
   void initState() {
@@ -26,8 +31,29 @@ class _TransactionInfoScreenState extends ConsumerState<TransactionInfoScreen> {
 
   @override
   void dispose() {
+    _debounce?.cancel();
     _descriptionController.dispose();
     super.dispose();
+  }
+
+  void _onDescriptionChanged(String value) {
+    // Cancelar debounce anterior
+    if (_debounce?.isActive ?? false) _debounce!.cancel();
+
+    // Iniciar novo debounce
+    _debounce = Timer(const Duration(milliseconds: 200), () async {
+      final controller = ref.read(transactionControllerProvider.notifier);
+      final response = await controller.updateTransactionDescription(
+        widget.transaction,
+        value.trim(),
+      );
+
+      if (response != null) {
+        FloatingMessage(context, response, 'error', 2);
+      } else {
+        FloatingMessage(context, 'Descrição atualizada', 'success', 1);
+      }
+    });
   }
 
   @override
@@ -39,7 +65,7 @@ class _TransactionInfoScreenState extends ConsumerState<TransactionInfoScreen> {
           Customtext.stringToColor(transaction.categoryColor ?? ''),
       body: Stack(
         children: [
-          // 🔙 AppBar Transparente
+          // AppBar
           Positioned(
             top: 0,
             left: 0,
@@ -61,44 +87,15 @@ class _TransactionInfoScreenState extends ConsumerState<TransactionInfoScreen> {
             ),
           ),
 
-          // 💰 Valor
-          Positioned(
-            left: 24,
-            top: 100,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Valor',
-                  style: TextStyle(
-                    color: Colors.grey.shade200,
-                    fontSize: 16,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  transaction.type == 'r'
-                      ? Customtext.formatMoeda(transaction.value)
-                      : Customtext.formatMoeda(-transaction.value),
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 36,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-              ],
-            ),
-          ),
-
-          // 🧾 Detalhes
+          // Info e conteúdo
           Positioned.fill(
             top: 200,
             child: Container(
               padding: const EdgeInsets.all(24),
               decoration: BoxDecoration(
                 color: AppTheme.dynamicBackgroundColor(context),
-                borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
-                boxShadow: [
+                borderRadius: const BorderRadius.vertical(top: Radius.circular(32)),
+                boxShadow: const [
                   BoxShadow(
                     color: Colors.black12,
                     blurRadius: 8,
@@ -110,7 +107,7 @@ class _TransactionInfoScreenState extends ConsumerState<TransactionInfoScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // 🔠 Título
+                    // Título
                     Text(
                       Customtext.capitalizeFirstLetter(transaction.title),
                       style: const TextStyle(
@@ -120,14 +117,13 @@ class _TransactionInfoScreenState extends ConsumerState<TransactionInfoScreen> {
                     ),
                     const SizedBox(height: 16),
 
-                    // 📄 Descrição (Editável)
+                    // Campo de descrição com onChanged
                     Padding(
                       padding: const EdgeInsets.only(bottom: 18.0),
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Icon(Iconsax.document,
-                              size: 20, color: Colors.grey.shade700),
+                          Icon(Iconsax.document, size: 20, color: Colors.grey.shade700),
                           const SizedBox(width: 12),
                           Expanded(
                             child: Column(
@@ -145,18 +141,17 @@ class _TransactionInfoScreenState extends ConsumerState<TransactionInfoScreen> {
                                 TextFormField(
                                   controller: _descriptionController,
                                   maxLines: null,
+                                  onChanged: _onDescriptionChanged,
                                   style: const TextStyle(
                                     fontSize: 14,
                                     fontWeight: FontWeight.bold,
                                   ),
                                   decoration: InputDecoration(
-                                    contentPadding: const EdgeInsets.symmetric(
-                                        vertical: 8),
+                                    contentPadding: const EdgeInsets.symmetric(vertical: 8),
                                     isDense: true,
                                     border: InputBorder.none,
                                     hintText: 'Digite a descrição...',
-                                    hintStyle: TextStyle(
-                                        color: Colors.grey.shade400),
+                                    hintStyle: TextStyle(color: Colors.grey.shade400),
                                   ),
                                 ),
                               ],
@@ -166,24 +161,49 @@ class _TransactionInfoScreenState extends ConsumerState<TransactionInfoScreen> {
                       ),
                     ),
 
-                    // 📅 Data
+                    // Infos adicionais
                     InfoTile(
                       icon: Iconsax.calendar,
                       label: 'Data e hora',
-                      content:
-                          Customtext.formatarDataHora(transaction.date),
+                      content: Customtext.formatarDataHora(transaction.date),
                     ),
-
-                    // 🏷 Categoria
                     InfoTile(
                       icon: Iconsax.tag,
                       label: 'Categoria',
-                      content:
-                          transaction.categoryName ?? 'Não informada',
+                      content: transaction.categoryName ?? 'Não informada',
+                    ),
+                    InfoTile(
+                      icon: PhosphorIcons.bank(PhosphorIconsStyle.regular),
+                      label: 'Conta',
+                      content: transaction.bank ?? 'Não informada',
                     ),
                   ],
                 ),
               ),
+            ),
+          ),
+
+          // Valor no topo
+          Positioned(
+            left: 24,
+            top: 100,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('Valor',
+                    style: TextStyle(color: Colors.grey.shade200, fontSize: 16)),
+                const SizedBox(height: 4),
+                Text(
+                  transaction.type == 'r'
+                      ? Customtext.formatMoeda(transaction.value)
+                      : Customtext.formatMoeda(-transaction.value),
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 36,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ],
             ),
           ),
         ],

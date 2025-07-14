@@ -3,9 +3,11 @@ import 'package:flutter_masked_text2/flutter_masked_text2.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:intl/intl.dart';
 import 'package:spendo/components/ExpandedComp.dart';
+import 'package:spendo/components/comboBox/BankLoadedComboBox.dart';
 import 'package:spendo/components/comboBox/CategoriesComboBox.dart';
 import 'package:spendo/components/FloatingMessage.dart';
 import 'package:spendo/controllers/transaction_controller.dart';
+import 'package:spendo/models/bank_model.dart';
 import 'package:spendo/models/transaction_model.dart';
 import 'package:spendo/utils/theme.dart';
 
@@ -33,6 +35,7 @@ class _NewReceitaScreenState extends ConsumerState<NewReceitaScreen> {
   final FocusNode _valorFocusNode = FocusNode();
   final FocusNode _tituloFocusNode = FocusNode();
   List<TransactionModel> filteredSuggestions = [];
+  BanksModel? bankSelected;
 
   @override
   void initState() {
@@ -72,6 +75,7 @@ class _NewReceitaScreenState extends ConsumerState<NewReceitaScreen> {
           category: categoria,
           date: selectedDate,
           repeat: _repeatCount,
+          bank: bankSelected!.name,
         ),
       );
       if (response != null) {
@@ -456,6 +460,14 @@ class _NewReceitaScreenState extends ConsumerState<NewReceitaScreen> {
                             },
                           ),
                         ],
+                      ),
+                      BankLoadedComboBox(
+                        selected: bankSelected,
+                        onSelect: (bank) {
+                          setState(() {
+                            bankSelected = bank;
+                          });
+                        },
                       ),
                       CategoriaComboBox(
                         onCategoriaSelecionada: (nome, tipo, cor) {

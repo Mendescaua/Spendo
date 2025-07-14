@@ -11,7 +11,7 @@ import 'package:spendo/ui/home_screen.dart';
 import 'package:spendo/ui/saving/saving_screen.dart';
 import 'package:spendo/ui/subscription_screen.dart';
 import 'package:spendo/ui/transactionChart/transaction_chart_tab.dart';
-import 'package:spendo/ui/wallet_screen.dart';
+import 'package:spendo/ui/wallet/wallet_screen.dart';
 import 'package:spendo/utils/theme.dart';
 
 class MainScreen extends ConsumerStatefulWidget {

@@ -26,6 +26,7 @@ class TransactionController extends StateNotifier<List<TransactionModel>> {
     if (transaction.title.isEmpty) return 'Adicione um título.';
     if (transaction.title.length < 3) return 'Adicione um título maior.';
     if (transaction.category.isEmpty) return 'Selecione uma categoria.';
+    if (transaction.bank.isEmpty) return 'Selecione um banco.';
 
     try {
       final newTransaction = TransactionModel(
@@ -37,6 +38,7 @@ class TransactionController extends StateNotifier<List<TransactionModel>> {
         category: transaction.category,
         date: transaction.date,
         repeat: transaction.repeat,
+        bank: transaction.bank,
       );
       await _transaction.addTransacao(newTransaction);
       // Atualiza o estado com a nova transação adicionada
@@ -69,6 +71,43 @@ class TransactionController extends StateNotifier<List<TransactionModel>> {
       return 'Erro inesperado: $e';
     }
   }
+
+  // Future<String?> deleteTransaction(String transactionId) async {
+  //   final userId = ref.read(currentUserId);
+  //   if (userId == null) return 'Usuário não autenticado';
+
+  //   try {
+  //     await _transaction.deleteTransaction(transactionId, userId);
+  //     // Atualiza o estado removendo a transação deletada
+  //     state = state.where((t) => t.id != transactionId).toList();
+  //     return null;
+  //   } catch (e) {
+  //     print('Erro ao deletar transação: $e');
+  //     return 'Erro inesperado: $e';
+  //   }
+  // }
+
+ Future<String?> updateTransactionDescription(
+  TransactionModel transaction,
+  String newDescription,
+) async {
+  try {
+    final updated = transaction.copyWith(description: newDescription);
+
+    await _transaction.updateTransaction(updated, updated.id!);
+
+    // Atualiza o estado com a transação atualizada
+    state = state.map((t) {
+      return t.id == updated.id ? updated : t;
+    }).toList();
+
+    return null;
+  } catch (e) {
+    print('Erro ao atualizar descrição: $e');
+    return 'Erro inesperado: $e';
+  }
+}
+
 
   // Aqui eu uso apenas no categoriesField para carregar as categorias do banco
   Future<String?> getCategoryTransaction() async {

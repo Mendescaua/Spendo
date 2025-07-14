@@ -137,7 +137,7 @@ class _ConfiguracoesScreenState extends ConsumerState<ConfiguracoesScreen> {
             children: [
               _buildTile(Iconsax.bank, 'Contas', () {}),
               _buildTile(
-                Iconsax.save_2,
+                Iconsax.tag,
                 'Categorias',
                 () {
                   Navigator.of(context).pushNamed('/category');

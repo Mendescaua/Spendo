@@ -9,6 +9,7 @@ class TransactionModel {
   final DateTime date;
   final DateTime? createdAt;
   final int? repeat;
+  final String bank;
 
   // Campos opcionais da categoria, podem ser null se não vierem da junção
   final String? categoryName;
@@ -26,6 +27,7 @@ class TransactionModel {
     required this.date,
     this.createdAt,
     this.repeat,
+    required this.bank,
     this.categoryName,
     this.categoryType,
     this.categoryColor,
@@ -43,6 +45,7 @@ class TransactionModel {
       date: DateTime.parse(json['date'] as String),
       createdAt: DateTime.parse(json['created_at'] as String),
       repeat: json['repeat'] as int?,
+      bank: json['bank'] as String,
       categoryName: json['category_name'] as String?,
       categoryType: json['category_type'] as String?,
       categoryColor: json['category_color'] as String?,
@@ -59,6 +62,7 @@ class TransactionModel {
       'category': category,
       'date': date.toIso8601String(),
       'repeat': repeat,
+      'bank': bank,
     };
   }
 
@@ -73,6 +77,7 @@ class TransactionModel {
     DateTime? date,
     DateTime? createdAt,
     int? repeat,
+    String? bank,
     String? categoryName,
     String? categoryType,
     String? categoryColor,
@@ -88,6 +93,7 @@ class TransactionModel {
       date: date ?? this.date,
       createdAt: createdAt ?? this.createdAt,
       repeat: repeat ?? this.repeat,
+      bank: bank ?? this.bank,
       categoryName: categoryName ?? this.categoryName,
       categoryType: categoryType ?? this.categoryType,
       categoryColor: categoryColor ?? this.categoryColor,

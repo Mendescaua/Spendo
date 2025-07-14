@@ -88,7 +88,7 @@ class _ModalArchivedCategoryState extends ConsumerState<ModalArchivedCategory> {
             Expanded(
               child: categoriasArquivadas.isEmpty
                   ? const Center(
-                      child: Text('Nenhuma categoria arquivada encontrada'),
+                      child: Text('Nenhuma categoria arquivada'),
                     )
                   : SingleChildScrollView(
                       child: Column(

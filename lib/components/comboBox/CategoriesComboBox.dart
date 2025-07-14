@@ -5,7 +5,7 @@ import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:spendo/components/FloatingMessage.dart';
 import 'package:spendo/controllers/transaction_controller.dart';
 import 'package:spendo/models/category_transaction_model.dart';
-import 'package:spendo/ui/add_category_screen.dart';
+import 'package:spendo/ui/category/add_category_screen.dart';
 import 'package:spendo/utils/theme.dart';
 
 class CategoriaComboBox extends ConsumerStatefulWidget {
@@ -320,14 +320,14 @@ void _abrirModalCategorias() {
                   decoration: BoxDecoration(
                     color: categoriaSelecionada != null
                         ? obterCorCategoria(categoriaSelecionada!)
-                        : Colors.grey.shade300,
+                        : AppTheme.primaryColor,
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Icon(
                     categoriaSelecionada != null
                         ? (iconesPorTipo[tipoSelecionado ?? ''] ?? Iconsax.note)
                         : Iconsax.category,
-                    color: AppTheme.darkBackgroundColor,
+                    color: AppTheme.whiteColor,
                     size: 20,
                   ),
                 ),

@@ -186,7 +186,18 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
               ),
             ),
           ),
-          const SizedBox(height: 32),
+           Padding(
+             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+             child: Monthpicker2(
+                      selectedMonth: _selectedMonth,
+                      onMonthSelected: (mes) {
+                        setState(() {
+                          _selectedMonth = mes ?? DateTime.now();
+                          _applyFilter();
+                        });
+                      },
+                    ),
+           ),
           Expanded(
             child: Container(
               width: double.infinity,
@@ -198,16 +209,6 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Monthpicker2(
-                    selectedMonth: _selectedMonth,
-                    onMonthSelected: (mes) {
-                      setState(() {
-                        _selectedMonth = mes ?? DateTime.now();
-                        _applyFilter();
-                      });
-                    },
-                  ),
-                  const SizedBox(height: 24),
                   Expanded(
                     child: _loading
                         ? Center(
