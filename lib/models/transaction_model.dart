@@ -52,19 +52,24 @@ class TransactionModel {
     );
   }
 
-  Map<String, dynamic> toJson() {
-    return {
-      'uuid': uuid,
-      'type': type,
-      'value': value,
-      'title': title,
-      'description': description,
-      'category': category,
-      'date': date.toIso8601String(),
-      'repeat': repeat,
-      'bank': bank,
-    };
+Map<String, dynamic> toJson() {
+  final data = {
+    'type': type,
+    'value': value,
+    'title': title,
+    'description': description,
+    'category': category,
+    'date': date.toIso8601String(),
+    'repeat': repeat,
+    'bank': bank,
+  };
+
+  if (uuid != null) {
+    data['uuid'] = uuid;
   }
+
+  return data;
+}
 
   TransactionModel copyWith({
     int? id,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_masked_text2/flutter_masked_text2.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:spendo/components/FloatingMessage.dart';
@@ -18,9 +19,20 @@ class Modalsaving extends ConsumerStatefulWidget {
 
 class _ModalsavingState extends ConsumerState<Modalsaving> {
   final TextEditingController _titlecontroller = TextEditingController();
-  final TextEditingController _goalvaluecontroller = TextEditingController();
-  final TextEditingController _valuecontroller = TextEditingController();
   String? selectedImageUrl;
+
+  final _goalvaluecontroller = MoneyMaskedTextController(
+    decimalSeparator: ',',
+    thousandSeparator: '.',
+    leftSymbol: 'R\$ ',
+  );
+
+  final _valuecontroller = MoneyMaskedTextController(
+    decimalSeparator: ',',
+    thousandSeparator: '.',
+    leftSymbol: 'R\$ ',
+  );
+
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +43,7 @@ class _ModalsavingState extends ConsumerState<Modalsaving> {
       final response = await savingController.addSaving(
         saving: SavingModel(
           title: _titlecontroller.text,
-          goalValue: double.tryParse(_goalvaluecontroller.text) ?? 0.0,
+          goalValue: _goalvaluecontroller.numberValue,
           picture: selectedImageUrl ?? '',
         ),
       );
@@ -47,7 +59,7 @@ class _ModalsavingState extends ConsumerState<Modalsaving> {
       final response = await savingController.updateSavingValue(
         saving: SavingModel(
           id: widget.saving!.id,
-          value: double.tryParse(_valuecontroller.text) ?? 0.0,
+          value: _valuecontroller.numberValue,
         ),
         type: widget.type,
       );
@@ -60,7 +72,7 @@ class _ModalsavingState extends ConsumerState<Modalsaving> {
     }
 
     return SafeArea(
-      child: widget.type == 'resgatar' || widget.type == 'guardar'
+      child: widget.type == 'retirar' || widget.type == 'adicionar'
           ? SingleChildScrollView(
             padding: EdgeInsets.only(
             bottom: MediaQuery.of(context).viewInsets.bottom + 24,
@@ -93,9 +105,9 @@ class _ModalsavingState extends ConsumerState<Modalsaving> {
                     ),
                     Center(
                       child: Text(
-                        widget.type == 'resgatar'
-                            ? 'Resgatar valor do cofrinho'
-                            : 'Guardar novo valor ao cofrinho',
+                        widget.type == 'retirar'
+                            ? 'Retirar valor do cofrinho'
+                            : 'Adicionar novo valor ao cofrinho',
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
@@ -122,7 +134,7 @@ class _ModalsavingState extends ConsumerState<Modalsaving> {
                     ),
                     SizedBox(height: 4),
                     StyleButton(
-                        text: widget.type == 'resgatar' ? 'Resgatar' : 'Guardar',
+                        text: widget.type == 'retirar' ? 'Retirar' : 'Adicionar',
                         onClick: () {
                           onUpdateValue();
                         }),

@@ -9,6 +9,12 @@ import 'package:spendo/components/modals/ModalChangePassword.dart';
 import 'package:spendo/components/modals/ModalEditPerfil.dart';
 import 'package:spendo/components/modals/ModalTheme.dart';
 import 'package:spendo/controllers/auth_controller.dart';
+import 'package:spendo/controllers/auth_gate.dart';
+import 'package:spendo/controllers/bank_controller.dart';
+import 'package:spendo/controllers/money_card_controller.dart';
+import 'package:spendo/controllers/saving_controller.dart';
+import 'package:spendo/controllers/subscription_controller.dart';
+import 'package:spendo/controllers/transaction_controller.dart';
 import 'package:spendo/controllers/user_controller.dart';
 import 'package:spendo/utils/base64.dart';
 import 'package:spendo/utils/customText.dart';
@@ -46,13 +52,19 @@ class _ConfiguracoesScreenState extends ConsumerState<ConfiguracoesScreen> {
   }
 
   void logout() async {
-    ref
-        .read(userControllerProvider.notifier)
-        .clear(); // Limpa o estado manualmente ANTES de desmontar o widget
+    ref.read(userControllerProvider.notifier).clear();
+    ref.read(transactionControllerProvider.notifier).clear();
+    ref.read(bankControllerProvider.notifier).clear();
+    ref.read(moneyCardControllerProvider.notifier).clear();
+    ref.read(savingControllerProvider.notifier).clear();
+    ref.read(subscriptionControllerProvider.notifier).clear();
     await _authController.signOut();
     if (!mounted) return;
 
     Navigator.of(context).pop();
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(builder: (context) => AuthGate()),
+    );
   }
 
   @override

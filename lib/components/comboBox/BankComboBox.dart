@@ -124,7 +124,7 @@ void _openAccountModal() {
                                 : null,
                           ),
                           child: account['icon']!.isEmpty
-                              ? const Icon(Iconsax.wallet,
+                              ? const Icon(Iconsax.bank,
                                   color: Color(0xFF4678C0))
                               : null,
                         ),
@@ -175,7 +175,7 @@ void _openAccountModal() {
                       : null,
                 ),
                 child: selected['icon']!.isEmpty
-                    ? const Icon(Iconsax.wallet,
+                    ? const Icon(Iconsax.bank,
                         color: Color(0xFF4678C0)) // cor primária
                     : null,
               )
@@ -187,7 +187,7 @@ void _openAccountModal() {
                   color: Color(0xFFE5E7EB),
                   borderRadius: BorderRadius.circular(12),
                 ),
-                child: Icon(Iconsax.wallet, color: AppTheme.primaryColor),
+                child: Icon(Iconsax.bank, color: AppTheme.primaryColor),
               ),
             const SizedBox(width: 12),
             Expanded(

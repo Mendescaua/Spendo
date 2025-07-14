@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:spendo/components/FloatingMessage.dart';
 import 'package:spendo/components/cards/BankCard.dart';
 import 'package:spendo/components/cards/MoneyCard.dart';
@@ -122,8 +123,10 @@ class _WalletScreenState extends ConsumerState<WalletScreen> {
                         onPressed: () {
                           Navigator.of(context).pushNamed('/money_card');
                         },
-                        icon: Icon(Iconsax.add,
-                            color: AppTheme.primaryColor, size: 26),
+                        icon: Icon(
+                            PhosphorIcons.dotsThreeOutline(
+                                PhosphorIconsStyle.regular),
+                            size: 26),
                       ),
                     ],
                   ),
@@ -170,8 +173,7 @@ class _WalletScreenState extends ConsumerState<WalletScreen> {
                         onPressed: () {
                           _openAddTransactionModal(context);
                         },
-                        icon: Icon(Iconsax.add,
-                            color: AppTheme.primaryColor, size: 26),
+                        icon: Icon(Iconsax.add, size: 26),
                       ),
                     ],
                   ),

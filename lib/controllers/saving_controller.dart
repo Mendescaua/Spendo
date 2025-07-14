@@ -77,9 +77,9 @@ class SavingController extends StateNotifier<List<SavingModel>> {
       final current = state.firstWhere((item) => item.id == saving.id);
       final newValue;
 
-      if (type == 'resgatar') {
+      if (type == 'retirar') {
         if (saving.value! > (current.value ?? 0)) {
-          return 'Você não pode resgatar um valor maior que o acumulado.';
+          return 'Você não pode retirar um valor maior que o acumulado.';
         }
         newValue = (current.value ?? 0) - saving.value!;
       } else {

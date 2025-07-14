@@ -25,6 +25,7 @@ class _AddMoneyCardScreenState extends ConsumerState<AddMoneyCardScreen> {
   Map<String, String>? selectedAccount;
   Map<String, String>? selectedFlag;
   DateTime? selectedDate;
+  bool isLoading = false;
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
@@ -46,6 +47,10 @@ class _AddMoneyCardScreenState extends ConsumerState<AddMoneyCardScreen> {
     final controller = ref.read(moneyCardControllerProvider.notifier);
 
     void onSave() async {
+      if (isLoading) return; // Impede múltiplos cliques
+      setState(() {
+        isLoading = true;
+      });
       final response = await controller.addMoneyCard(
         moneyCard: MoneyCardModel(
           name: selectedAccount?['name'] ?? '',
@@ -54,6 +59,9 @@ class _AddMoneyCardScreenState extends ConsumerState<AddMoneyCardScreen> {
           flag: selectedFlag?['name'] ?? '',
         ),
       );
+      setState(() {
+        isLoading = false;
+      });
       if (response != null) {
         FloatingMessage(context, response, 'error', 2);
       } else {
@@ -170,9 +178,7 @@ class _AddMoneyCardScreenState extends ConsumerState<AddMoneyCardScreen> {
                 const SizedBox(height: 32),
                 StyleButton(
                   text: 'Adicionar',
-                  onClick: () {
-                    onSave();
-                  },
+                  onClick: isLoading ? null : onSave,
                 ),
               ],
             ),

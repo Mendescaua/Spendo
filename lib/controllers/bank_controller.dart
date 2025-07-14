@@ -4,8 +4,7 @@ import 'package:spendo/providers/auth_provider.dart';
 import 'package:spendo/services/supabase_service.dart';
 
 final bankControllerProvider =
-    StateNotifierProvider<BankController, List<BanksModel>>(
-        (ref) {
+    StateNotifierProvider<BankController, List<BanksModel>>((ref) {
   return BankController(ref);
 });
 
@@ -37,52 +36,73 @@ class BankController extends StateNotifier<List<BanksModel>> {
     }
   }
 
-  Future<String?> addBank({required BanksModel bank}) async {
-  final userId = ref.read(currentUserId);
-  if (userId == null) return 'Usuário não autenticado';
+ Future<Map<String, dynamic>?> getBankInfo({required String bankName}) async {
+  String? userId;
+  int tentativas = 0;
 
-  if (bank.name == "") return 'Selecione uma conta';
-  if (bank.type == "") return 'Selecione o tipo da conta';
-
-  // Verifica se já existe uma conta com o mesmo nome
-  final alreadyExists = state.any((item) =>
-      item.uuid == userId &&
-      item.name.toLowerCase() == bank.name.toLowerCase());
-
-  if (alreadyExists) {
-    return 'Você já adicionou essa conta.';
+  while ((userId = ref.read(currentUserId)) == null && tentativas < 10) {
+    await Future.delayed(const Duration(milliseconds: 100));
+    tentativas++;
   }
 
-  try {
-    final newBanks = BanksModel(
-      uuid: userId,
-      name: bank.name,
-      type: bank.type,
-    );
-    await _banks.addBanks(newBanks);
+  if (userId == null) return null;
 
-    state = [...state, newBanks];
-    return null;
+  try {
+    final info = await _banks.getBankInfo(userId: userId, bankName: bankName);
+    print('Resumo da conta: $info');
+    return info;  // Retorna os dados
   } catch (e) {
-    print('Erro ao adicionar conta bancária: $e');
-    return 'Erro inesperado: $e';
+    print('Erro ao obter informações da conta bancária: $e');
+    return null;
   }
 }
 
+
+  Future<String?> addBank({required BanksModel bank}) async {
+    final userId = ref.read(currentUserId);
+    if (userId == null) return 'Usuário não autenticado';
+
+    if (bank.name == "") return 'Selecione uma conta';
+    if (bank.type == "") return 'Selecione o tipo da conta';
+
+    // Verifica se já existe uma conta com o mesmo nome
+    final alreadyExists = state.any((item) =>
+        item.uuid == userId &&
+        item.name.toLowerCase() == bank.name.toLowerCase());
+
+    if (alreadyExists) {
+      return 'Você já adicionou essa conta.';
+    }
+
+    try {
+      final newBanks = BanksModel(
+        uuid: userId,
+        name: bank.name,
+        type: bank.type,
+      );
+      await _banks.addBanks(newBanks);
+
+      state = [...state, newBanks];
+      return null;
+    } catch (e) {
+      print('Erro ao adicionar conta bancária: $e');
+      return 'Erro inesperado: $e';
+    }
+  }
 
   Future<String?> deleteBank({required int id}) async {
-  try {
-    await _banks.deleteBanks(id);
+    try {
+      await _banks.deleteBanks(id);
 
-    // Remove do estado
-    state = state.where((item) => item.id != id).toList();
+      // Remove do estado
+      state = state.where((item) => item.id != id).toList();
 
-    return null;
-  } catch (e) {
-    print('Erro ao deletar assinatura: $e');
-    return 'Erro inesperado: $e';
+      return null;
+    } catch (e) {
+      print('Erro ao deletar assinatura: $e');
+      return 'Erro inesperado: $e';
+    }
   }
-}
 
   void clear() {
     state = [];

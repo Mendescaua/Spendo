@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_masked_text2/flutter_masked_text2.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:intl/intl.dart'; // Import para formatar datas
@@ -17,7 +18,6 @@ class ModalSubscription extends ConsumerStatefulWidget {
 
 class _ModalSubscriptionState extends ConsumerState<ModalSubscription> {
   final TextEditingController _titlecontroller = TextEditingController();
-  final TextEditingController _valuecontroller = TextEditingController();
 
   int selectedDuration = 1; // padrão 1 mês
 
@@ -27,6 +27,14 @@ class _ModalSubscriptionState extends ConsumerState<ModalSubscription> {
     {'label': '1 ano', 'value': 12},
   ];
 
+  final _valuecontroller = MoneyMaskedTextController(
+    decimalSeparator: ',',
+    thousandSeparator: '.',
+    leftSymbol: 'R\$ ',
+  );
+
+  bool isLoading = false;
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -34,13 +42,14 @@ class _ModalSubscriptionState extends ConsumerState<ModalSubscription> {
         ref.read(subscriptionControllerProvider.notifier);
 
     void onSave() async {
+      if (isLoading) return;
       DateTime now = DateTime.now();
-      DateTime endDate = DateTime(
-        now.year + ((now.month + selectedDuration - 1) ~/ 12),
-        ((now.month + selectedDuration - 1) % 12) + 1,
-        now.day,
-      );
+      DateTime endDate =
+          DateTime(now.year, now.month + selectedDuration, now.day);
 
+      setState(() {
+        isLoading = true;
+      });
       final formatter = DateFormat('dd/MM/yyyy');
       String startStr = formatter.format(now);
       String endStr = formatter.format(endDate);
@@ -50,12 +59,13 @@ class _ModalSubscriptionState extends ConsumerState<ModalSubscription> {
       final response = await subscriptionController.addSubscription(
         subscription: SubscriptionModel(
           name: _titlecontroller.text,
-          value: _valuecontroller.text.isEmpty
-              ? 0.0
-              : double.parse(_valuecontroller.text),
+          value: _valuecontroller.numberValue,
           time: rangeStr, // salva como "10/07/2025 até 10/11/2025"
         ),
       );
+      setState(() {
+        isLoading = false;
+      });
       if (response != null) {
         FloatingMessage(context, response, 'error', 2);
       } else {
@@ -133,7 +143,7 @@ class _ModalSubscriptionState extends ConsumerState<ModalSubscription> {
               ),
               TextField(
                 controller: _valuecontroller,
-                keyboardType: TextInputType.numberWithOptions(decimal: true),
+                keyboardType: TextInputType.number,
                 decoration: InputDecoration(
                   prefixIcon: const Icon(Iconsax.dollar_circle),
                   hintText: 'Valor',
@@ -178,9 +188,7 @@ class _ModalSubscriptionState extends ConsumerState<ModalSubscription> {
               const SizedBox(height: 32),
               StyleButton(
                 text: 'Adicionar',
-                onClick: () {
-                  onSave();
-                },
+                onClick: isLoading ? null : onSave,
               ),
             ],
           ),

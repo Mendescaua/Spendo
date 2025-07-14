@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:spendo/core/supabse_client.dart';
 import 'package:spendo/models/bank_model.dart';
 import 'package:spendo/models/category_transaction_model.dart';
@@ -37,7 +36,7 @@ class SupabaseService {
     await supabase.from(table).insert(model.toJson());
   }
 
-  Future<void> deleteTransacao(int id) async {
+  Future<void> deleteTransaction(int id) async {
     await supabase.from(table).delete().eq('id', id);
   }
 
@@ -149,6 +148,38 @@ class SupabaseService {
   Future<void> deleteBanks(int id) async {
     await supabase.from('BANKS').delete().eq('id', id);
   }
+
+  Future<Map<String, dynamic>> getBankInfo({
+  required String userId,
+  required String bankName,
+}) async {
+  final response = await supabase.rpc(
+    'get_transaction_summary_by_user_and_bank',
+    params: {
+      'p_uuid': userId,
+      'bank_name': bankName,
+    },
+  );
+
+  if (response == null || response is! List || response.isEmpty) {
+    return {
+      'transaction_count': 0,
+      'despesa_count': 0,
+      'receita_count': 0,
+      'total_value': 0.0,
+    };
+  }
+
+  final data = response.first;
+
+  return {
+    'transaction_count': data['transaction_count'] ?? 0,
+    'despesa_count': data['despesa_count'] ?? 0,
+    'receita_count': data['receita_count'] ?? 0,
+    'total_value': (data['total_value'] ?? 0.0).toDouble(),
+  };
+}
+
 
   //Cartões criados pelo usuario
   Future<List<MoneyCardModel>> getMoneyCard(String userId) async {

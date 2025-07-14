@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:spendo/components/ConfirmAlertDialog.dart';
 import 'package:spendo/components/FloatingMessage.dart';
 import 'package:spendo/controllers/transaction_controller.dart';
 import 'package:spendo/models/transaction_model.dart';
@@ -41,7 +41,7 @@ class _TransactionInfoScreenState extends ConsumerState<TransactionInfoScreen> {
     if (_debounce?.isActive ?? false) _debounce!.cancel();
 
     // Iniciar novo debounce
-    _debounce = Timer(const Duration(milliseconds: 200), () async {
+    _debounce = Timer(const Duration(milliseconds: 600), () async {
       final controller = ref.read(transactionControllerProvider.notifier);
       final response = await controller.updateTransactionDescription(
         widget.transaction,
@@ -56,10 +56,34 @@ class _TransactionInfoScreenState extends ConsumerState<TransactionInfoScreen> {
     });
   }
 
+  void _showDeleteConfirmationDialog() {
+    showDialog(
+      context: context,
+      builder: (_) => ConfirmDeleteDialog(
+        label: 'confirmar',
+        onConfirm: () {
+          Navigator.of(context).pop(); // Fecha o dialog
+          onDelete(widget.transaction.id ?? 0);
+        },
+      ),
+    );
+  }
+
+  void onDelete(int id) async {
+    final controller = ref.read(transactionControllerProvider.notifier);
+    final response = await controller.deleteTransaction(id: id);
+
+    if (response != null) {
+      FloatingMessage(context, response, 'error', 2);
+    } else {
+      Navigator.of(context).pop();
+      FloatingMessage(context, 'Transação deletada com sucesso', 'success', 2);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final transaction = widget.transaction;
-
     return Scaffold(
       backgroundColor:
           Customtext.stringToColor(transaction.categoryColor ?? ''),
@@ -84,6 +108,12 @@ class _TransactionInfoScreenState extends ConsumerState<TransactionInfoScreen> {
                 icon: const Icon(Iconsax.arrow_left, color: Colors.white),
                 onPressed: () => Navigator.of(context).pop(),
               ),
+              actions: [
+                IconButton(
+                  icon: const Icon(Iconsax.trash, color: Colors.white),
+                  onPressed: () => _showDeleteConfirmationDialog(),
+                ),
+              ],
             ),
           ),
 
@@ -94,7 +124,8 @@ class _TransactionInfoScreenState extends ConsumerState<TransactionInfoScreen> {
               padding: const EdgeInsets.all(24),
               decoration: BoxDecoration(
                 color: AppTheme.dynamicBackgroundColor(context),
-                borderRadius: const BorderRadius.vertical(top: Radius.circular(32)),
+                borderRadius:
+                    const BorderRadius.vertical(top: Radius.circular(32)),
                 boxShadow: const [
                   BoxShadow(
                     color: Colors.black12,
@@ -123,7 +154,8 @@ class _TransactionInfoScreenState extends ConsumerState<TransactionInfoScreen> {
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Icon(Iconsax.document, size: 20, color: Colors.grey.shade700),
+                          Icon(Iconsax.document,
+                              size: 20, color: Colors.grey.shade700),
                           const SizedBox(width: 12),
                           Expanded(
                             child: Column(
@@ -147,11 +179,13 @@ class _TransactionInfoScreenState extends ConsumerState<TransactionInfoScreen> {
                                     fontWeight: FontWeight.bold,
                                   ),
                                   decoration: InputDecoration(
-                                    contentPadding: const EdgeInsets.symmetric(vertical: 8),
+                                    contentPadding:
+                                        const EdgeInsets.symmetric(vertical: 8),
                                     isDense: true,
                                     border: InputBorder.none,
                                     hintText: 'Digite a descrição...',
-                                    hintStyle: TextStyle(color: Colors.grey.shade400),
+                                    hintStyle:
+                                        TextStyle(color: Colors.grey.shade400),
                                   ),
                                 ),
                               ],
@@ -173,7 +207,7 @@ class _TransactionInfoScreenState extends ConsumerState<TransactionInfoScreen> {
                       content: transaction.categoryName ?? 'Não informada',
                     ),
                     InfoTile(
-                      icon: PhosphorIcons.bank(PhosphorIconsStyle.regular),
+                      icon: Iconsax.bank,
                       label: 'Conta',
                       content: transaction.bank ?? 'Não informada',
                     ),
@@ -191,7 +225,8 @@ class _TransactionInfoScreenState extends ConsumerState<TransactionInfoScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text('Valor',
-                    style: TextStyle(color: Colors.grey.shade200, fontSize: 16)),
+                    style:
+                        TextStyle(color: Colors.grey.shade200, fontSize: 16)),
                 const SizedBox(height: 4),
                 Text(
                   transaction.type == 'r'

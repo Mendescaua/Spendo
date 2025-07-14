@@ -18,8 +18,11 @@ class ModalBank extends ConsumerStatefulWidget {
 class _ModalBankState extends ConsumerState<ModalBank> {
     Map<String, String>? selectedAccount;
     Map<String, dynamic>? selectedTypeAccount;
+    bool isLoading = false;
 
     void onSave() async {
+      if (isLoading) return; // Impede múltiplos cliques
+      setState(() => isLoading = true);
       final BankController = ref.read(bankControllerProvider.notifier);
       final response = await BankController.addBank(
         bank: BanksModel(
@@ -27,6 +30,7 @@ class _ModalBankState extends ConsumerState<ModalBank> {
           type: selectedTypeAccount?['name'] ?? ''
         ),
       );
+      setState(() => isLoading = false);
       if (response != null) {
         FloatingMessage(context, response, 'error', 2);
       } else {
@@ -112,9 +116,7 @@ class _ModalBankState extends ConsumerState<ModalBank> {
             const SizedBox(height: 32),
             StyleButton(
               text: 'Adicionar',
-              onClick: () {
-                onSave();
-              },
+              onClick: isLoading ? null : onSave,
             ),
           ],
         ),

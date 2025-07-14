@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:spendo/components/ConfirmAlertDialog.dart';
 import 'package:spendo/components/FloatingMessage.dart';
 import 'package:spendo/components/MonthPicker2.dart';
 import 'package:spendo/components/cards/SubscriptionCard.dart';
@@ -74,8 +75,8 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
         bool afterOrEqualStart = (selYear > startYear) ||
             (selYear == startYear && selMonth >= startMonth);
 
-        bool beforeOrEqualEnd = (selYear < endYear) ||
-            (selYear == endYear && selMonth <= endMonth);
+        bool beforeOrEqualEnd =
+            (selYear < endYear) || (selYear == endYear && selMonth <= endMonth);
 
         return afterOrEqualStart && beforeOrEqualEnd;
       } catch (e) {
@@ -186,18 +187,18 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
               ),
             ),
           ),
-           Padding(
-             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-             child: Monthpicker2(
-                      selectedMonth: _selectedMonth,
-                      onMonthSelected: (mes) {
-                        setState(() {
-                          _selectedMonth = mes ?? DateTime.now();
-                          _applyFilter();
-                        });
-                      },
-                    ),
-           ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+            child: Monthpicker2(
+              selectedMonth: _selectedMonth,
+              onMonthSelected: (mes) {
+                setState(() {
+                  _selectedMonth = mes ?? DateTime.now();
+                  _applyFilter();
+                });
+              },
+            ),
+          ),
           Expanded(
             child: Container(
               width: double.infinity,
@@ -232,35 +233,20 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
                                     key: Key(sub.id.toString()),
                                     direction: DismissDirection.endToStart,
                                     confirmDismiss: (direction) async {
-                                      return await showDialog<bool>(
+                                      bool? confirmed = await showDialog<bool>(
                                         context: context,
-                                        builder: (context) {
-                                          return AlertDialog(
-                                            title:
-                                                const Text('Confirmar exclusão'),
-                                            content: const Text(
-                                                'Você realmente deseja excluir esta assinatura?'),
-                                            actions: [
-                                              TextButton(
-                                                onPressed: () =>
-                                                    Navigator.of(context)
-                                                        .pop(false),
-                                                child: const Text('Cancelar'),
-                                              ),
-                                              TextButton(
-                                                onPressed: () =>
-                                                    Navigator.of(context)
-                                                        .pop(true),
-                                                child: const Text(
-                                                  'Excluir',
-                                                  style: TextStyle(
-                                                      color: Colors.red),
-                                                ),
-                                              ),
-                                            ],
-                                          );
-                                        },
+                                        builder: (_) => ConfirmDeleteDialog(
+                                          label: 'Assinatura',
+                                          onConfirm: () {
+                                            Navigator.of(context).pop(
+                                                true); // Retorna true para o Dismissible
+                                          },
+                                        ),
                                       );
+                                      return confirmed ?? false;
+                                    },
+                                    onDismissed: (direction) {
+                                      onDelete(sub[index].id!);
                                     },
                                     background: Container(
                                       margin: const EdgeInsets.only(
@@ -272,12 +258,9 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
                                         borderRadius: BorderRadius.circular(16),
                                       ),
                                       alignment: Alignment.centerRight,
-                                      child: const Icon(Icons.delete,
+                                      child: const Icon(Iconsax.trash,
                                           color: Colors.white),
                                     ),
-                                    onDismissed: (direction) {
-                                      onDelete(sub.id!);
-                                    },
                                     child: SubscriptionCard(subscription: sub),
                                   );
                                 },

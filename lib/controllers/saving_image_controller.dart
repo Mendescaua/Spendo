@@ -24,4 +24,8 @@ class ImagesController extends StateNotifier<List<String>> {
       return 'Erro inesperado: $e';
     }
   }
+
+  void clear() {
+    state = [];
+  }
 }

@@ -75,7 +75,7 @@ class _NewDespesaScreenState extends ConsumerState<NewDespesaScreen> {
           category: categoria,
           date: selectedDate,
           repeat: _repeatCount,
-          bank: bankSelected!.name,
+          bank: bankSelected?.name ?? '',
         ),
       );
       if (response != null) {
@@ -339,8 +339,8 @@ class _NewDespesaScreenState extends ConsumerState<NewDespesaScreen> {
                       TextField(
                         controller: _descriptionController,
                         decoration: InputDecoration(
-                          prefixIcon: const Icon(Iconsax.attach_square),
-                          hintText: 'Digite um descrição',
+                          prefixIcon: const Icon(Iconsax.document),
+                          hintText: 'Digite uma descrição',
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(16),
                             borderSide: BorderSide(

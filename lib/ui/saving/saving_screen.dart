@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:spendo/components/ConfirmAlertDialog.dart';
 import 'package:spendo/components/FloatingMessage.dart';
 import 'package:spendo/components/cards/SavingCard.dart';
 import 'package:spendo/components/modals/ModalSaving.dart';
@@ -82,8 +83,7 @@ class _SavingScreenState extends ConsumerState<SavingScreen> {
         ),
         leading: IconButton(
           icon: const Icon(Iconsax.arrow_left, color: Colors.white),
-          onPressed: () =>
-              Navigator.of(context).pushReplacementNamed('/menu'),
+          onPressed: () => Navigator.of(context).pushReplacementNamed('/menu'),
         ),
       ),
       body: Column(
@@ -100,8 +100,7 @@ class _SavingScreenState extends ConsumerState<SavingScreen> {
             child: Container(
               width: double.infinity,
               margin: const EdgeInsets.only(top: 16),
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 16, vertical: 32),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 32),
               decoration: BoxDecoration(
                 color: AppTheme.dynamicBackgroundColor(context),
                 borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
@@ -127,48 +126,34 @@ class _SavingScreenState extends ConsumerState<SavingScreen> {
                               key: Key(savings[index].id.toString()),
                               direction: DismissDirection.endToStart,
                               confirmDismiss: (direction) async {
-                                return await showDialog<bool>(
+                                bool? confirmed = await showDialog<bool>(
                                   context: context,
-                                  builder: (context) {
-                                    return AlertDialog(
-                                      title: const Text('Confirmar exclusão'),
-                                      content: const Text(
-                                          'Você realmente deseja excluir esta meta?'),
-                                      actions: [
-                                        TextButton(
-                                          onPressed: () =>
-                                              Navigator.of(context)
-                                                  .pop(false),
-                                          child: const Text('Cancelar'),
-                                        ),
-                                        TextButton(
-                                          onPressed: () =>
-                                              Navigator.of(context).pop(true),
-                                          child: const Text('Excluir',
-                                              style: TextStyle(
-                                                  color: Colors.red)),
-                                        ),
-                                      ],
-                                    );
-                                  },
+                                  builder: (_) => ConfirmDeleteDialog(
+                                    label: 'meta',
+                                    onConfirm: () {
+                                      Navigator.of(context).pop(
+                                          true); // Retorna true para o Dismissible
+                                    },
+                                  ),
                                 );
+                                return confirmed ?? false;
+                              },
+                              onDismissed: (direction) {
+                                onDelete(savings[index].id!);
                               },
                               background: Container(
                                 margin: const EdgeInsets.only(
                                     bottom: 18, right: 16, top: 2),
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 20),
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 20),
                                 decoration: BoxDecoration(
                                   color: Colors.red,
                                   borderRadius: BorderRadius.circular(16),
                                 ),
                                 alignment: Alignment.centerRight,
-                                child: const Icon(Icons.delete,
+                                child: const Icon(Iconsax.trash,
                                     color: Colors.white),
                               ),
-                              onDismissed: (direction) {
-                                onDelete(savings[index].id!);
-                              },
                               child: MetaCard(
                                 saving: savings[index],
                               ),

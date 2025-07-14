@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:spendo/components/banksContainer.dart';
 import 'package:spendo/components/cards/BankCard.dart';
 import 'package:spendo/controllers/bank_controller.dart';
@@ -120,8 +119,9 @@ class _BankLoadedComboBoxState extends ConsumerState<BankLoadedComboBox> {
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Icon(
-                    PhosphorIcons.bank(PhosphorIconsStyle.regular),
+                    Iconsax.bank,
                     color: AppTheme.whiteColor,
+                    size: 20,
                   ),
                 ),
               const SizedBox(width: 12),

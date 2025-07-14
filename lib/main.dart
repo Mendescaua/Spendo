@@ -3,6 +3,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:month_year_picker/month_year_picker.dart';
 import 'package:spendo/providers/theme_provider.dart';
+import 'package:spendo/ui/bank_info_screen.dart';
 import 'package:spendo/ui/bank_screen.dart';
 import 'package:spendo/ui/category/add_category_screen.dart';
 import 'package:spendo/ui/wallet/add_money_card_screen.dart';

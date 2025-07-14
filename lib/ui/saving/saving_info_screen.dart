@@ -253,23 +253,23 @@ class _SavingInfoScreenState extends ConsumerState<SavingInfoScreen> {
                           child: StyleButton(
                             color: Colors.grey.shade600,
                             icon: Iconsax.money_send,
-                            text: 'Resgatar',
+                            text: 'Retirar',
                             textSize: 16,
                             onClick: () {
                               _openAddTransactionModal(context,
-                                  type: 'resgatar');
+                                  type: 'retirar');
                             },
                           ),
                         ),
-                        const SizedBox(width: 16),
+                        const SizedBox(width: 10),
                         Expanded(
                           child: StyleButton(
-                            text: 'Guardar',
+                            text: 'Adicionar',
                             textSize: 16,
                             icon: Iconsax.money_recive,
                             onClick: () {
                               _openAddTransactionModal(context,
-                                  type: 'guardar');
+                                  type: 'adicionar');
                             },
                           ),
                         ),
