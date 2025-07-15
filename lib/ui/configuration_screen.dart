@@ -70,165 +70,180 @@ class _ConfiguracoesScreenState extends ConsumerState<ConfiguracoesScreen> {
   @override
   Widget build(BuildContext context) {
     final users = ref.watch(userControllerProvider).firstOrNull;
+
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: const Text(
-          'Configurações',
-        ),
+        title: const Text('Configurações'),
         iconTheme: const IconThemeData(color: Colors.black),
+        backgroundColor: AppTheme.primaryColor,
+        elevation: 0,
       ),
-      body: ListView(
-        padding: const EdgeInsets.all(16),
+      backgroundColor: AppTheme.primaryColor,
+      body: Column(
         children: [
-          // Perfil Card
-          Container(
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: AppTheme.dynamicCardColor(context),
-              borderRadius: BorderRadius.circular(16),
-              boxShadow: [
-                BoxShadow(
-                    color: Colors.black12, blurRadius: 6, offset: Offset(0, 2)),
-              ],
-            ),
-            child: Row(
-              children: [
-                CircleAvatar(
-                  radius: 30,
-                  backgroundColor: Colors.grey.shade200,
-                  backgroundImage:
-                      users?.picture != null && users!.picture!.isNotEmpty
-                          ? base64ToImage(users.picture!)
-                          : null,
-                  child: users?.picture == null || users!.picture!.isEmpty
-                      ? Text(
-                          (users?.name.isNotEmpty ?? false)
-                              ? users!.name[0].toUpperCase()
-                              : '?',
-                          style: const TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        )
-                      : null,
+          Expanded(
+            child: Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: AppTheme.dynamicBackgroundColor(context),
+                borderRadius: const BorderRadius.vertical(
+                  top: Radius.circular(24),
                 ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+              ),
+              child: ListView(
+                children: [
+                  // Perfil Card
+                  Container(
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: AppTheme.dynamicCardColor(context),
+                      borderRadius: BorderRadius.circular(16),
+                      boxShadow: const [
+                        BoxShadow(
+                            color: Colors.black12, blurRadius: 6, offset: Offset(0, 2)),
+                      ],
+                    ),
+                    child: Row(
+                      children: [
+                        CircleAvatar(
+                          radius: 30,
+                          backgroundColor: Colors.grey.shade200,
+                          backgroundImage:
+                              users?.picture != null && users!.picture!.isNotEmpty
+                                  ? base64ToImage(users.picture!)
+                                  : null,
+                          child: users?.picture == null || users!.picture!.isEmpty
+                              ? Text(
+                                  (users?.name.isNotEmpty ?? false)
+                                      ? users!.name[0].toUpperCase()
+                                      : '?',
+                                  style: const TextStyle(
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                )
+                              : null,
+                        ),
+                        const SizedBox(width: 16),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                Customtext.capitalizeFirstLetter(users?.name ?? 'Sem nome'),
+                                style: const TextStyle(
+                                    fontSize: 18, fontWeight: FontWeight.bold),
+                              ),
+                              Text(
+                                users?.email ?? 'Sem email',
+                                style: const TextStyle(color: Colors.grey),
+                              ),
+                            ],
+                          ),
+                        ),
+                        IconButton(
+                          icon: const Icon(Iconsax.edit, color: Colors.grey),
+                          onPressed: () {
+                            _openEditPerfilModal(context);
+                          },
+                        )
+                      ],
+                    ),
+                  ),
+
+                  const SizedBox(height: 24),
+
+                  // Preferências Card
+                  _buildCard(
+                    title: 'Gerenciar',
                     children: [
-                      Text(
-                        Customtext.capitalizeFirstLetter(
-                            users?.name ?? 'Sem nome'),
-                        style: const TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.bold),
-                      ),
-                      Text(
-                        users?.email ?? 'Sem email',
-                        style: const TextStyle(color: Colors.grey),
+                      _buildTile(Iconsax.bank, 'Contas', () {
+                        Navigator.of(context).pushNamed('/bank');
+                      }),
+                      _buildTile(
+                        Iconsax.tag,
+                        'Categorias',
+                        () {
+                          Navigator.of(context).pushNamed('/category');
+                        },
                       ),
                     ],
                   ),
-                ),
-                IconButton(
-                  icon: const Icon(Iconsax.edit, color: Colors.grey),
-                  onPressed: () {
-                    _openEditPerfilModal(context);
-                  },
-                )
-              ],
-            ),
-          ),
 
-          const SizedBox(height: 24),
+                  const SizedBox(height: 24),
 
-          // Preferências Card
-          _buildCard(
-            title: 'Gerenciar',
-            children: [
-              _buildTile(Iconsax.bank, 'Contas', () {
-                Navigator.of(context).pushNamed('/bank');
-              }),
-              _buildTile(
-                Iconsax.tag,
-                'Categorias',
-                () {
-                  Navigator.of(context).pushNamed('/category');
-                },
-              ),
-            ],
-          ),
+                  // Segurança
+                  _buildCard(
+                    title: 'Segurança',
+                    children: [
+                      _buildTile(Iconsax.security_safe, 'Alterar senha', () {
+                        _openChangePasswordModal(context);
+                      }),
+                      SwitchListTile(
+                        contentPadding: EdgeInsets.zero,
+                        title: Text(
+                          'Exigir autenticação ao abrir o app',
+                          style: TextStyle(
+                            color: AppTheme.dynamicTextColor(context),
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        secondary: Icon(Iconsax.security_user,
+                            color: AppTheme.dynamicTextColor(context)),
+                        value: autenticacaoAtivada,
+                        onChanged: (value) async {
+                          final auth = LocalAuthentication();
+                          bool suportado = await auth.isDeviceSupported();
+                          if (!suportado) {
+                            FloatingMessage(
+                                context, 'Seu dispositivo não suporta autenticação.', 'info', 2);
+                            return;
+                          }
 
-          const SizedBox(height: 24),
+                          bool autenticado = await auth.authenticate(
+                            localizedReason: value
+                                ? 'Autentique-se para ativar a proteção de entrada'
+                                : 'Autentique-se para desativar a proteção',
+                            options: const AuthenticationOptions(
+                              biometricOnly: false,
+                              stickyAuth: true,
+                            ),
+                          );
 
-          // Segurança
-          _buildCard(
-            title: 'Segurança',
-            children: [
-              _buildTile(Iconsax.security_safe, 'Alterar senha', () {
-                _openChangePasswordModal(context);
-              }),
-              SwitchListTile(
-                contentPadding: EdgeInsets.zero,
-                title: Text(
-                  'Exigir autenticação ao abrir o app',
-                  style: TextStyle(
-                    color: AppTheme.dynamicTextColor(context),
-                    fontWeight: FontWeight.w500,
+                          if (autenticado) {
+                            await _salvarPreferenciaAutenticacao(value);
+                            setState(() {
+                              autenticacaoAtivada = value;
+                            });
+                          }
+                        },
+                      )
+                    ],
                   ),
-                ),
-                secondary: Icon(Iconsax.security_user,
-                    color: AppTheme.dynamicTextColor(context)),
-                value: autenticacaoAtivada,
-                onChanged: (value) async {
-                  final auth = LocalAuthentication();
-                  bool suportado = await auth.isDeviceSupported();
-                  if (!suportado) {
-                    FloatingMessage(context, 'Seu dispositivo não suporta autenticação.', 'info', 2);
-                    return;
-                  }
 
-                  // Autentica com biometria ou método do sistema
-                  bool autenticado = await auth.authenticate(
-                    localizedReason: value
-                        ? 'Autentique-se para ativar a proteção de entrada'
-                        : 'Autentique-se para desativar a proteção',
-                    options: const AuthenticationOptions(
-                      biometricOnly:
-                          false, // <- permite biometria OU senha/padrão/PIN
-                      stickyAuth: true,
-                    ),
-                  );
+                  const SizedBox(height: 24),
 
-                  if (autenticado) {
-                    await _salvarPreferenciaAutenticacao(value);
-                    setState(() {
-                      autenticacaoAtivada = value;
-                    });
-                  }
-                },
-              )
-            ],
-          ),
-
-          const SizedBox(height: 24),
-
-          // Outros
-          _buildCard(
-            title: 'Outros',
-            children: [
-              _buildTile(PhosphorIcons.sun(PhosphorIconsStyle.regular), 'Tema',
-                  () {
-                showThemeSelectionModal(context, ref);
-              }),
-              _buildTile(Iconsax.info_circle, 'Sobre o app', () {
-                Navigator.of(context).pushNamed('/about');
-              }),
-              _buildTile(Iconsax.logout, 'Sair', () {
-                logout();
-              }, color: Colors.red),
-            ],
+                  // Outros
+                  _buildCard(
+                    title: 'Outros',
+                    children: [
+                      _buildTile(PhosphorIcons.sun(PhosphorIconsStyle.regular), 'Tema',
+                          () {
+                        showThemeSelectionModal(context, ref);
+                      }),
+                      _buildTile(Iconsax.info_circle, 'Sobre o app', () {
+                        Navigator.of(context).pushNamed('/about');
+                      }),
+                      _buildTile(Iconsax.logout, 'Sair', () {
+                        logout();
+                      }, color: Colors.red),
+                    ],
+                  ),
+                ],
+              ),
+            ),
           ),
         ],
       ),
@@ -241,7 +256,7 @@ class _ConfiguracoesScreenState extends ConsumerState<ConfiguracoesScreen> {
       decoration: BoxDecoration(
         color: AppTheme.dynamicCardColor(context),
         borderRadius: BorderRadius.circular(16),
-        boxShadow: [
+        boxShadow: const [
           BoxShadow(color: Colors.black12, blurRadius: 6, offset: Offset(0, 2))
         ],
       ),

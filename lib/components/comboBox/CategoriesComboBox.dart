@@ -226,7 +226,7 @@ void _abrirModalCategorias() {
                               color: cor,
                               borderRadius: BorderRadius.circular(12),
                             ),
-                            child: Icon(icone, color: Colors.white),
+                            child: Icon(icone, color: AppTheme.dynamicIconColor(cor)),
                           ),
                           title: Text(nome),
                           trailing: categoriaSelecionada == nome
@@ -327,7 +327,11 @@ void _abrirModalCategorias() {
                     categoriaSelecionada != null
                         ? (iconesPorTipo[tipoSelecionado ?? ''] ?? Iconsax.note)
                         : Iconsax.category,
-                    color: AppTheme.whiteColor,
+                    color: AppTheme.dynamicIconColor(
+                      categoriaSelecionada != null
+                          ? obterCorCategoria(categoriaSelecionada!)
+                          : AppTheme.primaryColor,
+                    ),
                     size: 20,
                   ),
                 ),

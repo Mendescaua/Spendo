@@ -16,7 +16,7 @@ class _SuccessScreenState extends State<SuccessScreen> {
     super.initState();
 
     // Após 6 segundos, fecha a tela
-    Future.delayed(const Duration(seconds: 10), () {
+    Future.delayed(const Duration(seconds: 6), () {
       if (mounted) {
         Navigator.of(context).pop();
       }

@@ -84,6 +84,12 @@ class _TransactionInfoScreenState extends ConsumerState<TransactionInfoScreen> {
   @override
   Widget build(BuildContext context) {
     final transaction = widget.transaction;
+    final backgroundColor =
+        Customtext.stringToColor(transaction.categoryColor ?? '');
+    final isLight = ThemeData.estimateBrightnessForColor(backgroundColor) ==
+        Brightness.light;
+    final contentColor = isLight ? Colors.black : Colors.white;
+
     return Scaffold(
       backgroundColor:
           Customtext.stringToColor(transaction.categoryColor ?? ''),
@@ -99,18 +105,18 @@ class _TransactionInfoScreenState extends ConsumerState<TransactionInfoScreen> {
               elevation: 0,
               title: Text(
                 Customtext.capitalizeFirstLetter(transaction.title),
-                style: const TextStyle(
-                  color: Colors.white,
+                style: TextStyle(
+                  color: contentColor,
                   fontWeight: FontWeight.bold,
                 ),
               ),
               leading: IconButton(
-                icon: const Icon(Iconsax.arrow_left, color: Colors.white),
+                icon: Icon(Iconsax.arrow_left, color: contentColor),
                 onPressed: () => Navigator.of(context).pop(),
               ),
               actions: [
                 IconButton(
-                  icon: const Icon(Iconsax.trash, color: Colors.white),
+                  icon: Icon(Iconsax.trash, color: contentColor),
                   onPressed: () => _showDeleteConfirmationDialog(),
                 ),
               ],
@@ -226,14 +232,14 @@ class _TransactionInfoScreenState extends ConsumerState<TransactionInfoScreen> {
               children: [
                 Text('Valor',
                     style:
-                        TextStyle(color: Colors.grey.shade200, fontSize: 16)),
+                        TextStyle(color: contentColor, fontSize: 16)),
                 const SizedBox(height: 4),
                 Text(
                   transaction.type == 'r'
                       ? Customtext.formatMoeda(transaction.value)
                       : Customtext.formatMoeda(-transaction.value),
-                  style: const TextStyle(
-                    color: Colors.white,
+                  style: TextStyle(
+                    color: contentColor,
                     fontSize: 36,
                     fontWeight: FontWeight.w700,
                   ),

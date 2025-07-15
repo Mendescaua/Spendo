@@ -53,23 +53,6 @@ class _MainScreenState extends ConsumerState<MainScreen> {
       Iconsax.setting,
     ];
 
-    
-  void _openMenuModal() {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      builder: (context) => HomeMenuModal(
-        onItemSelected: (index) {
-          setState(() {
-            currentTab = index;
-          });
-          Navigator.of(context).pop(); // fecha o modal
-        },
-      ),
-    );
-  }
-
     void _openAddTransactionModal(BuildContext context) {
       showModalBottomSheet(
         context: context,
@@ -91,14 +74,6 @@ class _MainScreenState extends ConsumerState<MainScreen> {
               },
             )
           : null,
-          
-      // drawer: HomeDrawer(
-      //   onItemSelected: (index) {
-      //     setState(() {
-      //       currentTab = index;
-      //     });
-      //   },
-      // ),
       body: screens[currentTab],
       bottomNavigationBar: currentTab == 3 || currentTab == 4
           ? null
@@ -152,24 +127,36 @@ class _MainScreenState extends ConsumerState<MainScreen> {
     );
   }
 
-  Widget _buildNavIcon({required int index, required IconData icon}) {
-    final isSelected = currentTab == index;
+ Widget _buildNavIcon({required int index, required IconData icon}) {
+  final isSelected = currentTab == index;
 
-    return GestureDetector(
+  return Material(
+    color: Colors.transparent,
+    child: InkWell(
+      splashFactory: InkRipple.splashFactory,
+      splashColor: Colors.transparent,     // sem splash
+      highlightColor: Colors.transparent,  // sem destaque
+      hoverColor: Colors.transparent,      // sem hover (opcional)
+      borderRadius: BorderRadius.circular(40),
       onTap: () => setState(() => currentTab = index),
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        curve: Curves.easeOutBack,
-        padding: const EdgeInsets.all(8),
-        child: Transform.scale(
-          scale: isSelected ? 1.2 : 1.0,
-          child: Icon(
-            icon,
-            size: 28,
-            color: isSelected ? AppTheme.primaryColor : Colors.grey,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Container(
+          padding: const EdgeInsets.all(10),
+          child: Transform.scale(
+            scale: isSelected ? 1.2 : 1.0,
+            child: Icon(
+              icon,
+              size: 28,
+              color: isSelected ? AppTheme.primaryColor : Colors.grey,
+            ),
           ),
         ),
       ),
-    );
-  }
+    ),
+  );
+}
+
+
+
 }

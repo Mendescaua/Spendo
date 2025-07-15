@@ -75,7 +75,7 @@ class _CategoryChartState extends ConsumerState<CategoryChart> {
                   _selectedMonth = mes!;
                 });
               },
-              textColor: AppTheme.primaryColor,
+              textColor: AppTheme.dynamicTextColor(context),
             ),
             if (categoriaGastos.isEmpty)
               const Expanded(
@@ -130,7 +130,7 @@ class _CategoryChartState extends ConsumerState<CategoryChart> {
                               ? "Total"
                               : categorias[touchedIndex!],
                           style: TextStyle(
-                            color: AppTheme.primaryColor,
+                            color: AppTheme.dynamicTextColor(context),
                             fontSize: 16,
                           ),
                         ),
@@ -143,8 +143,8 @@ class _CategoryChartState extends ConsumerState<CategoryChart> {
                                         categorias[touchedIndex!]] ??
                                     0.0,
                           ),
-                          style: const TextStyle(
-                            color: AppTheme.redColor,
+                          style: TextStyle(
+                            color: AppTheme.dynamicRedColor(context),
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
                           ),

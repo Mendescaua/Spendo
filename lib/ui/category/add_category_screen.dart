@@ -187,71 +187,32 @@ class _CriarCategoriaScreenState extends ConsumerState<CriarCategoriaScreen> {
     Color(0xFFF44336), Color(0xFFB71C1C), Color(0xFFE57373), Color(0xFFFFCDD2),
     Color(0xFFC62828),
 
-    // Amarelos / Laranjas
-    Color(0xFFFFC107), Color(0xFFFFA726), Color(0xFFFF9800), Color(0xFFFF7043),
-    Color(0xFFF57C00),
-    Color(0xFFFFB300), Color(0xFFFFCA28), Color(0xFFFFEB3B), Color(0xFFFFE082),
-    Color(0xFFFF6F00),
-
     // Roxos / Violetas
     Color(0xFF9C27B0), Color(0xFFBA68C8), Color(0xFF7B1FA2), Color(0xFF9575CD),
     Color(0xFFB39DDB),
     Color(0xFF8E24AA), Color(0xFFCE93D8), Color(0xFFE1BEE7), Color(0xFF4A148C),
     Color(0xFF6A1B9A),
 
-    // Cianos / Turquesas
-    Color(0xFF00BCD4), Color(0xFF4DD0E1), Color(0xFF0097A7), Color(0xFF26C6DA),
-    Color(0xFF80DEEA),
-    Color(0xFF00ACC1), Color(0xFFB2EBF2), Color(0xFFE0F7FA), Color(0xFF006064),
-    Color(0xFF00838F),
-
     // Marrons / Terrosos
     Color(0xFF795548), Color(0xFFA1887F), Color(0xFF5D4037), Color(0xFF8D6E63),
     Color(0xFFD7CCC8),
     Color(0xFF3E2723), Color(0xFF6D4C41), Color(0xFFBCAAA4), Color(0xFF4E342E),
-    Color(0xFFEDE7F6),
 
     // Cinzas / Neutros
     Color(0xFF607D8B), Color(0xFF90A4AE), Color(0xFF455A64), Color(0xFFB0BEC5),
-    Color(0xFFCFD8DC),
-    Color(0xFFECEFF1), Color(0xFF78909C), Color(0xFF37474F), Color(0xFF212121),
-    Color(0xFFEEEEEE),
-
-    // Cores vivas e contraste
-    Color(0xFF00E676), Color(0xFF69F0AE), Color(0xFFFFD54F), Color(0xFFFFB74D),
-    Color(0xFFFF8A65),
-    Color(0xFF00B8D4), Color(0xFF00E5FF), Color(0xFF1DE9B6), Color(0xFFFFEA00),
-    Color(0xFFFF3D00),
-
-    // Escuros profundos
-    Color(0xFF263238), Color(0xFF1A237E), Color(0xFF004D40), Color(0xFF3E2723),
-    Color(0xFF212121),
-    Color(0xFF0D47A1), Color(0xFF311B92), Color(0xFF1B1B1B), Color(0xFF102027),
-    Color(0xFF2C2C2C),
-
-    // Alternativas vibrantes
-    Color(0xFFEEFF41), Color(0xFFFFD740), Color(0xFFB2FF59), Color(0xFF69F0AE),
-    Color(0xFF40C4FF),
-    Color(0xFFFF6E40), Color(0xFFFF4081), Color(0xFFE040FB), Color(0xFF7C4DFF),
-    Color(0xFF536DFE),
-
-    // Neon / Tech
-    Color(0xFF64FFDA), Color(0xFF18FFFF), Color(0xFF00E5FF), Color(0xFF1DE9B6),
-    Color(0xFF76FF03),
-    Color(0xFFD500F9), Color(0xFFFF1744), Color(0xFFFF9100), Color(0xFF6200EA),
-    Color(0xFF00BFA5),
+    Color(0xFF78909C), Color(0xFF37474F), Color(0xFF212121),
 
     // Pastéis criativos
-    Color(0xFFFFF8E1), Color(0xFFFFF3E0), Color(0xFFFFFDE7), Color(0xFFE8F5E9),
-    Color(0xFFE3F2FD),
-    Color(0xFFFBE9E7), Color(0xFFF9FBE7), Color(0xFFF3E5F5), Color(0xFFE1F5FE),
-    Color(0xFFE0F2F1),
-
-    // Outras misturas
-    Color(0xFF4CAF50), Color(0xFF7CB342), Color(0xFFCDDC39), Color(0xFFFFC107),
-    Color(0xFFFF9800),
-    Color(0xFFF44336), Color(0xFF9E9D24), Color(0xFF009688), Color(0xFF3F51B5),
-    Color(0xFF673AB7),
+    Color(0xFFFFECB3), // Antes: 0xFFFFF8E1
+    Color(0xFFFFE0B2), // Antes: 0xFFFFF3E0
+    Color(0xFFFFF9C4), // Antes: 0xFFFFFDE7
+    Color(0xFFC8E6C9), // Antes: 0xFFE8F5E9
+    Color(0xFFBBDEFB), // Antes: 0xFFE3F2FD
+    Color(0xFFFFCCBC), // Antes: 0xFFFBE9E7
+    Color(0xFFF0F4C3), // Antes: 0xFFF9FBE7
+    Color(0xFFE1BEE7), // Antes: 0xFFF3E5F5
+    Color(0xFFB3E5FC), // Antes: 0xFFE1F5FE
+    Color(0xFFB2DFDB), // Antes: 0xFFE0F2F1
   ];
 
   Future<void> onSave(
@@ -274,34 +235,39 @@ class _CriarCategoriaScreenState extends ConsumerState<CriarCategoriaScreen> {
   }
 
   Widget _iconeCarouselItem(Map<String, dynamic> item) {
-    final icone = item['icone'] as IconData;
-    final tipo = item['tipo'] as String;
-    final isSelected = iconeSelecionado == icone;
+  final icone = item['icone'] as IconData;
+  final tipo = item['tipo'] as String;
+  final isSelected = iconeSelecionado == icone;
 
-    return GestureDetector(
-      onTap: () {
-        setState(() {
-          iconeSelecionado = icone;
-          tipoSelecionadoDialog = tipo;
-        });
-      },
-      child: Container(
-        decoration: BoxDecoration(
-          color: isSelected ? corSelecionadaDialog : Colors.grey.shade100,
-          borderRadius: BorderRadius.circular(14),
-          border: Border.all(
-            color: isSelected ? Colors.black : Colors.grey.shade300,
-            width: 2,
-          ),
-        ),
-        child: Icon(
-          icone,
-          size: 30,
-          color: isSelected ? Colors.white : Colors.grey[700],
+  final iconColor = isSelected
+      ? AppTheme.dynamicIconColor(corSelecionadaDialog)
+      : Colors.grey[700];
+
+  return GestureDetector(
+    onTap: () {
+      setState(() {
+        iconeSelecionado = icone;
+        tipoSelecionadoDialog = tipo;
+      });
+    },
+    child: Container(
+      decoration: BoxDecoration(
+        color: isSelected ? corSelecionadaDialog : Colors.grey.shade100,
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(
+          color: isSelected ? Colors.black : Colors.grey.shade300,
+          width: 2,
         ),
       ),
-    );
-  }
+      child: Icon(
+        icone,
+        size: 30,
+        color: iconColor,
+      ),
+    ),
+  );
+}
+
 
   Widget _corCarouselItem(Color cor) {
     final isSelected = corSelecionadaDialog == cor;
@@ -314,8 +280,6 @@ class _CriarCategoriaScreenState extends ConsumerState<CriarCategoriaScreen> {
       },
       child: Container(
         margin: const EdgeInsets.only(right: 12),
-        width: 40,
-        height: 36,
         decoration: BoxDecoration(
           color: cor,
           borderRadius: BorderRadius.circular(16),
@@ -373,9 +337,12 @@ class _CriarCategoriaScreenState extends ConsumerState<CriarCategoriaScreen> {
                             fontSize: 18, fontWeight: FontWeight.bold)),
                     const SizedBox(height: 12),
                     SizedBox(
-                      height: 40,
-                      child: ListView(
+                      height: 100,
+                      child: GridView.count(
+                        crossAxisCount: 2,
                         scrollDirection: Axis.horizontal,
+                        crossAxisSpacing: 10,
+                        childAspectRatio: 0.8,
                         children:
                             _coresDisponiveis.map(_corCarouselItem).toList(),
                       ),
@@ -419,8 +386,6 @@ class _CriarCategoriaScreenState extends ConsumerState<CriarCategoriaScreen> {
 
                             await onSave(nomeNovaCategoria,
                                 tipoSelecionadoDialog!, corHex);
-
-                            
                           }),
                     )
                   ],

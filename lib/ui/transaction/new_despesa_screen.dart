@@ -34,6 +34,7 @@ class _NewDespesaScreenState extends ConsumerState<NewDespesaScreen> {
   String categoria = '';
   final FocusNode _valorFocusNode = FocusNode();
   final FocusNode _tituloFocusNode = FocusNode();
+  final FocusNode _descricaoFocusNode = FocusNode();
   List<TransactionModel> filteredSuggestions = [];
   BanksModel? bankSelected;
 
@@ -114,7 +115,16 @@ class _NewDespesaScreenState extends ConsumerState<NewDespesaScreen> {
       ),
       backgroundColor: AppTheme.dynamicDespesaColor(context),
       body: GestureDetector(
-        onTap: () => FocusScope.of(context).unfocus(),
+        behavior: HitTestBehavior.opaque, // <- adiciona isso
+        onTap: () {
+          _tituloFocusNode
+              .unfocus(); // <- garante que o campo título perca foco
+          _valorFocusNode
+              .unfocus(); // <- garante que o campo valor também perca
+          _descricaoFocusNode
+              .unfocus(); // <- e o campo descrição também perca foco
+          FocusScope.of(context).unfocus(); // <- desfoca o resto
+        },
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -338,6 +348,7 @@ class _NewDespesaScreenState extends ConsumerState<NewDespesaScreen> {
                       ),
                       TextField(
                         controller: _descriptionController,
+                        focusNode: _descricaoFocusNode,
                         decoration: InputDecoration(
                           prefixIcon: const Icon(Iconsax.document),
                           hintText: 'Digite uma descrição',
@@ -363,7 +374,7 @@ class _NewDespesaScreenState extends ConsumerState<NewDespesaScreen> {
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12),
                             ),
-                            selectedColor: AppTheme.primaryColor,
+                            selectedColor: AppTheme.dynamicDespesaColor(context),
                             backgroundColor:
                                 AppTheme.dynamicBackgroundColor(context),
                             label: Text(
@@ -382,13 +393,14 @@ class _NewDespesaScreenState extends ConsumerState<NewDespesaScreen> {
                                 });
                               }
                             },
+                            checkmarkColor: Colors.white,
                           ),
                           SizedBox(width: 8),
                           ChoiceChip(
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12),
                             ),
-                            selectedColor: AppTheme.primaryColor,
+                            selectedColor: AppTheme.dynamicDespesaColor(context),
                             backgroundColor:
                                 AppTheme.dynamicBackgroundColor(context),
                             label: Text(
@@ -412,13 +424,14 @@ class _NewDespesaScreenState extends ConsumerState<NewDespesaScreen> {
                                 });
                               }
                             },
+                            checkmarkColor: Colors.white,
                           ),
                           SizedBox(width: 8),
                           ChoiceChip(
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12),
                             ),
-                            selectedColor: AppTheme.primaryColor,
+                            selectedColor: AppTheme.dynamicDespesaColor(context),
                             backgroundColor:
                                 AppTheme.dynamicBackgroundColor(context),
                             label: Text(
@@ -458,6 +471,7 @@ class _NewDespesaScreenState extends ConsumerState<NewDespesaScreen> {
                                 });
                               }
                             },
+                            checkmarkColor: Colors.white,
                           ),
                         ],
                       ),
@@ -479,10 +493,9 @@ class _NewDespesaScreenState extends ConsumerState<NewDespesaScreen> {
                           onRepetirChanged: (qtd) {
                             _repeatCount = qtd;
                           },
-
                         ),
                       ),
-                      SizedBox(height: 30),
+                      SizedBox(height: 100),
                     ],
                   ),
                 ),

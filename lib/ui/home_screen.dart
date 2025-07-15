@@ -113,17 +113,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                           final now = DateTime.now();
                           final transactionsThisMonth = transactions
                               .where((t) =>
-                                  t.createdAt?.year == now.year &&
-                                  t.createdAt?.month == now.month)
+                                  t.date.year == now.year &&
+                                  t.date.month == now.month)
                               .toList()
-                            ..sort((a, b) {
-                              final aDate = a.createdAt;
-                              final bDate = b.createdAt;
-                              if (aDate == null && bDate == null) return 0;
-                              if (aDate == null) return 1;
-                              if (bDate == null) return -1;
-                              return bDate.compareTo(aDate);
-                            }); // mais recentes
+                            ..sort((a, b) => b.date.compareTo(a.date));
 
                           if (transactionsThisMonth.isEmpty) {
                             return Center(

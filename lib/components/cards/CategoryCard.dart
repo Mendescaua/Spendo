@@ -29,6 +29,13 @@ class CategoryCard extends ConsumerWidget {
       decoration: BoxDecoration(
         color: AppTheme.dynamicCardColor(context),
         borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.1),
+              blurRadius: 4,
+              offset: const Offset(0, 1), // changes position of shadow
+            ),
+          ],
       ),
       child: Row(
         children: [

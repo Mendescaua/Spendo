@@ -78,6 +78,12 @@ class AppTheme {
         : Colors.grey.shade300; // branco real para light
   }
 
+  static Color dynamicIconColor(Color backgroundColor) {
+    return ThemeData.estimateBrightnessForColor(backgroundColor) == Brightness.light
+        ? Colors.black
+        : Colors.white;
+  }
+
   static ThemeData get lightTheme => ThemeData(
         brightness: Brightness.light,
         fontFamily: 'Poppins',

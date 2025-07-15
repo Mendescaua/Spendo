@@ -34,6 +34,7 @@ class _NewReceitaScreenState extends ConsumerState<NewReceitaScreen> {
   String categoria = '';
   final FocusNode _valorFocusNode = FocusNode();
   final FocusNode _tituloFocusNode = FocusNode();
+  final FocusNode _descricaoFocusNode = FocusNode();
   List<TransactionModel> filteredSuggestions = [];
   BanksModel? bankSelected;
 
@@ -114,7 +115,16 @@ class _NewReceitaScreenState extends ConsumerState<NewReceitaScreen> {
       ),
       backgroundColor: AppTheme.dynamicReceitaColor(context),
       body: GestureDetector(
-        onTap: () => FocusScope.of(context).unfocus(),
+        behavior: HitTestBehavior.opaque, // <- adiciona isso
+        onTap: () {
+          _tituloFocusNode
+              .unfocus(); // <- garante que o campo título perca foco
+          _valorFocusNode
+              .unfocus(); // <- garante que o campo valor também perca
+          _descricaoFocusNode.unfocus(); // <- e o campo descrição
+
+          FocusScope.of(context).unfocus(); // <- desfoca o resto
+        },
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -338,6 +348,7 @@ class _NewReceitaScreenState extends ConsumerState<NewReceitaScreen> {
                       ),
                       TextField(
                         controller: _descriptionController,
+                        focusNode: _descricaoFocusNode,
                         decoration: InputDecoration(
                           prefixIcon: const Icon(Iconsax.document),
                           hintText: 'Digite uma descrição',
@@ -359,36 +370,37 @@ class _NewReceitaScreenState extends ConsumerState<NewReceitaScreen> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          ChoiceChip(
+                            ChoiceChip(
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12),
                             ),
-                            selectedColor: AppTheme.primaryColor,
+                            selectedColor: AppTheme.dynamicReceitaColor(context),
                             backgroundColor:
-                                AppTheme.dynamicBackgroundColor(context),
+                              AppTheme.dynamicBackgroundColor(context),
                             label: Text(
                               'Hoje',
                               style: TextStyle(
-                                color: isSameDate(selectedDate, DateTime.now())
-                                    ? Colors.white
-                                    : AppTheme.dynamicTextColor(context),
+                              color: isSameDate(selectedDate, DateTime.now())
+                                ? Colors.white
+                                : AppTheme.dynamicTextColor(context),
                               ),
                             ),
                             selected: isSameDate(selectedDate, DateTime.now()),
                             onSelected: (selected) {
                               if (selected) {
-                                setState(() {
-                                  selectedDate = DateTime.now();
-                                });
+                              setState(() {
+                                selectedDate = DateTime.now();
+                              });
                               }
                             },
-                          ),
+                            checkmarkColor: Colors.white, // <- Adicione esta linha
+                            ),
                           SizedBox(width: 8),
                           ChoiceChip(
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12),
                             ),
-                            selectedColor: AppTheme.primaryColor,
+                            selectedColor: AppTheme.dynamicReceitaColor(context),
                             backgroundColor:
                                 AppTheme.dynamicBackgroundColor(context),
                             label: Text(
@@ -412,13 +424,14 @@ class _NewReceitaScreenState extends ConsumerState<NewReceitaScreen> {
                                 });
                               }
                             },
+                            checkmarkColor: Colors.white,
                           ),
                           SizedBox(width: 8),
                           ChoiceChip(
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12),
                             ),
-                            selectedColor: AppTheme.primaryColor,
+                            selectedColor: AppTheme.dynamicReceitaColor(context),
                             backgroundColor:
                                 AppTheme.dynamicBackgroundColor(context),
                             label: Text(
@@ -458,6 +471,7 @@ class _NewReceitaScreenState extends ConsumerState<NewReceitaScreen> {
                                 });
                               }
                             },
+                            checkmarkColor: Colors.white,
                           ),
                         ],
                       ),
@@ -481,7 +495,7 @@ class _NewReceitaScreenState extends ConsumerState<NewReceitaScreen> {
                           },
                         ),
                       ),
-                      SizedBox(height: 30),
+                      SizedBox(height: 100),
                     ],
                   ),
                 ),

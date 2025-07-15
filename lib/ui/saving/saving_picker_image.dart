@@ -20,23 +20,56 @@ class _ImagePickerScreenState extends ConsumerState<ImagePickerScreen> {
     });
   }
 
+  bool isValidUrl(String url) {
+    final cleaned = url.trim();
+    final uri = Uri.tryParse(cleaned);
+    final validExtensions = [
+      '.png',
+      '.jpg',
+      '.jpeg',
+      '.gif',
+      '.webp',
+      '.bmp',
+      '.svg'
+    ];
+
+    bool hasValidExtension =
+        validExtensions.any((ext) => cleaned.toLowerCase().endsWith(ext));
+
+    return uri != null &&
+        uri.hasAbsolutePath &&
+        (cleaned.startsWith('http://') || cleaned.startsWith('https://')) &&
+        hasValidExtension;
+  }
+
   @override
   Widget build(BuildContext context) {
     final images = ref.watch(imagesControllerProvider);
-    if (images.isEmpty) {
-      // Mostra loading enquanto a lista estiver vazia
+
+    for (var img in images) {
+      print('Imagem carregada: "$img"');
+    }
+
+    // Na sua tela:
+    final validImages = images.where((image) {
+      return isValidUrl(image) && !image.contains('.emptyFolderPlaceholder');
+    }).toList();
+
+    if (validImages.isEmpty) {
       return const Scaffold(
         body: Center(
           child: CircularProgressIndicator(),
         ),
       );
     }
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Personalizar'),
         leading: IconButton(
-            onPressed: () => Navigator.pop(context),
-            icon: const Icon(Iconsax.arrow_left)),
+          onPressed: () => Navigator.pop(context),
+          icon: const Icon(Iconsax.arrow_left),
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),
@@ -54,8 +87,7 @@ class _ImagePickerScreenState extends ConsumerState<ImagePickerScreen> {
                 mainAxisSpacing: 16,
                 crossAxisSpacing: 16,
                 children: [
-                  // Mostrar imagens carregadas
-                  ...images.map((image) {
+                  ...validImages.map((image) {
                     return InkWell(
                       onTap: () {
                         Navigator.pop(
