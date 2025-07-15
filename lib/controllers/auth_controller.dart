@@ -52,6 +52,12 @@ class AuthController {
         'created_at': dateInc,
       });
 
+      await supabase.from('BANKS').insert({
+        'uuid': user.id,
+        'name': 'Carteira Digital',
+        'type': 'Carteira',
+      });
+
       return null;
     } on AuthException catch (e) {
       return e.message;

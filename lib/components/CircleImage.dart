@@ -1,10 +1,11 @@
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:spendo/utils/theme.dart';
+import 'package:image/image.dart' as img;
+
 
 class CircleImage extends StatefulWidget {
   final String? initialBase64;
@@ -32,21 +33,32 @@ class _CircleImageState extends State<CircleImage> {
   }
 
   Future<void> _pickImage(ImageSource source) async {
-    final picker = ImagePicker();
-    final pickedFile =
-        await picker.pickImage(source: source, imageQuality: 70);
+  final picker = ImagePicker();
+  final pickedFile = await picker.pickImage(source: source, imageQuality: 70);
 
-    if (pickedFile != null) {
-      final bytes = await File(pickedFile.path).readAsBytes();
-      final base64Image = base64Encode(bytes);
+  if (pickedFile != null) {
+    final bytes = await File(pickedFile.path).readAsBytes();
 
-      setState(() {
-        _base64Image = base64Image;
-      });
+    // Decode a imagem para manipular
+    img.Image? image = img.decodeImage(bytes);
+    if (image == null) return;
 
-      widget.onImageSelected(base64Image);
-    }
+    // Reduz a largura para no máximo 720, mantendo a proporção
+    final resized = img.copyResize(image, width: 720);
+
+    // Converte novamente para JPEG com qualidade 85 (ajuste se quiser)
+    final resizedBytes = img.encodeJpg(resized, quality: 70);
+
+    final base64Image = base64Encode(resizedBytes);
+
+    setState(() {
+      _base64Image = base64Image;
+    });
+
+    widget.onImageSelected(base64Image);
   }
+}
+
 
   void _showImageSourceOptions() {
     showModalBottomSheet(

@@ -9,71 +9,61 @@ import 'package:spendo/models/transaction_model.dart';
 import 'package:spendo/utils/customText.dart';
 import 'package:spendo/utils/theme.dart';
 
-final filtroTransacaoProvider = StateProvider<String>((ref) => 'all');
+class TransactionBankScreen extends ConsumerStatefulWidget {
+  final String bankName;
+  final String type; // 'r' ou 'd'
 
-class TransactionScreen extends ConsumerStatefulWidget {
-  final String? type;
-  const TransactionScreen({super.key, this.type});
+  const TransactionBankScreen({
+    super.key,
+    required this.bankName,
+    required this.type,
+  });
 
   @override
-  ConsumerState<TransactionScreen> createState() => _TransactionScreenState();
+  ConsumerState<TransactionBankScreen> createState() => _TransactionBankScreenState();
 }
 
-class _TransactionScreenState extends ConsumerState<TransactionScreen> {
+class _TransactionBankScreenState extends ConsumerState<TransactionBankScreen> {
   late DateTime _selectedMonth;
 
   @override
   void initState() {
     super.initState();
     _selectedMonth = DateTime(DateTime.now().year, DateTime.now().month);
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.read(filtroTransacaoProvider.notifier).state = widget.type ?? 'all';
-    });
   }
 
   @override
   Widget build(BuildContext context) {
-    final filtro = ref.watch(filtroTransacaoProvider);
     final transactions = ref.watch(transactionControllerProvider);
 
-    // Filtra por mês atual (ou selecionado)
+    // Filtra as transações pelo banco, tipo e mês selecionado
     var transactionsFiltradas = transactions.where((t) {
-      return t.date.year == _selectedMonth.year &&
+      return t.bank == widget.bankName &&
+          t.type == widget.type &&
+          t.date.year == _selectedMonth.year &&
           t.date.month == _selectedMonth.month;
     }).toList();
 
-    // Filtra por tipo, se necessário
-    if (filtro != 'all') {
-      transactionsFiltradas =
-          transactionsFiltradas.where((t) => t.type == filtro).toList();
-    }
-
-    final receitas = transactionsFiltradas
-        .where((t) => t.type == 'r')
-        .fold(0.0, (sum, t) => sum + t.value);
-
-    final despesas = transactionsFiltradas
-        .where((t) => t.type == 'd')
-        .fold(0.0, (sum, t) => sum + t.value);
+    final totalValue = transactionsFiltradas.fold(0.0, (sum, t) => sum + t.value);
 
     final transacoesAgrupadas = _agruparPorData(transactionsFiltradas);
 
     final datasOrdenadas = transacoesAgrupadas.keys.toList()
       ..sort((a, b) => b.compareTo(a));
 
-    String _tituloPorFiltro(String filtro) {
-      switch (filtro) {
+    String _tituloPorTipo(String tipo) {
+      switch (tipo) {
         case 'r':
-          return 'Minhas receitas';
+          return 'Receitas de ${widget.bankName}';
         case 'd':
-          return 'Minhas despesas';
+          return 'Despesas de ${widget.bankName}';
         default:
-          return 'Minhas transações';
+          return 'Transações de ${widget.bankName}';
       }
     }
 
-    String _tituloTotal(String filtro) {
-      switch (filtro) {
+    String _tituloTotal(String tipo) {
+      switch (tipo) {
         case 'r':
           return 'Total de receitas';
         case 'd':
@@ -83,49 +73,11 @@ class _TransactionScreenState extends ConsumerState<TransactionScreen> {
       }
     }
 
-    double _valorTotal(String filtro, double receitas, double despesas) {
-      switch (filtro) {
-        case 'r':
-          return receitas;
-        case 'd':
-          return despesas;
-        default:
-          return receitas - despesas;
-      }
-    }
-
     return Scaffold(
       appBar: AppBar(
-        title: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const SizedBox(width: 30),
-            Text(
-              _tituloPorFiltro(filtro),
-              style: const TextStyle(fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(width: 8),
-            PopupMenuButton<String>(
-              initialValue: filtro,
-              icon: Icon(
-                PhosphorIcons.caretDown(PhosphorIconsStyle.regular),
-                color: AppTheme.whiteColor,
-              ),
-              onSelected: (value) {
-                ref.read(filtroTransacaoProvider.notifier).state = value;
-              },
-              itemBuilder: (context) => const [
-                PopupMenuItem(
-                  value: 'r',
-                  child: Text('Receitas'),
-                ),
-                PopupMenuItem(
-                  value: 'd',
-                  child: Text('Despesas'),
-                ),
-              ],
-            ),
-          ],
+        title: Text(
+          _tituloPorTipo(widget.type),
+          style: const TextStyle(fontWeight: FontWeight.bold),
         ),
         leading: IconButton(
           icon: const Icon(
@@ -134,24 +86,24 @@ class _TransactionScreenState extends ConsumerState<TransactionScreen> {
           ),
           onPressed: () => Navigator.pop(context),
         ),
+        backgroundColor: AppTheme.primaryColor,
       ),
       backgroundColor: AppTheme.primaryColor,
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  _tituloTotal(filtro),
+                  _tituloTotal(widget.type),
                   style: const TextStyle(fontSize: 14, color: Colors.white70),
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  Customtext.formatMoeda(
-                      _valorTotal(filtro, receitas, despesas)),
+                  Customtext.formatMoeda(totalValue),
                   style: const TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,

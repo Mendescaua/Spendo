@@ -39,6 +39,7 @@ class _TransactionChartTabState extends ConsumerState<TransactionChartTab> {
           'Relatórios',
           style: TextStyle(color: AppTheme.whiteColor),
         ),
+        automaticallyImplyLeading: false,
         backgroundColor: Colors.transparent,
         elevation: 0,
         iconTheme: const IconThemeData(color: AppTheme.whiteColor),

@@ -51,7 +51,7 @@ class _AuthGateState extends State<AuthGate> {
           return Scaffold(
             body: Center(
               child: LoadingAnimationWidget.staggeredDotsWave(
-                  color: AppTheme.primaryColor, size: 60),
+                  color: AppTheme.primaryColor, size: 100),
             ),
           );
         }
@@ -74,7 +74,7 @@ class _AuthGateState extends State<AuthGate> {
             return Scaffold(
               body: Center(
                 child: LoadingAnimationWidget.staggeredDotsWave(
-                    color: AppTheme.primaryColor, size: 60),
+                    color: AppTheme.primaryColor, size: 100),
               ),
             );
           }

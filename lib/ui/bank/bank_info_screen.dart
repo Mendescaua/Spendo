@@ -4,12 +4,16 @@ import 'package:iconsax/iconsax.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:spendo/controllers/bank_controller.dart';
 import 'package:spendo/models/bank_model.dart';
+import 'package:spendo/ui/bank/transaction_bank_screen.dart';
 import 'package:spendo/utils/customText.dart';
 import 'package:spendo/utils/theme.dart';
 
 class BankInfoScreen extends ConsumerStatefulWidget {
   final BanksModel banks;
-  const BankInfoScreen({super.key, required this.banks});
+  const BankInfoScreen({
+    super.key,
+    required this.banks,
+  });
 
   @override
   ConsumerState<BankInfoScreen> createState() => _BankInfoScreenState();
@@ -101,7 +105,8 @@ class _BankInfoScreenState extends ConsumerState<BankInfoScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
               decoration: BoxDecoration(
                 color: AppTheme.dynamicBackgroundColor(context),
-                borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+                borderRadius:
+                    const BorderRadius.vertical(top: Radius.circular(24)),
                 boxShadow: [
                   BoxShadow(
                     color: Colors.black.withOpacity(0.05),
@@ -111,8 +116,10 @@ class _BankInfoScreenState extends ConsumerState<BankInfoScreen> {
                 ],
               ),
               child: _loading
-                  ? Center(child: LoadingAnimationWidget.staggeredDotsWave(
-                  color: AppTheme.primaryColor, size: 60),)
+                  ? Center(
+                      child: LoadingAnimationWidget.staggeredDotsWave(
+                          color: AppTheme.primaryColor, size: 60),
+                    )
                   : stats == null
                       ? Center(
                           child: Text(
@@ -149,20 +156,42 @@ class _BankInfoScreenState extends ConsumerState<BankInfoScreen> {
                               value: widget.banks.type,
                             ),
                             _divider(),
-                            _infoItem(
-                              icon: Iconsax.money,
-                              iconColor: AppTheme.dynamicDespesaColor(context),
-                              label: 'Despesas',
-                              value: '${stats['despesa_count']}',
-                              valueColor: AppTheme.dynamicDespesaColor(context),
+                            GestureDetector(
+                              onTap: () =>
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => TransactionBankScreen(
+                                  bankName: widget.banks.name,
+                                  type: 'd',
+                                ),
+                              )),
+                              child: _infoItem(
+                                icon: Iconsax.money,
+                                iconColor:
+                                    AppTheme.dynamicDespesaColor(context),
+                                label: 'Despesas',
+                                value: '${stats['despesa_count']}',
+                                valueColor:
+                                    AppTheme.dynamicDespesaColor(context),
+                              ),
                             ),
                             _divider(),
-                            _infoItem(
-                              icon: Iconsax.money,
-                              iconColor: AppTheme.dynamicReceitaColor(context),
-                              label: 'Receitas',
-                              value: '${stats['receita_count']}',
-                              valueColor: AppTheme.dynamicReceitaColor(context),
+                            GestureDetector(
+                              onTap: () =>
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => TransactionBankScreen(
+                                  bankName: widget.banks.name,
+                                  type: 'r',
+                                ),
+                              )),
+                              child: _infoItem(
+                                icon: Iconsax.money,
+                                iconColor:
+                                    AppTheme.dynamicReceitaColor(context),
+                                label: 'Receitas',
+                                value: '${stats['receita_count']}',
+                                valueColor:
+                                    AppTheme.dynamicReceitaColor(context),
+                              ),
                             ),
                             _divider(),
                             _infoItem(

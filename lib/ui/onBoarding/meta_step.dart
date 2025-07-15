@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:phosphor_flutter/phosphor_flutter.dart'; // Ícones elegantes
-import 'package:spendo/utils/theme.dart'; // AppTheme
-import 'package:spendo/components/buttons/StyleButton.dart';
+import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:spendo/utils/theme.dart';
 
 class MetaStep extends ConsumerStatefulWidget {
   final VoidCallback? onFinished;
+
   const MetaStep({super.key, this.onFinished});
 
   @override
@@ -26,6 +26,21 @@ class _MetaStepState extends ConsumerState<MetaStep> {
     'Entender onde gasto mais',
   ];
 
+  void _atualizarMotivos(String motivo, bool selecionado) {
+    setState(() {
+      if (selecionado) {
+        motivosSelecionados.remove(motivo);
+      } else {
+        motivosSelecionados.add(motivo);
+      }
+
+      // Quando pelo menos um motivo for selecionado, aciona onFinished
+      if (motivosSelecionados.isNotEmpty) {
+        widget.onFinished?.call();
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Form(
@@ -40,20 +55,11 @@ class _MetaStepState extends ConsumerState<MetaStep> {
             ),
             const SizedBox(height: 20),
 
-            // Motivos em cards estilizados
             ...motivos.map((motivo) {
               final selecionado = motivosSelecionados.contains(motivo);
 
               return GestureDetector(
-                onTap: () {
-                  setState(() {
-                    if (selecionado) {
-                      motivosSelecionados.remove(motivo);
-                    } else {
-                      motivosSelecionados.add(motivo);
-                    }
-                  });
-                },
+                onTap: () => _atualizarMotivos(motivo, selecionado),
                 child: Container(
                   margin: const EdgeInsets.only(bottom: 12),
                   padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
@@ -73,7 +79,6 @@ class _MetaStepState extends ConsumerState<MetaStep> {
                         width: 40,
                         height: 40,
                         decoration: BoxDecoration(
-                          //borda umpouco redonda
                           borderRadius: BorderRadius.circular(12),
                           color: selecionado
                               ? Theme.of(context).colorScheme.primary.withOpacity(0.1)
@@ -91,8 +96,7 @@ class _MetaStepState extends ConsumerState<MetaStep> {
                           motivo,
                           style: TextStyle(
                             fontSize: 15,
-                            fontWeight:
-                                selecionado ? FontWeight.bold : FontWeight.w400,
+                            fontWeight: selecionado ? FontWeight.bold : FontWeight.w400,
                             color: AppTheme.dynamicTextColor(context),
                           ),
                         ),
@@ -100,13 +104,7 @@ class _MetaStepState extends ConsumerState<MetaStep> {
                       Checkbox(
                         value: selecionado,
                         onChanged: (bool? value) {
-                          setState(() {
-                            if (value == true) {
-                              motivosSelecionados.add(motivo);
-                            } else {
-                              motivosSelecionados.remove(motivo);
-                            }
-                          });
+                          _atualizarMotivos(motivo, selecionado);
                         },
                       ),
                     ],

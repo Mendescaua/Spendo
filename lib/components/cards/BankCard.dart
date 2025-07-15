@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:spendo/components/banksContainer.dart';
 import 'package:spendo/controllers/bank_controller.dart';
 import 'package:spendo/models/bank_model.dart';
-import 'package:spendo/ui/bank_info_screen.dart';
+import 'package:spendo/ui/bank/bank_info_screen.dart';
 import 'package:spendo/utils/theme.dart';
 
 class BankCard extends ConsumerWidget {
@@ -38,10 +38,19 @@ class BankCard extends ConsumerWidget {
         itemCount: banks.length,
         itemBuilder: (context, index) {
           final bank = banks[index];
-          return BankCardItem(
-            title: bank.name ?? '',
-            type: bank.type ?? '', // ou banco.url se tiver
-            banks: bank,
+          return GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => BankInfoScreen(banks: bank,),
+                ),
+              );
+            },
+            child: BankCardItem(
+              title: bank.name ?? '',
+              type: bank.type ?? '', // ou banco.url se tiver
+            ),
           );
         },
       ),
@@ -52,48 +61,39 @@ class BankCard extends ConsumerWidget {
 class BankCardItem extends ConsumerWidget {
   final String title;
   final String type;
-  final BanksModel? banks;
 
   const BankCardItem({
     super.key,
     required this.title,
     required this.type,
-    this.banks,
   });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return GestureDetector(
-      onTap: () {
-        Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => BankInfoScreen(banks: banks ?? BanksModel(name: '', type: '')),
-        ));
-      },
-      child: Container(
-        padding: EdgeInsets.symmetric(vertical: 8),
-        child: Row(
-          children: [
-            Bankscontainer(name: title),
-            const SizedBox(width: 10),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: const TextStyle(
-                    fontSize: 16,
-                  ),
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: 8),
+      child: Row(
+        children: [
+          Bankscontainer(name: title),
+          const SizedBox(width: 10),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                title,
+                style: const TextStyle(
+                  fontSize: 16,
                 ),
-                Text(
-                  type, // Pode ser atualizado futuramente
-                  style: TextStyle(
-                    fontSize: 14,
-                  ),
+              ),
+              Text(
+                type, // Pode ser atualizado futuramente
+                style: TextStyle(
+                  fontSize: 14,
                 ),
-              ],
-            ),
-          ],
-        ),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
