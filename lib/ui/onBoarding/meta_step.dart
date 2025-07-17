@@ -14,16 +14,30 @@ class MetaStep extends ConsumerStatefulWidget {
 
 class _MetaStepState extends ConsumerState<MetaStep> {
   final _formKey = GlobalKey<FormState>();
-  final TextEditingController _valorController = TextEditingController();
 
   List<String> motivosSelecionados = [];
 
-  final List<String> motivos = [
-    'Economizar dinheiro',
-    'Controlar meus gastos',
-    'Planejar uma viagem',
-    'Sair das dívidas',
-    'Entender onde gasto mais',
+  final List<Map<String, dynamic>> motivos = [
+    {
+      'texto': 'Economizar dinheiro',
+      'icone': PhosphorIcons.currencyDollarSimple(PhosphorIconsStyle.regular),
+    },
+    {
+      'texto': 'Controlar meus gastos',
+      'icone': PhosphorIcons.chartLineUp(PhosphorIconsStyle.regular),
+    },
+    {
+      'texto': 'Melhorar minha qualidade de vida',
+      'icone': PhosphorIcons.heart(PhosphorIconsStyle.regular),
+    },
+    {
+      'texto': 'Sair das dívidas',
+      'icone': PhosphorIcons.warningCircle(PhosphorIconsStyle.regular),
+    },
+    {
+      'texto': 'Entender onde gasto mais',
+      'icone': PhosphorIcons.magnifyingGlass(PhosphorIconsStyle.regular),
+    },
   ];
 
   void _atualizarMotivos(String motivo, bool selecionado) {
@@ -54,22 +68,25 @@ class _MetaStepState extends ConsumerState<MetaStep> {
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 20),
+            ...motivos.map((item) {
+              final String motivo = item['texto'];
+              final IconData icone = item['icone'];
 
-            ...motivos.map((motivo) {
-              final selecionado = motivosSelecionados.contains(motivo);
+              final bool selecionado = motivosSelecionados.contains(motivo);
 
               return GestureDetector(
                 onTap: () => _atualizarMotivos(motivo, selecionado),
                 child: Container(
                   margin: const EdgeInsets.only(bottom: 12),
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                   decoration: BoxDecoration(
                     color: AppTheme.dynamicCardColor(context),
                     borderRadius: BorderRadius.circular(12),
                     border: Border.all(
                       color: selecionado
                           ? Theme.of(context).colorScheme.primary
-                          : Colors.grey.shade300,
+                          : AppTheme.dynamicBorderSavingColor(context),
                       width: 1.5,
                     ),
                   ),
@@ -80,14 +97,12 @@ class _MetaStepState extends ConsumerState<MetaStep> {
                         height: 40,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(12),
-                          color: selecionado
-                              ? Theme.of(context).colorScheme.primary.withOpacity(0.1)
-                              : Colors.grey.shade200,
+                          color: AppTheme.primaryColor,
                         ),
                         child: Icon(
-                          PhosphorIcons.target(PhosphorIconsStyle.regular),
+                          icone,
                           size: 26,
-                          color: Theme.of(context).colorScheme.primary,
+                          color: AppTheme.whiteColor,
                         ),
                       ),
                       const SizedBox(width: 16),
@@ -96,7 +111,8 @@ class _MetaStepState extends ConsumerState<MetaStep> {
                           motivo,
                           style: TextStyle(
                             fontSize: 15,
-                            fontWeight: selecionado ? FontWeight.bold : FontWeight.w400,
+                            fontWeight:
+                                selecionado ? FontWeight.bold : FontWeight.w400,
                             color: AppTheme.dynamicTextColor(context),
                           ),
                         ),

@@ -28,16 +28,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
       isLoading = true;
     });
 
-    await Future.delayed(Duration(seconds: 2));
-
-    if (passwordController.text != confirmPasswordController.text) {
-      FloatingMessage(context, "Senhas diferentes", "error", 2);
-      return;
-    }
-
     final result = await _authController.register(
       email: emailController.text,
       password: passwordController.text,
+      confirmPassword: confirmPasswordController.text,
       name: nameController.text,
     );
 

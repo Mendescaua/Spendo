@@ -97,7 +97,7 @@ class _CategoryStepState extends ConsumerState<CategoryStep> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Text(
-              'Escolha até 5 categorias para começar',
+              'Escolha 3 ou mais categorias de gastos para começar',
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 24),
@@ -180,6 +180,7 @@ class _CategoryStepState extends ConsumerState<CategoryStep> {
                     }
                   : null,
             ),
+            const SizedBox(height: 24),
           ],
         ),
       ),

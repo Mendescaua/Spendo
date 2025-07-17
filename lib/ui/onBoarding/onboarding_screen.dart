@@ -121,7 +121,7 @@ class _OnboardingSetupScreenState extends ConsumerState<OnboardingSetupScreen> {
             });
           },
         ),
-        const SizedBox(height: 20),
+        const SizedBox(height: 40),
         StyleButton(
           text: 'Finalizar',
           onClick: finalizar,
