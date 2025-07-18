@@ -9,6 +9,7 @@ import 'package:spendo/ui/configuration_screen.dart';
 import 'package:spendo/ui/home_screen.dart';
 import 'package:spendo/ui/saving/saving_screen.dart';
 import 'package:spendo/ui/subscription_screen.dart';
+import 'package:spendo/ui/transaction/transaction_screen.dart';
 import 'package:spendo/ui/transactionChart/transaction_chart_tab.dart';
 import 'package:spendo/ui/wallet/wallet_screen.dart';
 import 'package:spendo/utils/theme.dart';
@@ -39,17 +40,17 @@ class _MainScreenState extends ConsumerState<MainScreen> {
   Widget build(BuildContext context) {
     List<Widget> screens = [
       const HomeScreen(),
-      TransactionChartTab(),
-      WalletScreen(),
-      const SubscriptionScreen(),
+      TransactionScreen(type: 'all'),
+      TransactionChartTab(),     
       const SavingScreen(),
       const ConfiguracoesScreen(),
+      const SubscriptionScreen(),
     ];
 
     final items = <IconData>[
       Iconsax.home,
+      Iconsax.arrange_square,
       Iconsax.chart_square,
-      Iconsax.empty_wallet,
       Iconsax.setting,
     ];
 
@@ -65,7 +66,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
     }
 
     return Scaffold(
-      appBar: currentTab == 0 
+      appBar: currentTab == 0
           ? Homebar(
               onItemSelected: (index) {
                 setState(() {
@@ -127,36 +128,33 @@ class _MainScreenState extends ConsumerState<MainScreen> {
     );
   }
 
- Widget _buildNavIcon({required int index, required IconData icon}) {
-  final isSelected = currentTab == index;
+  Widget _buildNavIcon({required int index, required IconData icon}) {
+    final isSelected = currentTab == index;
 
-  return Material(
-    color: Colors.transparent,
-    child: InkWell(
-      splashFactory: InkRipple.splashFactory,
-      splashColor: Colors.transparent,     // sem splash
-      highlightColor: Colors.transparent,  // sem destaque
-      hoverColor: Colors.transparent,      // sem hover (opcional)
-      borderRadius: BorderRadius.circular(40),
-      onTap: () => setState(() => currentTab = index),
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Container(
-          padding: const EdgeInsets.all(10),
-          child: Transform.scale(
-            scale: isSelected ? 1.2 : 1.0,
-            child: Icon(
-              icon,
-              size: 28,
-              color: isSelected ? AppTheme.primaryColor : Colors.grey,
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        splashFactory: InkRipple.splashFactory,
+        splashColor: Colors.transparent, // sem splash
+        highlightColor: Colors.transparent, // sem destaque
+        hoverColor: Colors.transparent, // sem hover (opcional)
+        borderRadius: BorderRadius.circular(40),
+        onTap: () => setState(() => currentTab = index),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Container(
+            padding: const EdgeInsets.all(10),
+            child: Transform.scale(
+              scale: isSelected ? 1.2 : 1.0,
+              child: Icon(
+                icon,
+                size: 28,
+                color: isSelected ? AppTheme.primaryColor : Colors.grey,
+              ),
             ),
           ),
         ),
       ),
-    ),
-  );
-}
-
-
-
+    );
+  }
 }

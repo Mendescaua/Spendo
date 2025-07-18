@@ -96,6 +96,7 @@ class _TransactionScreenState extends ConsumerState<TransactionScreen> {
 
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -127,13 +128,6 @@ class _TransactionScreenState extends ConsumerState<TransactionScreen> {
             ),
           ],
         ),
-        leading: IconButton(
-          icon: const Icon(
-            Iconsax.arrow_left,
-            color: AppTheme.whiteColor,
-          ),
-          onPressed: () => Navigator.pop(context),
-        ),
       ),
       backgroundColor: AppTheme.primaryColor,
       body: Column(
@@ -146,32 +140,24 @@ class _TransactionScreenState extends ConsumerState<TransactionScreen> {
               children: [
                 Text(
                   _tituloTotal(filtro),
-                  style: const TextStyle(fontSize: 14, color: Colors.white70),
+                  style: const TextStyle(
+                    fontSize: 14,
+                  ),
                 ),
-                const SizedBox(height: 4),
+                const SizedBox(height: 10),
                 Text(
                   Customtext.formatMoeda(
                       _valorTotal(filtro, receitas, despesas)),
                   style: const TextStyle(
-                    fontSize: 24,
+                    fontSize: 26,
                     fontWeight: FontWeight.bold,
                     color: AppTheme.whiteColor,
                   ),
                 ),
-                const SizedBox(height: 16),
-                Monthpicker2(
-                  selectedMonth: _selectedMonth,
-                  onMonthSelected: (mes) {
-                    setState(() {
-                      _selectedMonth = mes!;
-                    });
-                  },
-                  textColor: AppTheme.whiteColor,
-                ),
+                const SizedBox(height: 10.6),
               ],
             ),
           ),
-          const SizedBox(height: 16),
           Expanded(
             child: Container(
               width: double.infinity,
@@ -205,6 +191,16 @@ class _TransactionScreenState extends ConsumerState<TransactionScreen> {
                           return Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
+                              Monthpicker2(
+                                selectedMonth: _selectedMonth,
+                                onMonthSelected: (mes) {
+                                  setState(() {
+                                    _selectedMonth = mes!;
+                                  });
+                                },
+                                textColor: AppTheme.whiteColor,
+                              ),
+                              SizedBox(height: 16),
                               Text(
                                 titulo,
                                 style: const TextStyle(

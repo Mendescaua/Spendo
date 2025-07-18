@@ -103,35 +103,46 @@ class _BankScreenState extends ConsumerState<BankScreen> {
               ),
               child: _isLoading
                   ? const Center(child: CircularProgressIndicator())
-                  : ListView.builder(
+                  : ReorderableListView.builder(
+                      onReorder: (oldIndex, newIndex) async {
+                        if (newIndex > oldIndex) newIndex -= 1;
+                        final newBanks = List.of(banks);
+                        final item = newBanks.removeAt(oldIndex);
+                        newBanks.insert(newIndex, item);
+
+                        // Atualiza o estado e salva a ordem local
+                        await ref
+                            .read(bankControllerProvider.notifier)
+                            .updateOrder(newBanks);
+                      },
                       itemCount: banks.length,
                       itemBuilder: (context, index) {
+                        final bank = banks[index];
                         return Dismissible(
-                          key: Key(banks[index].id.toString()),
+                          key: ValueKey(
+                              bank.id), // importante manter a mesma key
                           direction: DismissDirection.endToStart,
                           confirmDismiss: (direction) async {
                             return await showDialog<bool>(
                               context: context,
-                              builder: (context) {
-                                return AlertDialog(
-                                  title: const Text('Confirmar exclusão'),
-                                  content: const Text(
-                                      'Você realmente deseja excluir essa conta?'),
-                                  actions: [
-                                    TextButton(
-                                      onPressed: () =>
-                                          Navigator.of(context).pop(false),
-                                      child: const Text('Cancelar'),
-                                    ),
-                                    TextButton(
-                                      onPressed: () =>
-                                          Navigator.of(context).pop(true),
-                                      child: const Text('Excluir',
-                                          style: TextStyle(color: Colors.red)),
-                                    ),
-                                  ],
-                                );
-                              },
+                              builder: (context) => AlertDialog(
+                                title: const Text('Confirmar exclusão'),
+                                content: const Text(
+                                    'Você realmente deseja excluir essa conta?'),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () =>
+                                        Navigator.of(context).pop(false),
+                                    child: const Text('Cancelar'),
+                                  ),
+                                  TextButton(
+                                    onPressed: () =>
+                                        Navigator.of(context).pop(true),
+                                    child: const Text('Excluir',
+                                        style: TextStyle(color: Colors.red)),
+                                  ),
+                                ],
+                              ),
                             );
                           },
                           background: Container(
@@ -147,9 +158,9 @@ class _BankScreenState extends ConsumerState<BankScreen> {
                                 const Icon(Icons.delete, color: Colors.white),
                           ),
                           onDismissed: (direction) {
-                            onDelete(banks[index].id!);
+                            onDelete(bank.id!);
                           },
-                          child: BankLoadedCard(banks: banks[index]),
+                          child: BankLoadedCard(banks: bank),
                         );
                       },
                     ),

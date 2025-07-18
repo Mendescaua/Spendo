@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:spendo/components/banksContainer.dart';
 import 'package:spendo/controllers/bank_controller.dart';
-import 'package:spendo/models/bank_model.dart';
 import 'package:spendo/ui/bank/bank_info_screen.dart';
 import 'package:spendo/utils/theme.dart';
 

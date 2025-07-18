@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:spendo/models/bank_model.dart';
 import 'package:spendo/providers/auth_provider.dart';
 import 'package:spendo/services/supabase_service.dart';
@@ -14,11 +15,11 @@ class BankController extends StateNotifier<List<BanksModel>> {
 
   BankController(this.ref) : super([]);
 
+  // Método para carregar bancos e aplicar ordem salva localmente
   Future<String?> getBank() async {
     String? userId;
     int tentativas = 0;
 
-    // Tenta pegar o userId até 10 vezes (com 100ms de delay entre cada uma)
     while ((userId = ref.read(currentUserId)) == null && tentativas < 10) {
       await Future.delayed(const Duration(milliseconds: 100));
       tentativas++;
@@ -28,6 +29,21 @@ class BankController extends StateNotifier<List<BanksModel>> {
 
     try {
       final banks = await _banks.getBanks(userId);
+
+      // Pega ordem salva localmente
+      final prefs = await SharedPreferences.getInstance();
+      final savedOrder = prefs.getStringList('bank_order');
+
+      if (savedOrder != null && savedOrder.isNotEmpty) {
+        banks.sort((a, b) {
+          final indexA = savedOrder.indexOf(a.id.toString());
+          final indexB = savedOrder.indexOf(b.id.toString());
+          if (indexA == -1) return 1;
+          if (indexB == -1) return -1;
+          return indexA.compareTo(indexB);
+        });
+      }
+
       state = banks;
       return null;
     } catch (e) {
@@ -36,27 +52,37 @@ class BankController extends StateNotifier<List<BanksModel>> {
     }
   }
 
- Future<Map<String, dynamic>?> getBankInfo({required String bankName}) async {
-  String? userId;
-  int tentativas = 0;
+  // Novo método para atualizar ordem, salvar local e atualizar estado
+  Future<void> updateOrder(List<BanksModel> newOrder) async {
+    state = newOrder;
 
-  while ((userId = ref.read(currentUserId)) == null && tentativas < 10) {
-    await Future.delayed(const Duration(milliseconds: 100));
-    tentativas++;
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setStringList(
+      'bank_order',
+      newOrder.map((b) => b.id.toString()).toList(),
+    );
   }
 
-  if (userId == null) return null;
+  // O resto do controller fica igual
+  Future<Map<String, dynamic>?> getBankInfo({required String bankName}) async {
+    String? userId;
+    int tentativas = 0;
 
-  try {
-    final info = await _banks.getBankInfo(userId: userId, bankName: bankName);
-    print('Resumo da conta: $info');
-    return info;  // Retorna os dados
-  } catch (e) {
-    print('Erro ao obter informações da conta bancária: $e');
-    return null;
+    while ((userId = ref.read(currentUserId)) == null && tentativas < 10) {
+      await Future.delayed(const Duration(milliseconds: 100));
+      tentativas++;
+    }
+
+    if (userId == null) return null;
+
+    try {
+      final info = await _banks.getBankInfo(userId: userId, bankName: bankName);
+      return info;
+    } catch (e) {
+      print('Erro ao obter informações da conta bancária: $e');
+      return null;
+    }
   }
-}
-
 
   Future<String?> addBank({required BanksModel bank}) async {
     final userId = ref.read(currentUserId);
@@ -65,7 +91,6 @@ class BankController extends StateNotifier<List<BanksModel>> {
     if (bank.name == "") return 'Selecione uma conta';
     if (bank.type == "") return 'Selecione o tipo da conta';
 
-    // Verifica se já existe uma conta com o mesmo nome
     final alreadyExists = state.any((item) =>
         item.uuid == userId &&
         item.name.toLowerCase() == bank.name.toLowerCase());
@@ -94,7 +119,6 @@ class BankController extends StateNotifier<List<BanksModel>> {
     try {
       await _banks.deleteBanks(id);
 
-      // Remove do estado
       state = state.where((item) => item.id != id).toList();
 
       return null;
