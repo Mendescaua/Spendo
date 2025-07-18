@@ -63,26 +63,33 @@ class BankController extends StateNotifier<List<BanksModel>> {
     );
   }
 
-  // O resto do controller fica igual
-  Future<Map<String, dynamic>?> getBankInfo({required String bankName}) async {
-    String? userId;
-    int tentativas = 0;
+  Future<Map<String, dynamic>?> getBankInfo({
+  required String bankName,
+  DateTime? date, // parâmetro opcional para filtro por data
+}) async {
+  String? userId;
+  int tentativas = 0;
 
-    while ((userId = ref.read(currentUserId)) == null && tentativas < 10) {
-      await Future.delayed(const Duration(milliseconds: 100));
-      tentativas++;
-    }
-
-    if (userId == null) return null;
-
-    try {
-      final info = await _banks.getBankInfo(userId: userId, bankName: bankName);
-      return info;
-    } catch (e) {
-      print('Erro ao obter informações da conta bancária: $e');
-      return null;
-    }
+  while ((userId = ref.read(currentUserId)) == null && tentativas < 10) {
+    await Future.delayed(const Duration(milliseconds: 100));
+    tentativas++;
   }
+
+  if (userId == null) return null;
+
+  try {
+    final info = await _banks.getBankInfo(
+      userId: userId,
+      bankName: bankName,
+      date: date, // repassando a data opcional
+    );
+    return info;
+  } catch (e) {
+    print('Erro ao obter informações da conta bancária: $e');
+    return null;
+  }
+}
+
 
   Future<String?> addBank({required BanksModel bank}) async {
     final userId = ref.read(currentUserId);

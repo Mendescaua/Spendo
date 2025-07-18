@@ -56,14 +56,14 @@ class AppTheme {
 
   static Color dynamicDespesaColor(BuildContext context) {
     return Theme.of(context).brightness == Brightness.dark
-        ? const Color.fromARGB(255, 141, 12, 36)
-        : redColor;
+        ? const Color(0xFFAC1934)
+        : const Color(0xFFAC1934);
   }
 
   static Color dynamicReceitaColor(BuildContext context) {
     return Theme.of(context).brightness == Brightness.dark
-        ? const Color.fromARGB(255, 29, 173, 82)
-        : greenColor;
+        ? const Color(0xFF029456)
+        : const Color(0xFF029456);
   }
 
   static Color dynamicBorderSavingColor(BuildContext context) {
@@ -101,7 +101,7 @@ class AppTheme {
         ),
         colorScheme: const ColorScheme.light(
           primary: primaryColor,
-          secondary: secondaryColor,
+          secondary: primaryColor,
           background: backgroundColor,
           onPrimary: Colors.white,
           onSurface: textColor,
@@ -125,7 +125,7 @@ class AppTheme {
         ),
         colorScheme: const ColorScheme.dark(
           primary: primaryColor,
-          secondary: secondaryColor,
+          secondary: primaryColor,
           background: darkBackgroundColor,
           onPrimary: Colors.white,
           onSurface: darkTextColor,

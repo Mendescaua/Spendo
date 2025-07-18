@@ -209,7 +209,6 @@ class _ExpandedcompState extends State<Expandedcomp> {
             child: const Text(
               'Mais detalhes',
               style: TextStyle(
-                color: AppTheme.primaryColor,
                 fontWeight: FontWeight.bold,
               ),
             ),

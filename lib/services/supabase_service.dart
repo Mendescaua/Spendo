@@ -149,16 +149,20 @@ class SupabaseService {
     await supabase.from('BANKS').delete().eq('id', id);
   }
 
-  Future<Map<String, dynamic>> getBankInfo({
+Future<Map<String, dynamic>> getBankInfo({
   required String userId,
   required String bankName,
+  DateTime? date, // parâmetro opcional
 }) async {
+  final params = {
+    'p_uuid': userId,
+    'bank_name': bankName,
+    'p_date': date?.toIso8601String(), // ou null se date for null
+  };
+
   final response = await supabase.rpc(
     'get_transaction_summary_by_user_and_bank',
-    params: {
-      'p_uuid': userId,
-      'bank_name': bankName,
-    },
+    params: params,
   );
 
   if (response == null || response is! List || response.isEmpty) {
@@ -179,6 +183,7 @@ class SupabaseService {
     'total_value': (data['total_value'] ?? 0.0).toDouble(),
   };
 }
+
 
 
   //Cartões criados pelo usuario

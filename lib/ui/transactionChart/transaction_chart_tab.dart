@@ -46,7 +46,6 @@ class _TransactionChartTabState extends ConsumerState<TransactionChartTab> {
       ),
       body: Column(
         children: [
-          const SizedBox(height: 16),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: TabNavigation(
@@ -54,7 +53,7 @@ class _TransactionChartTabState extends ConsumerState<TransactionChartTab> {
               onTabSelected: _onTabSelected,
             ),
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: 14),
           Expanded(
             child: Container(
               width: double.infinity,

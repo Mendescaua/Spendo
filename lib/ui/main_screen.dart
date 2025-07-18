@@ -43,8 +43,8 @@ class _MainScreenState extends ConsumerState<MainScreen> {
       TransactionScreen(type: 'all'),
       TransactionChartTab(),     
       const SavingScreen(),
-      const ConfiguracoesScreen(),
       const SubscriptionScreen(),
+      const ConfiguracoesScreen(),
     ];
 
     final items = <IconData>[

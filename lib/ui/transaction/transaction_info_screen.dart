@@ -156,13 +156,10 @@ class _TransactionInfoScreenState extends ConsumerState<TransactionInfoScreen> {
 
                     // Campo de descrição com onChanged
                     Padding(
-                      padding: const EdgeInsets.only(bottom: 18.0),
+                      padding: const EdgeInsets.only(bottom: 16.0),
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Icon(Iconsax.document,
-                              size: 20, color: Colors.grey.shade700),
-                          const SizedBox(width: 12),
                           Expanded(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -181,17 +178,31 @@ class _TransactionInfoScreenState extends ConsumerState<TransactionInfoScreen> {
                                   maxLines: null,
                                   onChanged: _onDescriptionChanged,
                                   style: const TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w600,
                                   ),
                                   decoration: InputDecoration(
-                                    contentPadding:
-                                        const EdgeInsets.symmetric(vertical: 8),
-                                    isDense: true,
-                                    border: InputBorder.none,
-                                    hintText: 'Digite a descrição...',
-                                    hintStyle:
-                                        TextStyle(color: Colors.grey.shade400),
+                                    hintText: 'Digite uma descrição...',
+                                    hintStyle: const TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                    filled: true,
+                                    fillColor:
+                                        AppTheme.dynamicCardColor(context),
+                                    prefixIcon: Icon(
+                                      Iconsax.document,
+                                      size: 24,
+                                    ),
+                                    contentPadding: const EdgeInsets.symmetric(
+                                        vertical: 18),
+                                    enabledBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(16),
+                                      borderSide: BorderSide.none,
+                                    ),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(16),
+                                      borderSide: BorderSide.none,
+                                    ),
                                   ),
                                 ),
                               ],
@@ -200,12 +211,20 @@ class _TransactionInfoScreenState extends ConsumerState<TransactionInfoScreen> {
                         ],
                       ),
                     ),
-
-                    // Infos adicionais
+                    Text(
+                      'Detalhes',
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.grey.shade600,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
                     InfoTile(
                       icon: Iconsax.calendar,
                       label: 'Data e hora',
                       content: Customtext.formatarDataHora(transaction.date),
+                      fontSize: 13.5,
                     ),
                     InfoTile(
                       icon: Iconsax.tag,
@@ -231,8 +250,7 @@ class _TransactionInfoScreenState extends ConsumerState<TransactionInfoScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text('Valor',
-                    style:
-                        TextStyle(color: contentColor, fontSize: 16)),
+                    style: TextStyle(color: contentColor, fontSize: 16)),
                 const SizedBox(height: 4),
                 Text(
                   transaction.type == 'r'
@@ -257,47 +275,53 @@ class InfoTile extends StatelessWidget {
   final IconData icon;
   final String label;
   final String content;
+  final double? fontSize;
 
   const InfoTile({
     super.key,
     required this.icon,
     required this.label,
     required this.content,
+    this.fontSize,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 18.0),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Icon(icon, size: 20, color: Colors.grey.shade700),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  label,
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.grey.shade600,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  content,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
-            ),
+    return Container(
+      margin: const EdgeInsets.only(bottom: 12),
+      decoration: BoxDecoration(
+        color: AppTheme.dynamicCardColor(context),
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: const [
+          BoxShadow(
+            color: Colors.black12,
+            blurRadius: 6,
+            offset: Offset(0, 2),
           ),
         ],
+      ),
+      child: ListTile(
+        contentPadding: const EdgeInsets.symmetric(horizontal: 12),
+        leading: Icon(icon, color: Colors.white, size: 24),
+        title: Text(
+          label,
+          style: TextStyle(
+            fontSize: 14,
+            color: Colors.grey.shade400,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        subtitle: Padding(
+          padding: const EdgeInsets.only(top: 4),
+          child: Text(
+            content,
+            style: TextStyle(
+              fontSize: fontSize ?? 16,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+            ),
+          ),
+        ),
       ),
     );
   }

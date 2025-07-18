@@ -104,15 +104,16 @@ class HomeMenuModal extends StatelessWidget {
         'icon': PhosphorIcons.handCoins(PhosphorIconsStyle.regular),
         'label': 'Minhas metas',
       },
+      
       {
         'id': 4,
-        'icon': Iconsax.setting,
-        'label': 'Configurações',
-      },
-      {
-        'id': 2,
         'icon': Iconsax.card,
         'label': 'Assinaturas',
+      },
+      {
+        'id': 5,
+        'icon': Iconsax.setting,
+        'label': 'Configurações',
       },
     ];
 

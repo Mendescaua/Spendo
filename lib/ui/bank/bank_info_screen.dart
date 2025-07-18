@@ -36,7 +36,7 @@ class _BankInfoScreenState extends ConsumerState<BankInfoScreen> {
     setState(() => _loading = true);
 
     final controller = ref.read(bankControllerProvider.notifier);
-    final info = await controller.getBankInfo(bankName: widget.banks.name);
+    final info = await controller.getBankInfo(bankName: widget.banks.name, date: DateTime.now());
 
     if (!mounted) return;
     setState(() => _loading = false);

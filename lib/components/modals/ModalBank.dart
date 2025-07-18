@@ -92,7 +92,6 @@ class _ModalBankState extends ConsumerState<ModalBank> {
               onSelect: (account) {
                 setState(() {
                   selectedAccount = account;
-                  print("Conta ${account}");
                 });
               },
             ),
@@ -109,7 +108,6 @@ class _ModalBankState extends ConsumerState<ModalBank> {
               onSelect: (account) {
                 setState(() {
                   selectedTypeAccount = account;
-                  print("Tipo da conta ${account}");
                 });
               },
             ),

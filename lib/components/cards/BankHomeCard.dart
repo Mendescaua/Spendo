@@ -110,7 +110,7 @@ class BankHomeCardItem extends ConsumerWidget {
     final bankTotalProvider =
         FutureProvider.family<double, String>((ref, bankName) async {
       final controller = ref.read(bankControllerProvider.notifier);
-      final info = await controller.getBankInfo(bankName: bankName);
+      final info = await controller.getBankInfo(bankName: bankName, date: DateTime.now());
       return info?['total_value']?.toDouble() ?? 0.0;
     });
 

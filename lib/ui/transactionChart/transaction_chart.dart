@@ -48,7 +48,7 @@ class _IncomeExpenseBarChartState extends ConsumerState<IncomeExpenseBarChart> {
 
     final maxValor = (totalReceita > totalDespesa ? totalReceita : totalDespesa) * 1.3;
 
-    return Expanded(
+    return Container(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

@@ -95,62 +95,73 @@ class _BankLoadedComboBoxState extends ConsumerState<BankLoadedComboBox> {
     final selected = widget.selected;
 
     return GestureDetector(
-      onTap: _openAccountModal,
-      child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-          decoration: BoxDecoration(
-            border: Border.all(color: AppTheme.dynamicTextColor(context)),
-            borderRadius: BorderRadius.circular(16),
+  onTap: _openAccountModal,
+  child: Container(
+    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+    decoration: BoxDecoration(
+      color: AppTheme.dynamicCardColor(context),
+      borderRadius: BorderRadius.circular(16),
+      boxShadow: [
+        BoxShadow(
+          color: Colors.black.withOpacity(0.03),
+          blurRadius: 4,
+          offset: const Offset(0, 2),
+        ),
+      ],
+    ),
+    child: Row(
+      children: [
+        if (selected != null)
+          SizedBox(
+            width: 36,
+            height: 36,
+            child: Bankscontainer(name: selected.name ?? ''),
+          )
+        else
+          Container(
+            width: 36,
+            height: 36,
+            decoration: BoxDecoration(
+              color: Colors.transparent,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Icon(
+              Iconsax.bank,
+              color: AppTheme.dynamicTextColor(context),
+              size: 24,
+            ),
           ),
-          child: Row(
+        const SizedBox(width: 12),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              if (selected != null)
-                SizedBox(
-                  width: 36,
-                  height: 36,
-                  child: Bankscontainer(name: selected.name ?? ''),
-                )
-              else
-                Container(
-                  width: 36,
-                  height: 36,
-                  decoration: BoxDecoration(
-                    color: AppTheme.primaryColor,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Icon(
-                    Iconsax.bank,
-                    color: AppTheme.whiteColor,
-                    size: 20,
-                  ),
-                ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      selected?.name ?? 'Selecione uma conta',
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    if (selected != null && selected.type != null)
-                      Text(
-                        selected.type!,
-                        style: TextStyle(
-                          fontSize: 13,
-                          color: AppTheme.dynamicTextColor(context)
-                              .withOpacity(0.7),
-                        ),
-                      ),
-                  ],
+              Text(
+                selected?.name ?? 'Selecione uma conta',
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
                 ),
               ),
-              const Icon(Icons.keyboard_arrow_down),
+              if (selected != null && selected.type != null)
+                Text(
+                  selected.type!,
+                  style: TextStyle(
+                    fontSize: 13,
+                    color: AppTheme.dynamicTextColor(context).withOpacity(0.7),
+                  ),
+                ),
             ],
-          )),
-    );
+          ),
+        ),
+        const Icon(
+          Icons.keyboard_arrow_down,
+          size: 24,
+        ),
+      ],
+    ),
+  ),
+);
+
   }
 }

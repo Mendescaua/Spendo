@@ -92,6 +92,7 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
 
     setState(() {});
   }
+
   void onDelete(int id) async {
     final controller = ref.read(subscriptionControllerProvider.notifier);
     final response = await controller.deleteSubscription(id: id);
@@ -186,18 +187,7 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
               ),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-            child: Monthpicker2(
-              selectedMonth: _selectedMonth,
-              onMonthSelected: (mes) {
-                setState(() {
-                  _selectedMonth = mes ?? DateTime.now();
-                  _applyFilter();
-                });
-              },
-            ),
-          ),
+          SizedBox(height: 16),
           Expanded(
             child: Container(
               width: double.infinity,
@@ -209,6 +199,17 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  Monthpicker2(
+                    selectedMonth: _selectedMonth,
+                    onMonthSelected: (mes) {
+                      setState(() {
+                        _selectedMonth = mes ?? DateTime.now();
+                        _applyFilter();
+                      });
+                    },
+                    textColor: AppTheme.dynamicTextColor(context),
+                  ),
+                  const SizedBox(height: 16),
                   Expanded(
                     child: _loading
                         ? Center(
@@ -260,7 +261,6 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
                                       child: const Icon(Iconsax.trash,
                                           color: Colors.white),
                                     ),
-
                                     child: SubscriptionCard(subscription: sub),
                                   );
                                 },

@@ -51,128 +51,123 @@ class _CategoryChartState extends ConsumerState<CategoryChart> {
     final selectedCategoryType =
         selectedCategory != null ? categoriaTipos[selectedCategory]! : null;
 
-    return Expanded(
-      child: Container(
-        width: double.infinity,
-        decoration: const BoxDecoration(
-          borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+    return Container(
+    width: double.infinity,
+    decoration: const BoxDecoration(
+      borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+    ),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          "Gastos por categoria",
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+          ),
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              "Gastos por categoria",
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            Monthpicker2(
-              selectedMonth: _selectedMonth,
-              onMonthSelected: (mes) {
-                setState(() {
-                  touchedIndex = null;
-                  _selectedMonth = mes!;
-                });
-              },
-              textColor: AppTheme.dynamicTextColor(context),
-            ),
-            if (categoriaGastos.isEmpty)
-              const Expanded(
-                child: Center(child: Text("Nenhuma despesa encontrada")),
-              )
-            else
-              Expanded(
-                child: Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    PieChart(
-                      PieChartData(
-                        sectionsSpace: 0,
-                        centerSpaceRadius: 80,
-                        sections: List.generate(categorias.length, (index) {
-                          final categoria = categorias[index];
-                          final valor = categoriaGastos[categoria]!;
-                          final cor = Customtext.stringToColor(
-                              categoriaCores[categoria]!);
-                          final isTouched = index == touchedIndex;
+        Monthpicker2(
+          selectedMonth: _selectedMonth,
+          onMonthSelected: (mes) {
+            setState(() {
+              touchedIndex = null;
+              _selectedMonth = mes!;
+            });
+          },
+          textColor: AppTheme.dynamicTextColor(context),
+        ),
+        if (categoriaGastos.isEmpty)
+          Expanded(
+            child: Center(child: Text("Nenhuma despesa encontrada")),
+          )
+        else
+          Expanded(
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                PieChart(
+                  PieChartData(
+                    sectionsSpace: 0,
+                    centerSpaceRadius: 80,
+                    sections: List.generate(categorias.length, (index) {
+                      final categoria = categorias[index];
+                      final valor = categoriaGastos[categoria]!;
+                      final cor = Customtext.stringToColor(
+                          categoriaCores[categoria]!);
+                      final isTouched = index == touchedIndex;
 
-                          return PieChartSectionData(
-                            value: valor,
-                            title: '',
-                            color: touchedIndex == null
+                      return PieChartSectionData(
+                        value: valor,
+                        title: '',
+                        color: touchedIndex == null
+                            ? cor
+                            : isTouched
                                 ? cor
-                                : isTouched
-                                    ? cor
-                                    : cor.withOpacity(0.2),
-                            radius: 40,
-                          );
-                        }),
-                        pieTouchData: PieTouchData(
-                          touchCallback: (event, response) {
-                            final index = response
-                                    ?.touchedSection?.touchedSectionIndex ??
-                                -1;
-                            if (index < 0 || index >= categorias.length) {
-                              setState(() => touchedIndex = null);
-                            } else {
-                              setState(() => touchedIndex = index);
-                            }
-                          },
-                        ),
+                                : cor.withOpacity(0.2),
+                        radius: 40,
+                      );
+                    }),
+                    pieTouchData: PieTouchData(
+                      touchCallback: (event, response) {
+                        final index =
+                            response?.touchedSection?.touchedSectionIndex ?? -1;
+                        if (index < 0 || index >= categorias.length) {
+                          setState(() => touchedIndex = null);
+                        } else {
+                          setState(() => touchedIndex = index);
+                        }
+                      },
+                    ),
+                  ),
+                ),
+                Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      touchedIndex == null
+                          ? "Total"
+                          : categorias[touchedIndex!],
+                      style: TextStyle(
+                        color: AppTheme.dynamicTextColor(context),
+                        fontSize: 16,
                       ),
                     ),
-                    Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          touchedIndex == null
-                              ? "Total"
-                              : categorias[touchedIndex!],
-                          style: TextStyle(
-                            color: AppTheme.dynamicTextColor(context),
-                            fontSize: 16,
-                          ),
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          Customtext.formatMoeda(
-                            touchedIndex == null
-                                ? total
-                                : categoriaGastos[
-                                        categorias[touchedIndex!]] ??
-                                    0.0,
-                          ),
-                          style: TextStyle(
-                            color: AppTheme.dynamicRedColor(context),
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        if (touchedIndex != null)
-                          Text(
-                            "${(categoriaGastos[categorias[touchedIndex!]]! / total * 100).toStringAsFixed(1)}%",
-                            style: const TextStyle(color: Colors.grey),
-                          ),
-                      ],
+                    const SizedBox(height: 4),
+                    Text(
+                      Customtext.formatMoeda(
+                        touchedIndex == null
+                            ? total
+                            : categoriaGastos[categorias[touchedIndex!]] ?? 0.0,
+                      ),
+                      style: TextStyle(
+                        color: AppTheme.dynamicRedColor(context),
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
+                    if (touchedIndex != null)
+                      Text(
+                        "${(categoriaGastos[categorias[touchedIndex!]]! / total * 100).toStringAsFixed(1)}%",
+                        style: const TextStyle(color: Colors.grey),
+                      ),
                   ],
                 ),
-              ),
-            const SizedBox(height: 8),
-            if (categoriaGastos.isNotEmpty)
-              categoryCard(
-                selectedCategoryType: selectedCategoryType,
-                selectedCategoryColor: selectedCategoryColor,
-                touchedIndex: touchedIndex,
-                categorias: categorias,
-                total: total,
-                categoriaGastos: categoriaGastos,
-              ),
-          ],
-        ),
-      ),
-    );
+              ],
+            ),
+          ),
+        const SizedBox(height: 8),
+        if (categoriaGastos.isNotEmpty)
+          categoryCard(
+            selectedCategoryType: selectedCategoryType,
+            selectedCategoryColor: selectedCategoryColor,
+            touchedIndex: touchedIndex,
+            categorias: categorias,
+            total: total,
+            categoriaGastos: categoriaGastos,
+          ),
+      ],
+    ),
+  );
   }
 }
 

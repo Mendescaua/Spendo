@@ -166,7 +166,7 @@ class _NewReceitaScreenState extends ConsumerState<NewReceitaScreen> {
               ),
             ),
 
-            const SizedBox(height: 32),
+            const SizedBox(height: 16),
 
             // Container branco ocupando toda a largura
             Expanded(
@@ -182,296 +182,349 @@ class _NewReceitaScreenState extends ConsumerState<NewReceitaScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     spacing: 16,
                     children: [
-                      const Text(
-                        'Título',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                      RawAutocomplete<TransactionModel>(
-                        textEditingController: _titleController,
-                        focusNode: _tituloFocusNode,
-                        optionsBuilder: (TextEditingValue textEditingValue) {
-                          final allReceitas = ref
-                              .read(transactionControllerProvider)
-                              .where((t) => t.type == 'r');
-
-                          if (!_tituloFocusNode.hasFocus ||
-                              textEditingValue.text.trim().isEmpty) {
-                            return const Iterable<TransactionModel>.empty();
-                          }
-
-                          // Agrupa as transações pelo título e conta quantas vezes cada uma aparece
-                          final Map<String, List<TransactionModel>> grouped =
-                              {};
-
-                          for (var t in allReceitas) {
-                            final key = t.title.toLowerCase().trim();
-                            if (grouped.containsKey(key)) {
-                              grouped[key]!.add(t);
-                            } else {
-                              grouped[key] = [t];
-                            }
-                          }
-
-                          // Filtra os grupos que aparecem pelo menos 3 vezes
-                          final frequentTitles = grouped.entries
-                              .where((entry) => entry.value.length >= 2)
-                              .map((entry) => entry.value.first)
-                              .toList();
-
-                          // Agora filtra pelo que foi digitado
-                          return frequentTitles.where((t) => t.title
-                              .toLowerCase()
-                              .contains(textEditingValue.text.toLowerCase()));
-                        },
-                        displayStringForOption: (TransactionModel option) =>
-                            option.title,
-                        fieldViewBuilder:
-                            (context, controller, focusNode, onFieldSubmitted) {
-                          return TextField(
-                            controller: controller,
-                            focusNode: focusNode,
-                            style: const TextStyle(fontSize: 16),
-                            decoration: InputDecoration(
-                              prefixIcon: const Icon(Iconsax.text_block),
-                              hintText: 'Digite um título',
-                              filled: true,
-                              fillColor:
-                                  AppTheme.dynamicBackgroundColor(context),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(16),
-                                borderSide: BorderSide(
-                                  color: AppTheme.dynamicReceitaColor(context),
-                                ),
-                              ),
-                            ),
-                          );
-                        },
-                        optionsViewBuilder: (context, onSelected, options) {
-                          return Align(
-                            alignment: Alignment.topLeft,
-                            child: Material(
-                              color: AppTheme.dynamicModalColor(context),
-                              child: Container(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 8),
-                                decoration: BoxDecoration(
-                                  color:
-                                      AppTheme.dynamicBackgroundColor(context),
-                                  borderRadius: BorderRadius.circular(16),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.black.withOpacity(0.08),
-                                      blurRadius: 12,
-                                      offset: const Offset(0, 4),
-                                    )
-                                  ],
-                                ),
-                                child: ListView.builder(
-                                  shrinkWrap: true,
-                                  itemCount: options.length,
-                                  itemBuilder: (context, index) {
-                                    final option = options.elementAt(index);
-                                    return ListTile(
-                                      contentPadding:
-                                          const EdgeInsets.symmetric(
-                                              horizontal: 16, vertical: 4),
-                                      leading: const Icon(Iconsax.repeat),
-                                      title: Text(
-                                        option.title,
-                                        style: const TextStyle(
-                                            fontWeight: FontWeight.w600,
-                                            fontSize: 16),
-                                      ),
-                                      subtitle: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          if (option.description != null &&
-                                              option.description!.isNotEmpty)
-                                            Text(
-                                              option.description!,
-                                              style:
-                                                  const TextStyle(fontSize: 13),
-                                              overflow: TextOverflow.ellipsis,
-                                            ),
-                                          Text(
-                                            'R\$ ${option.value.toStringAsFixed(2).replaceAll('.', ',')}',
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              color:
-                                                  AppTheme.dynamicReceitaColor(
-                                                      context),
-                                              fontSize: 14,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      onTap: () {
-                                        onSelected(option);
-                                      },
-                                    );
-                                  },
-                                ),
-                              ),
-                            ),
-                          );
-                        },
-                        onSelected: (TransactionModel selected) {
-                          setState(() {
-                            _titleController.text = selected.title;
-                            _descriptionController.text =
-                                selected.description ?? '';
-                            _moneyController.updateValue(selected.value);
-                          });
-
-                          // Fecha teclado corretamente
-                          _tituloFocusNode.unfocus();
-                          FocusScope.of(context).unfocus();
-
-                          FloatingMessage(
-                            context,
-                            'Campos preenchidos com base em "${selected.title}"',
-                            'info',
-                            2,
-                          );
-                        },
-                      ),
-                      const Text(
-                        'Descrição',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                      TextField(
-                        controller: _descriptionController,
-                        focusNode: _descricaoFocusNode,
-                        decoration: InputDecoration(
-                          prefixIcon: const Icon(Iconsax.document),
-                          hintText: 'Digite uma descrição',
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(16),
-                            borderSide: BorderSide(
-                              color: AppTheme.dynamicReceitaColor(context),
-                            ),
-                          ),
-                        ),
-                      ),
-                      const Text(
-                        'Data',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                            ChoiceChip(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
+                          const Text(
+                            'Título',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
                             ),
-                            selectedColor: AppTheme.dynamicReceitaColor(context),
-                            backgroundColor:
-                              AppTheme.dynamicBackgroundColor(context),
-                            label: Text(
-                              'Hoje',
-                              style: TextStyle(
-                              color: isSameDate(selectedDate, DateTime.now())
-                                ? Colors.white
-                                : AppTheme.dynamicTextColor(context),
-                              ),
-                            ),
-                            selected: isSameDate(selectedDate, DateTime.now()),
-                            onSelected: (selected) {
-                              if (selected) {
-                              setState(() {
-                                selectedDate = DateTime.now();
-                              });
-                              }
-                            },
-                            checkmarkColor: Colors.white, // <- Adicione esta linha
-                            ),
-                          SizedBox(width: 8),
-                          ChoiceChip(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            selectedColor: AppTheme.dynamicReceitaColor(context),
-                            backgroundColor:
-                                AppTheme.dynamicBackgroundColor(context),
-                            label: Text(
-                              'Ontem',
-                              style: TextStyle(
-                                color: isSameDate(
-                                        selectedDate,
-                                        DateTime.now()
-                                            .subtract(Duration(days: 1)))
-                                    ? Colors.white
-                                    : AppTheme.dynamicTextColor(context),
-                              ),
-                            ),
-                            selected: isSameDate(selectedDate,
-                                DateTime.now().subtract(Duration(days: 1))),
-                            onSelected: (selected) {
-                              if (selected) {
-                                setState(() {
-                                  selectedDate = DateTime.now()
-                                      .subtract(Duration(days: 1));
-                                });
-                              }
-                            },
-                            checkmarkColor: Colors.white,
                           ),
-                          SizedBox(width: 8),
-                          ChoiceChip(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
+                          RawAutocomplete<TransactionModel>(
+                            textEditingController: _titleController,
+                            focusNode: _tituloFocusNode,
+                            optionsBuilder: (TextEditingValue textEditingValue) {
+                              final allReceitas = ref
+                                  .read(transactionControllerProvider)
+                                  .where((t) => t.type == 'r');
+                          
+                              if (!_tituloFocusNode.hasFocus ||
+                                  textEditingValue.text.trim().isEmpty) {
+                                return const Iterable<TransactionModel>.empty();
+                              }
+                          
+                              // Agrupa as transações pelo título e conta quantas vezes cada uma aparece
+                              final Map<String, List<TransactionModel>> grouped =
+                                  {};
+                          
+                              for (var t in allReceitas) {
+                                final key = t.title.toLowerCase().trim();
+                                if (grouped.containsKey(key)) {
+                                  grouped[key]!.add(t);
+                                } else {
+                                  grouped[key] = [t];
+                                }
+                              }
+                          
+                              // Filtra os grupos que aparecem pelo menos 3 vezes
+                              final frequentTitles = grouped.entries
+                                  .where((entry) => entry.value.length >= 2)
+                                  .map((entry) => entry.value.first)
+                                  .toList();
+                          
+                              // Agora filtra pelo que foi digitado
+                              return frequentTitles.where((t) => t.title
+                                  .toLowerCase()
+                                  .contains(textEditingValue.text.toLowerCase()));
+                            },
+                            displayStringForOption: (TransactionModel option) =>
+                                option.title,
+                            fieldViewBuilder:
+                                (context, controller, focusNode, onFieldSubmitted) {
+                              return TextField(
+                                controller: controller,
+                                focusNode: focusNode,
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                                decoration: InputDecoration(
+                                  hintText: 'Digite um título',
+                                  hintStyle: const TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                  filled: true,
+                                  fillColor: AppTheme.dynamicCardColor(context),
+                                  prefixIcon: Icon(
+                                    Iconsax.text_block,
+                                    size: 24,
+                                  ),
+                                  contentPadding:
+                                      const EdgeInsets.symmetric(vertical: 18),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(16),
+                                    borderSide: BorderSide.none,
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(16),
+                                    borderSide: BorderSide.none,
+                                  ),
+                                ),
+                              );
+                            },
+                            optionsViewBuilder: (context, onSelected, options) {
+                              return Align(
+                                alignment: Alignment.topLeft,
+                                child: Material(
+                                  color: AppTheme.dynamicModalColor(context),
+                                  child: Container(
+                                    padding:
+                                        const EdgeInsets.symmetric(vertical: 8),
+                                    decoration: BoxDecoration(
+                                      color:
+                                          AppTheme.dynamicBackgroundColor(context),
+                                      borderRadius: BorderRadius.circular(16),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.black.withOpacity(0.08),
+                                          blurRadius: 12,
+                                          offset: const Offset(0, 4),
+                                        )
+                                      ],
+                                    ),
+                                    child: ListView.builder(
+                                      shrinkWrap: true,
+                                      itemCount: options.length,
+                                      itemBuilder: (context, index) {
+                                        final option = options.elementAt(index);
+                                        return ListTile(
+                                          contentPadding:
+                                              const EdgeInsets.symmetric(
+                                                  horizontal: 16, vertical: 4),
+                                          leading: const Icon(Iconsax.repeat),
+                                          title: Text(
+                                            option.title,
+                                            style: const TextStyle(
+                                                fontWeight: FontWeight.w600,
+                                                fontSize: 16),
+                                          ),
+                                          subtitle: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              if (option.description != null &&
+                                                  option.description!.isNotEmpty)
+                                                Text(
+                                                  option.description!,
+                                                  style:
+                                                      const TextStyle(fontSize: 13),
+                                                  overflow: TextOverflow.ellipsis,
+                                                ),
+                                              Text(
+                                                'R\$ ${option.value.toStringAsFixed(2).replaceAll('.', ',')}',
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  color:
+                                                      AppTheme.dynamicReceitaColor(
+                                                          context),
+                                                  fontSize: 14,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          onTap: () {
+                                            onSelected(option);
+                                          },
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
+                            onSelected: (TransactionModel selected) {
+                              setState(() {
+                                _titleController.text = selected.title;
+                                _descriptionController.text =
+                                    selected.description ?? '';
+                                _moneyController.updateValue(selected.value);
+                              });
+                          
+                              // Fecha teclado corretamente
+                              _tituloFocusNode.unfocus();
+                              FocusScope.of(context).unfocus();
+                          
+                              FloatingMessage(
+                                context,
+                                'Campos preenchidos com base em "${selected.title}"',
+                                'info',
+                                2,
+                              );
+                            },
+                          ),
+                        ],
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            'Descrição',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
                             ),
-                            selectedColor: AppTheme.dynamicReceitaColor(context),
-                            backgroundColor:
-                                AppTheme.dynamicBackgroundColor(context),
-                            label: Text(
-                              selectedDate.isAfter(DateTime.now()
-                                          .subtract(Duration(days: 1))) &&
-                                      !isSameDate(selectedDate, DateTime.now())
-                                  ? '${dateFormat.format(selectedDate)}'
-                                  : 'Outro dia',
-                              style: TextStyle(
-                                color: !(isSameDate(
-                                            selectedDate, DateTime.now()) ||
+                          ),
+                          TextField(
+                            controller: _descriptionController,
+                            focusNode: _descricaoFocusNode,
+                            style: const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                                decoration: InputDecoration(
+                                  hintText: 'Digite uma descrição',
+                                  hintStyle: const TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                  filled: true,
+                                  fillColor: AppTheme.dynamicCardColor(context),
+                                  prefixIcon: Icon(
+                                    Iconsax.document,
+                                    size: 24,
+                                  ),
+                                  contentPadding:
+                                      const EdgeInsets.symmetric(vertical: 18),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(16),
+                                    borderSide: BorderSide.none,
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(16),
+                                    borderSide: BorderSide.none,
+                                  ),
+                                ),
+                          ),
+                        ],
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            'Data',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              ChoiceChip(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                side: BorderSide
+                                    .none,
+                                selectedColor:
+                                    AppTheme.dynamicReceitaColor(context),
+                                backgroundColor:
+                                    AppTheme.dynamicCardColor(context),
+                                label: Text(
+                                  'Hoje',
+                                  style: TextStyle(
+                                    color: isSameDate(selectedDate, DateTime.now())
+                                        ? Colors.white
+                                        : AppTheme.dynamicTextColor(context),
+                                  ),
+                                ),
+                                selected: isSameDate(selectedDate, DateTime.now()),
+                                onSelected: (selected) {
+                                  if (selected) {
+                                    setState(() {
+                                      selectedDate = DateTime.now();
+                                    });
+                                  }
+                                },
+                                checkmarkColor:
+                                    Colors.white, // <- Adicione esta linha
+                              ),
+                              SizedBox(width: 8),
+                              ChoiceChip(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                side: BorderSide
+                                    .none,
+                                selectedColor:
+                                    AppTheme.dynamicReceitaColor(context),
+                                backgroundColor:
+                                    AppTheme.dynamicCardColor(context),
+                                label: Text(
+                                  'Ontem',
+                                  style: TextStyle(
+                                    color: isSameDate(
+                                            selectedDate,
+                                            DateTime.now()
+                                                .subtract(Duration(days: 1)))
+                                        ? Colors.white
+                                        : AppTheme.dynamicTextColor(context),
+                                  ),
+                                ),
+                                selected: isSameDate(selectedDate,
+                                    DateTime.now().subtract(Duration(days: 1))),
+                                onSelected: (selected) {
+                                  if (selected) {
+                                    setState(() {
+                                      selectedDate = DateTime.now()
+                                          .subtract(Duration(days: 1));
+                                    });
+                                  }
+                                },
+                                checkmarkColor: Colors.white,
+                              ),
+                              SizedBox(width: 8),
+                              ChoiceChip(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                side: BorderSide
+                                    .none,
+                                selectedColor:
+                                    AppTheme.dynamicReceitaColor(context),
+                                backgroundColor:
+                                    AppTheme.dynamicCardColor(context),
+                                label: Text(
+                                  selectedDate.isAfter(DateTime.now()
+                                              .subtract(Duration(days: 1))) &&
+                                          !isSameDate(selectedDate, DateTime.now())
+                                      ? '${dateFormat.format(selectedDate)}'
+                                      : 'Outro dia',
+                                  style: TextStyle(
+                                    color: !(isSameDate(
+                                                selectedDate, DateTime.now()) ||
+                                            isSameDate(
+                                                selectedDate,
+                                                DateTime.now()
+                                                    .subtract(Duration(days: 1))))
+                                        ? Colors.white
+                                        : AppTheme.dynamicTextColor(context),
+                                  ),
+                                ),
+                                selected:
+                                    !(isSameDate(selectedDate, DateTime.now()) ||
                                         isSameDate(
                                             selectedDate,
                                             DateTime.now()
-                                                .subtract(Duration(days: 1))))
-                                    ? Colors.white
-                                    : AppTheme.dynamicTextColor(context),
+                                                .subtract(Duration(days: 1)))),
+                                onSelected: (selected) async {
+                                  final pickedDate = await showDatePicker(
+                                    context: context,
+                                    initialDate: selectedDate,
+                                    firstDate: DateTime(2000),
+                                    lastDate: DateTime(2101),
+                                    locale: const Locale('pt', 'BR'),
+                                  );
+                                  if (pickedDate != null) {
+                                    setState(() {
+                                      selectedDate = pickedDate;
+                                    });
+                                  }
+                                },
+                                checkmarkColor: Colors.white,
                               ),
-                            ),
-                            selected:
-                                !(isSameDate(selectedDate, DateTime.now()) ||
-                                    isSameDate(
-                                        selectedDate,
-                                        DateTime.now()
-                                            .subtract(Duration(days: 1)))),
-                            onSelected: (selected) async {
-                              final pickedDate = await showDatePicker(
-                                context: context,
-                                initialDate: selectedDate,
-                                firstDate: DateTime(2000),
-                                lastDate: DateTime(2101),
-                                locale: const Locale('pt', 'BR'),
-                              );
-                              if (pickedDate != null) {
-                                setState(() {
-                                  selectedDate = pickedDate;
-                                });
-                              }
-                            },
-                            checkmarkColor: Colors.white,
+                            ],
                           ),
                         ],
                       ),

@@ -97,6 +97,15 @@ class _TransactionScreenState extends ConsumerState<TransactionScreen> {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
+        leading: filtro == 'all'
+            ? null
+            : IconButton(
+                icon: const Icon(
+                  Iconsax.arrow_left,
+                  color: AppTheme.whiteColor,
+                ),
+                onPressed: () => Navigator.of(context).pop(),
+              ),
         title: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -142,9 +151,10 @@ class _TransactionScreenState extends ConsumerState<TransactionScreen> {
                   _tituloTotal(filtro),
                   style: const TextStyle(
                     fontSize: 14,
+                    color: AppTheme.whiteColor,
                   ),
                 ),
-                const SizedBox(height: 10),
+                const SizedBox(height: 9.8),
                 Text(
                   Customtext.formatMoeda(
                       _valorTotal(filtro, receitas, despesas)),
@@ -154,7 +164,7 @@ class _TransactionScreenState extends ConsumerState<TransactionScreen> {
                     color: AppTheme.whiteColor,
                   ),
                 ),
-                const SizedBox(height: 10.6),
+                const SizedBox(height: 11),
               ],
             ),
           ),
@@ -168,57 +178,62 @@ class _TransactionScreenState extends ConsumerState<TransactionScreen> {
                   top: Radius.circular(24),
                 ),
               ),
-              child: datasOrdenadas.isEmpty
-                  ? const Center(
-                      child: Padding(
-                        padding: EdgeInsets.only(top: 32),
-                        child: Text(
-                          "Nenhuma transação encontrada",
-                          style: TextStyle(fontSize: 16),
-                        ),
-                      ),
-                    )
-                  : SingleChildScrollView(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: datasOrdenadas.map((data) {
-                          final transacoesDoDia = transacoesAgrupadas[data]!;
-                          final nomeDia = _diaSemana(data.weekday);
-                          final dia = data.day.toString().padLeft(2, '0');
-                          final nomeMes = _nomeMes(data.month);
-                          final titulo = "$nomeDia, $dia de $nomeMes";
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Monthpicker2(
+                    selectedMonth: _selectedMonth,
+                    onMonthSelected: (mes) {
+                      setState(() {
+                        _selectedMonth = mes!;
+                      });
+                    },
+                    textColor: AppTheme.dynamicTextColor(context),
+                  ),
+                  const SizedBox(height: 16),
+                  Expanded(
+                    child: datasOrdenadas.isEmpty
+                        ? const Center(
+                            child: Text(
+                              "Nenhuma transação encontrada",
+                              style: TextStyle(fontSize: 16),
+                            ),
+                          )
+                        : ListView.builder(
+                            itemCount: datasOrdenadas.length,
+                            itemBuilder: (context, index) {
+                              final data = datasOrdenadas[index];
+                              final transacoesDoDia =
+                                  transacoesAgrupadas[data]!;
+                              final nomeDia = _diaSemana(data.weekday);
+                              final dia = data.day.toString().padLeft(2, '0');
+                              final nomeMes = _nomeMes(data.month);
+                              final titulo = "$nomeDia, $dia de $nomeMes";
 
-                          return Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Monthpicker2(
-                                selectedMonth: _selectedMonth,
-                                onMonthSelected: (mes) {
-                                  setState(() {
-                                    _selectedMonth = mes!;
-                                  });
-                                },
-                                textColor: AppTheme.whiteColor,
-                              ),
-                              SizedBox(height: 16),
-                              Text(
-                                titulo,
-                                style: const TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              const SizedBox(height: 8),
-                              ...transacoesDoDia
-                                  .map((transacao) =>
-                                      TransactionCard(transaction: transacao))
-                                  .toList(),
-                              const SizedBox(height: 24),
-                            ],
-                          );
-                        }).toList(),
-                      ),
-                    ),
+                              return Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  SizedBox(height: 16),
+                                  Text(
+                                    titulo,
+                                    style: const TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 8),
+                                  ...transacoesDoDia
+                                      .map((transacao) => TransactionCard(
+                                          transaction: transacao))
+                                      .toList(),
+                                  const SizedBox(height: 24),
+                                ],
+                              );
+                            },
+                          ),
+                  ),
+                ],
+              ),
             ),
           ),
         ],
