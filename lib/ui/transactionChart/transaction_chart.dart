@@ -52,11 +52,11 @@ class _IncomeExpenseBarChartState extends ConsumerState<IncomeExpenseBarChart> {
 
     final maxValor =
         (totalReceita > totalDespesa ? totalReceita : totalDespesa) * 1.3;
-
-        final now = DateTime.now();
-final filteredTransactions = transactions.where((t) =>
-  t.date.month == now.month && t.date.year == now.year
-).toList();
+    final filteredTransactions = transactions
+        .where((t) =>
+            t.date.month == _selectedMonth.month &&
+            t.date.year == _selectedMonth.year)
+        .toList();
 
     return Container(
       child: Column(
@@ -97,6 +97,7 @@ final filteredTransactions = transactions.where((t) =>
                                 'relatorio_transacoes_${DateTime.now().day}-${DateTime.now().month}-${DateTime.now().year}',
                           );
                         },
+                        
                         onGenerateExcel: () {
                           Navigator.pop(context);
                           exportToExcelTransactions(

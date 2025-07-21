@@ -40,171 +40,95 @@ Future<void> exportToPdfCategories({
       : categoriaGastos.values.reduce((a, b) => a > b ? a : b);
 
   pdf.addPage(
-    pw.Page(
+    pw.MultiPage(
       pageFormat: PdfPageFormat.a4,
       margin: const pw.EdgeInsets.all(24),
-      build: (context) {
-        return pw.Stack(
+      footer: (context) => pw.Text(
+        'Página ${context.pageNumber} de ${context.pagesCount}',
+        style: pw.TextStyle(fontSize: 10, color: PdfColors.grey),
+        textAlign: pw.TextAlign.center,
+      ),
+      build: (context) => [
+        pw.Column(
+          crossAxisAlignment: pw.CrossAxisAlignment.start,
           children: [
-            pw.Column(
-              crossAxisAlignment: pw.CrossAxisAlignment.start,
+            // Cabeçalho: logo esquerda + texto "Spendo" ao lado
+            pw.Row(
+              mainAxisAlignment: pw.MainAxisAlignment.start,
+              crossAxisAlignment: pw.CrossAxisAlignment.center,
               children: [
-                // Cabeçalho: logo esquerda + texto "Spendo" ao lado
-                pw.Row(
-                  mainAxisAlignment: pw.MainAxisAlignment.start,
-                  crossAxisAlignment: pw.CrossAxisAlignment.center,
-                  children: [
-                    pw.Image(logoImage, width: 40, height: 40),
-                    pw.SizedBox(width: 8),
-                    pw.Text(
-                      'Spendo',
-                      style: pw.TextStyle(
-                        fontSize: 26,
-                        fontWeight: pw.FontWeight.bold,
-                        color: PdfColors.black,
-                      ),
-                    ),
-                  ],
-                ),
-
-                pw.SizedBox(height: 20),
-
-                // Título com fundo azul e cantos arredondados
-                pw.Container(
-                  padding: const pw.EdgeInsets.all(8),
-                  decoration: pw.BoxDecoration(
-                    color: PdfColor.fromInt(0xFF4678C0),
-                    borderRadius:
-                        const pw.BorderRadius.all(pw.Radius.circular(8)),
-                  ),
-                  child: pw.Text(
-                    'Relatório de Gastos',
-                    style: pw.TextStyle(
-                      fontSize: 22,
-                      fontWeight: pw.FontWeight.bold,
-                      color: PdfColor.fromInt(0xFFFFFFFF),
-                    ),
-                  ),
-                ),
-
-                pw.SizedBox(height: 8),
-
-                // Data/hora geração
+                pw.Image(logoImage, width: 40, height: 40),
+                pw.SizedBox(width: 8),
                 pw.Text(
-                  'Gerado em: ${DateTime.now().toLocal()}',
-                  style: pw.TextStyle(fontSize: 10, color: PdfColors.grey600),
-                ),
-
-                pw.SizedBox(height: 20),
-
-                // Tabela com linhas alternadas
-                pw.Table.fromTextArray(
-                  headers: headers,
-                  data: data,
-                  headerDecoration:
-                      pw.BoxDecoration(color: PdfColor.fromInt(0xFF4678C0)),
-                  headerHeight: 25,
-                  cellAlignment: pw.Alignment.center,
-                  cellHeight: 30,
-                  border: pw.TableBorder.all(width: 0.5, color: PdfColors.grey),
-                  headerStyle: headerStyle,
-                  cellStyle: const pw.TextStyle(fontSize: 12),
-                  rowDecoration: pw.BoxDecoration(color: PdfColors.grey200),
-                  oddRowDecoration: pw.BoxDecoration(color: PdfColors.grey100),
-                  columnWidths: {
-                    0: const pw.FixedColumnWidth(150),
-                    1: const pw.FixedColumnWidth(80),
-                    2: const pw.FixedColumnWidth(80),
-                  },
-                  cellAlignments: {
-                    0: pw.Alignment.centerLeft,
-                    1: pw.Alignment.center,
-                    2: pw.Alignment.center,
-                  },
-                ),
-
-                pw.SizedBox(height: 30),
-
-                // Gráfico de barras vertical (único gráfico)
-                pw.Text(
-                  'Gráfico de Barras Vertical:',
+                  'Spendo',
                   style: pw.TextStyle(
-                      fontSize: 16, fontWeight: pw.FontWeight.bold),
-                ),
-                pw.SizedBox(
-                    height: 20), // espaçamento maior entre título e gráfico
-
-                pw.Container(
-                  padding:
-                      const pw.EdgeInsets.all(12), // espaço interno do card
-                  decoration: pw.BoxDecoration(
-                    color:
-                        PdfColors.grey200, // cor de fundo clara para destacar
-                    border: pw.Border.all(
-                        color: PdfColors.grey600, width: 1), // borda cinza
-                    borderRadius: const pw.BorderRadius.all(
-                        pw.Radius.circular(8)), // cantos arredondados
-                  ),
-                  height: 200,
-                  child: pw.Row(
-                    crossAxisAlignment: pw.CrossAxisAlignment.end,
-                    children: categoriaGastos.entries.map((e) {
-                      final barHeight =
-                          maxValue == 0 ? 0 : (e.value / maxValue) * 130;
-                      return pw.Padding(
-                        padding: const pw.EdgeInsets.symmetric(horizontal: 6),
-                        child: pw.Column(
-                          mainAxisAlignment: pw.MainAxisAlignment.end,
-                          children: [
-                            pw.Text(
-                              e.value.toStringAsFixed(2),
-                              style: pw.TextStyle(
-                                fontSize: 10,
-                                fontWeight: pw.FontWeight.bold,
-                              ),
-                            ),
-                            pw.SizedBox(height: 4),
-                            pw.Container(
-                              width: 20,
-                              height: barHeight.toDouble(),
-                              color: PdfColor.fromInt(0xFF4678C0),
-                            ),
-                            pw.SizedBox(height: 5),
-                            pw.Container(
-                              width: 50,
-                              child: pw.Text(
-                                e.key,
-                                style: const pw.TextStyle(fontSize: 8),
-                                textAlign: pw.TextAlign.center,
-                                maxLines: 3,
-                                overflow: pw.TextOverflow.visible,
-                              ),
-                            ),
-                          ],
-                        ),
-                      );
-                    }).toList(),
+                    fontSize: 26,
+                    fontWeight: pw.FontWeight.bold,
+                    color: PdfColors.black,
                   ),
                 ),
-
-                pw.SizedBox(height: 30),
               ],
             ),
+            pw.SizedBox(height: 20),
 
-            // Rodapé com número da página
-            pw.Positioned(
-              bottom: 0,
-              left: 0,
-              right: 0,
+            // Título com fundo azul e cantos arredondados
+            pw.Container(
+              padding: const pw.EdgeInsets.all(8),
+              decoration: pw.BoxDecoration(
+                color: PdfColor.fromInt(0xFF4678C0),
+                borderRadius:
+                    const pw.BorderRadius.all(pw.Radius.circular(8)),
+              ),
               child: pw.Text(
-                'Página ${context.pageNumber} de ${context.pagesCount}',
-                style: pw.TextStyle(fontSize: 10, color: PdfColors.grey),
-                textAlign: pw.TextAlign.center,
+                'Relatório de Gastos',
+                style: pw.TextStyle(
+                  fontSize: 22,
+                  fontWeight: pw.FontWeight.bold,
+                  color: PdfColor.fromInt(0xFFFFFFFF),
+                ),
               ),
             ),
+            pw.SizedBox(height: 8),
+
+            // Data/hora geração
+            pw.Text(
+              'Gerado em: ${DateTime.now().toLocal()}',
+              style: pw.TextStyle(fontSize: 10, color: PdfColors.grey600),
+            ),
+            pw.SizedBox(height: 20),
+
+            // Tabela com linhas alternadas
+            pw.Table.fromTextArray(
+              headers: headers,
+              data: data,
+              headerDecoration:
+                  pw.BoxDecoration(color: PdfColor.fromInt(0xFF4678C0)),
+              headerHeight: 25,
+              cellAlignment: pw.Alignment.center,
+              cellHeight: 30,
+              border: pw.TableBorder.all(width: 0.5, color: PdfColors.grey),
+              headerStyle: headerStyle,
+              cellStyle: const pw.TextStyle(fontSize: 12),
+              rowDecoration: pw.BoxDecoration(color: PdfColors.grey200),
+              oddRowDecoration: pw.BoxDecoration(color: PdfColors.grey100),
+              columnWidths: {
+                0: const pw.FixedColumnWidth(150),
+                1: const pw.FixedColumnWidth(80),
+                2: const pw.FixedColumnWidth(80),
+              },
+              cellAlignments: {
+                0: pw.Alignment.centerLeft,
+                1: pw.Alignment.center,
+                2: pw.Alignment.center,
+              },
+            ),
+            pw.SizedBox(height: 30),
           ],
-        );
-      },
+        ),
+
+        // Gráficos divididos em múltiplos cards
+        ..._buildBarChartCards(categoriaGastos, maxValue.toDouble()),
+      ],
     ),
   );
 
@@ -250,3 +174,71 @@ Future<void> exportToPdfCategories({
     subject: 'Aqui está seu relatório de gastos em PDF',
   );
 }
+
+List<pw.Widget> _buildBarChartCards(Map<String, double> data, double maxValue) {
+  const int categoriasPorCard = 8;
+  // Ordenar por valor decrescente
+  final entries = data.entries.toList()
+    ..sort((a, b) => b.value.compareTo(a.value));
+
+  final List<pw.Widget> cards = [];
+
+  for (int i = 0; i < entries.length; i += categoriasPorCard) {
+    final bloco = entries.skip(i).take(categoriasPorCard).toList();
+
+    cards.addAll([
+      pw.Container(
+        padding: const pw.EdgeInsets.all(12),
+        decoration: pw.BoxDecoration(
+          color: PdfColors.grey200,
+          border: pw.Border.all(color: PdfColors.grey600, width: 1),
+          borderRadius: const pw.BorderRadius.all(pw.Radius.circular(8)),
+        ),
+        height: 200,
+        child: pw.Row(
+          crossAxisAlignment: pw.CrossAxisAlignment.end,
+          mainAxisAlignment: pw.MainAxisAlignment.spaceEvenly,
+          children: bloco.map((e) {
+            final barHeight = maxValue == 0 ? 0 : (e.value / maxValue) * 130;
+            return pw.Padding(
+              padding: const pw.EdgeInsets.symmetric(horizontal: 2),
+              child: pw.Column(
+                mainAxisAlignment: pw.MainAxisAlignment.end,
+                children: [
+                  pw.Text(
+                    e.value.toStringAsFixed(2),
+                    style: pw.TextStyle(
+                      fontSize: 10,
+                      fontWeight: pw.FontWeight.bold,
+                    ),
+                  ),
+                  pw.SizedBox(height: 4),
+                  pw.Container(
+                    width: 16,
+                    height: barHeight.toDouble(),
+                    color: PdfColor.fromInt(0xFF4678C0),
+                  ),
+                  pw.SizedBox(height: 5),
+                  pw.Container(
+                    width: 60,
+                    child: pw.Text(
+                      e.key,
+                      style: const pw.TextStyle(fontSize: 8),
+                      textAlign: pw.TextAlign.center,
+                      maxLines: 3,
+                      overflow: pw.TextOverflow.visible,
+                    ),
+                  ),
+                ],
+              ),
+            );
+          }).toList(),
+        ),
+      ),
+      pw.SizedBox(height: 16),
+    ]);
+  }
+
+  return cards;
+}
+
