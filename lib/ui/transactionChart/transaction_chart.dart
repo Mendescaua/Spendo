@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:spendo/components/MonthPicker2.dart';
+import 'package:spendo/components/modals/ModalRelatorioCategories.dart';
 import 'package:spendo/controllers/transaction_controller.dart';
+import 'package:spendo/services/relatorios/exportToExcelTransactions.dart';
+import 'package:spendo/services/relatorios/exportToPdfTransactions.dart';
 import 'package:spendo/utils/customText.dart';
 import 'package:spendo/utils/theme.dart';
 
@@ -46,20 +50,70 @@ class _IncomeExpenseBarChartState extends ConsumerState<IncomeExpenseBarChart> {
     // Para exemplo, vamos criar um grupo com receitas e despesas lado a lado
     // Para múltiplos grupos, você criaria uma lista de BarChartGroupData.
 
-    final maxValor = (totalReceita > totalDespesa ? totalReceita : totalDespesa) * 1.3;
+    final maxValor =
+        (totalReceita > totalDespesa ? totalReceita : totalDespesa) * 1.3;
+
+        final now = DateTime.now();
+final filteredTransactions = transactions.where((t) =>
+  t.date.month == now.month && t.date.year == now.year
+).toList();
 
     return Container(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            'Receita vs Despesa',
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-            ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text(
+                'Receita vs Despesa',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Tooltip(
+                message: 'Gerar relatório',
+                child: IconButton(
+                  icon: Icon(
+                    PhosphorIcons.microsoftExcelLogo(
+                        PhosphorIconsStyle.regular),
+                    color: Color(0xFF217346), // verde Excel
+                    size: 28,
+                  ),
+                  onPressed: () {
+                    showModalBottomSheet(
+                      context: context,
+                      backgroundColor: Colors.transparent,
+                      isScrollControlled: true,
+                      builder: (_) => ModalGenerateReport(
+                        onGeneratePdf: () {
+                          Navigator.pop(context);
+                          exportToPdfTransactions(
+                            receita: totalReceita,
+                            despesa: totalDespesa,
+                            transactions: filteredTransactions,
+                            nomeArquivo:
+                                'relatorio_transacoes_${DateTime.now().day}-${DateTime.now().month}-${DateTime.now().year}',
+                          );
+                        },
+                        onGenerateExcel: () {
+                          Navigator.pop(context);
+                          exportToExcelTransactions(
+                            receita: totalReceita,
+                            despesa: totalDespesa,
+                            transactions: filteredTransactions,
+                            nomeArquivo:
+                                'relatorio_transacoes_${DateTime.now().day}-${DateTime.now().month}-${DateTime.now().year}',
+                          );
+                        },
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ],
           ),
-          const SizedBox(height: 12),
           Monthpicker2(
             selectedMonth: _selectedMonth,
             onMonthSelected: (mes) {
@@ -67,7 +121,7 @@ class _IncomeExpenseBarChartState extends ConsumerState<IncomeExpenseBarChart> {
                 _selectedMonth = mes!;
               });
             },
-            textColor: AppTheme.primaryColor,
+            textColor: AppTheme.dynamicTextColor(context),
           ),
           const SizedBox(height: 24),
           if (totalReceita == 0 && totalDespesa == 0)
@@ -84,7 +138,8 @@ class _IncomeExpenseBarChartState extends ConsumerState<IncomeExpenseBarChart> {
               child: BarChart(
                 BarChartData(
                   maxY: maxValor,
-                  groupsSpace: 44, // espaçamento entre grupos (no seu caso só 1 grupo)
+                  groupsSpace:
+                      44, // espaçamento entre grupos (no seu caso só 1 grupo)
                   barGroups: [
                     BarChartGroupData(
                       x: 0,
@@ -92,7 +147,8 @@ class _IncomeExpenseBarChartState extends ConsumerState<IncomeExpenseBarChart> {
                       barRods: [
                         BarChartRodData(
                           toY: totalReceita,
-                          color: AppTheme.greenColor, // azul forte, como na imagem
+                          color:
+                              AppTheme.greenColor, // azul forte, como na imagem
                           width: 32,
                           borderRadius: BorderRadius.circular(6),
                           backDrawRodData: BackgroundBarChartRodData(
@@ -103,7 +159,8 @@ class _IncomeExpenseBarChartState extends ConsumerState<IncomeExpenseBarChart> {
                         ),
                         BarChartRodData(
                           toY: totalDespesa,
-                          color: AppTheme.dynamicRedColor(context), // laranja forte
+                          color: AppTheme.dynamicRedColor(
+                              context), // laranja forte
                           width: 32,
                           borderRadius: BorderRadius.circular(6),
                           backDrawRodData: BackgroundBarChartRodData(
@@ -148,8 +205,10 @@ class _IncomeExpenseBarChartState extends ConsumerState<IncomeExpenseBarChart> {
                     bottomTitles: AxisTitles(
                       sideTitles: SideTitles(showTitles: false),
                     ),
-                    rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                    topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                    rightTitles:
+                        AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                    topTitles:
+                        AxisTitles(sideTitles: SideTitles(showTitles: false)),
                   ),
                   borderData: FlBorderData(show: false),
                   barTouchData: BarTouchData(
@@ -159,7 +218,8 @@ class _IncomeExpenseBarChartState extends ConsumerState<IncomeExpenseBarChart> {
                         final label = rodIndex == 0 ? 'Receita' : 'Despesa';
                         return BarTooltipItem(
                           '$label\n${Customtext.formatMoeda(rod.toY)}',
-                          const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                          const TextStyle(
+                              color: Colors.white, fontWeight: FontWeight.bold),
                         );
                       },
                     ),
