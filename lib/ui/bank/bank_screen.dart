@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:spendo/components/FloatingMessage.dart';
@@ -104,7 +105,16 @@ class _BankScreenState extends ConsumerState<BankScreen> {
               child: _isLoading
                   ? const Center(child: CircularProgressIndicator())
                   : ReorderableListView.builder(
+                      proxyDecorator: (Widget child, int index,
+                          Animation<double> animation) {
+                        return Material(
+                          color: Colors.transparent,
+                          elevation: 0, // remove sombra
+                          child: child,
+                        );
+                      },
                       onReorder: (oldIndex, newIndex) async {
+                        HapticFeedback.mediumImpact();
                         if (newIndex > oldIndex) newIndex -= 1;
                         final newBanks = List.of(banks);
                         final item = newBanks.removeAt(oldIndex);

@@ -96,7 +96,7 @@ class _ModalArchivedCategoryState extends ConsumerState<ModalArchivedCategory> {
                             .take(3)
                             .map((cat) => CategoryCard(
                                   category: cat,
-                                  tipo: true, // Categoria arquivada
+                                  tipo: false, // Categoria arquivada
                                   onArquivar: (_) =>
                                       _handleDesarquivar(cat, context),
                                 ))

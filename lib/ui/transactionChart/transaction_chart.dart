@@ -66,7 +66,7 @@ class _IncomeExpenseBarChartState extends ConsumerState<IncomeExpenseBarChart> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               const Text(
-                'Receita vs Despesa',
+                'Transações',
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
@@ -97,7 +97,6 @@ class _IncomeExpenseBarChartState extends ConsumerState<IncomeExpenseBarChart> {
                                 'relatorio_transacoes_${DateTime.now().day}-${DateTime.now().month}-${DateTime.now().year}',
                           );
                         },
-                        
                         onGenerateExcel: () {
                           Navigator.pop(context);
                           exportToExcelTransactions(
@@ -129,8 +128,7 @@ class _IncomeExpenseBarChartState extends ConsumerState<IncomeExpenseBarChart> {
             const Expanded(
               child: Center(
                 child: Text(
-                  'Nenhuma transação encontrada neste mês.',
-                  style: TextStyle(fontSize: 16, color: Colors.grey),
+                  'Nenhuma transação encontrada.',
                 ),
               ),
             )

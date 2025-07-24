@@ -55,15 +55,10 @@ class Homebar extends ConsumerWidget implements PreferredSizeWidget {
                       ? base64ToImage(users.picture!)
                       : null,
               child: users?.picture == null || users!.picture!.isEmpty
-                  ? Text(
-                      (users?.name.isNotEmpty ?? false)
-                          ? users!.name[0].toUpperCase()
-                          : '',
-                      style: const TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    )
+                  ? Icon(
+                      PhosphorIcons.user(PhosphorIconsStyle.regular), 
+                      color: AppTheme.primaryColor,
+                      size: 28,)
                   : null,
             ),
           ),

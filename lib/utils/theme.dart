@@ -15,6 +15,8 @@ class AppTheme {
   static const Color greenColor = Color(0xFF22C55E);
   static const Color softRedColor = Color(0xFFFDE8E8);
   static const Color softGreenColor = Color(0xFFD1FAE5);
+  static const Color isArchivedColor = Color(0xFFFDE8E8);
+  static const Color notArchivedColor = Color(0xFFD1FAE5);
 
   /// Retorna a cor "white" baseada no tema atual (claro ou escuro)
   static Color dynamicBackgroundColor(BuildContext context) {

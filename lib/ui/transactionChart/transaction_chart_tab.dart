@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:iconsax/iconsax.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:spendo/ui/transactionChart/category_chart.dart';
 import 'package:spendo/ui/transactionChart/transaction_chart.dart';
@@ -87,7 +86,7 @@ class TabNavigation extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final icons = [PhosphorIcons.chartDonut(PhosphorIconsStyle.regular), PhosphorIcons.chartBar(PhosphorIconsStyle.regular), Icons.bar_chart];
+    final icons = [PhosphorIcons.chartDonut(PhosphorIconsStyle.regular), PhosphorIcons.chartBar(PhosphorIconsStyle.regular), PhosphorIcons.chartLine(PhosphorIconsStyle.regular)];
 
     return Container(
       padding: const EdgeInsets.all(10),

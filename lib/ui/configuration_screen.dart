@@ -102,7 +102,9 @@ class _ConfiguracoesScreenState extends ConsumerState<ConfiguracoesScreen> {
                       borderRadius: BorderRadius.circular(16),
                       boxShadow: const [
                         BoxShadow(
-                            color: Colors.black12, blurRadius: 6, offset: Offset(0, 2)),
+                            color: Colors.black12,
+                            blurRadius: 6,
+                            offset: Offset(0, 2)),
                       ],
                     ),
                     child: Row(
@@ -110,21 +112,19 @@ class _ConfiguracoesScreenState extends ConsumerState<ConfiguracoesScreen> {
                         CircleAvatar(
                           radius: 30,
                           backgroundColor: Colors.grey.shade200,
-                          backgroundImage:
-                              users?.picture != null && users!.picture!.isNotEmpty
-                                  ? base64ToImage(users.picture!)
-                                  : null,
-                          child: users?.picture == null || users!.picture!.isEmpty
-                              ? Text(
-                                  (users?.name.isNotEmpty ?? false)
-                                      ? users!.name[0].toUpperCase()
-                                      : '?',
-                                  style: const TextStyle(
-                                    fontSize: 24,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                )
+                          backgroundImage: users?.picture != null &&
+                                  users!.picture!.isNotEmpty
+                              ? base64ToImage(users.picture!)
                               : null,
+                          child:
+                              users?.picture == null || users!.picture!.isEmpty
+                                  ? Icon(
+                                      PhosphorIcons.user(
+                                          PhosphorIconsStyle.regular),
+                                      color: AppTheme.primaryColor,
+                                      size: 32,
+                                    )
+                                  : null,
                         ),
                         const SizedBox(width: 16),
                         Expanded(
@@ -132,7 +132,8 @@ class _ConfiguracoesScreenState extends ConsumerState<ConfiguracoesScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                Customtext.capitalizeFirstLetter(users?.name ?? 'Sem nome'),
+                                Customtext.capitalizeFirstLetter(
+                                    users?.name ?? 'Sem nome'),
                                 style: const TextStyle(
                                     fontSize: 18, fontWeight: FontWeight.bold),
                               ),
@@ -198,7 +199,10 @@ class _ConfiguracoesScreenState extends ConsumerState<ConfiguracoesScreen> {
                           bool suportado = await auth.isDeviceSupported();
                           if (!suportado) {
                             FloatingMessage(
-                                context, 'Seu dispositivo não suporta autenticação.', 'info', 2);
+                                context,
+                                'Seu dispositivo não suporta autenticação.',
+                                'info',
+                                2);
                             return;
                           }
 
@@ -229,7 +233,8 @@ class _ConfiguracoesScreenState extends ConsumerState<ConfiguracoesScreen> {
                   _buildCard(
                     title: 'Outros',
                     children: [
-                      _buildTile(PhosphorIcons.sun(PhosphorIconsStyle.regular), 'Tema',
+                      _buildTile(
+                          PhosphorIcons.sun(PhosphorIconsStyle.regular), 'Tema',
                           () {
                         showThemeSelectionModal(context, ref);
                       }),

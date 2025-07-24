@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
-import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:spendo/components/transactionContainer.dart';
 import 'package:spendo/models/category_transaction_model.dart';
 import 'package:spendo/utils/customText.dart';
@@ -21,6 +20,77 @@ class CategoryCard extends ConsumerWidget {
     this.tipo,
   }) : super(key: key);
 
+ void _showActionSheet(BuildContext context) {
+  final size = MediaQuery.of(context).size;
+
+  showModalBottomSheet(
+    context: context,
+    backgroundColor: Colors.transparent,
+    isScrollControlled: false,
+    builder: (_) {
+      return SafeArea(
+        child: Container(
+          height: size.height * 0.35,
+          padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 24),
+          decoration: BoxDecoration(
+            color: AppTheme.dynamicModalColor(context),
+            borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(24),
+              topRight: Radius.circular(24),
+            ),
+          ),
+          child: Column(
+            children: [
+              Container(
+                height: 4,
+                width: 40,
+                margin: const EdgeInsets.only(bottom: 16),
+                decoration: BoxDecoration(
+                  color: Colors.grey[400],
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+              Text(
+                'O que deseja fazer?',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: AppTheme.dynamicTextColor(context),
+                ),
+              ),
+              const SizedBox(height: 24),
+              _buildOptionButton(
+                context: context,
+                label: tipo == true ? 'Arquivar categoria' : 'Desarquivar categoria',
+                icon: tipo == true
+                    ? PhosphorIcons.boxArrowDown(PhosphorIconsStyle.regular)
+                    : PhosphorIcons.boxArrowUp(PhosphorIconsStyle.regular),
+                color: const Color(0xFFE4BF1C),
+                onTap: () {
+                  Navigator.pop(context);
+                  onArquivar?.call(tipo == true);
+                },
+              ),
+              const SizedBox(height: 16),
+              _buildOptionButton(
+                context: context,
+                label: 'Editar categoria',
+                icon: PhosphorIcons.pencil(PhosphorIconsStyle.regular),
+                color: AppTheme.primaryColor,
+                onTap: () {
+                  Navigator.pop(context);
+                  onEditar?.call();
+                },
+              ),
+            ],
+          ),
+        ),
+      );
+    },
+  );
+}
+
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Container(
@@ -29,13 +99,6 @@ class CategoryCard extends ConsumerWidget {
       decoration: BoxDecoration(
         color: AppTheme.dynamicCardColor(context),
         borderRadius: BorderRadius.circular(12),
-        // boxShadow: [
-        //     BoxShadow(
-        //       color: Colors.black.withOpacity(0.1),
-        //       blurRadius: 4,
-        //       offset: const Offset(0, 1), // changes position of shadow
-        //     ),
-        //   ],
       ),
       child: Row(
         children: [
@@ -55,97 +118,53 @@ class CategoryCard extends ConsumerWidget {
               ),
             ),
           ),
-          tipo == false
-              ? SpeedDial(
-                  elevation: 0,
-                  animationCurve: Curves.easeInOut,
-                  animationDuration: const Duration(milliseconds: 250),
-                  icon: PhosphorIcons.dotsThreeVertical(
-                      PhosphorIconsStyle.regular),
-                  iconTheme:
-                      IconThemeData(color: AppTheme.dynamicTextColor(context)),
-                  activeIcon: PhosphorIcons.x(PhosphorIconsStyle.regular),
-                  buttonSize: const Size(36, 36),
-                  childrenButtonSize: const Size(50, 60),
-                  backgroundColor: AppTheme.dynamicCardColor(context),
-                  activeBackgroundColor: AppTheme.dynamicCardColor(context),
-                  activeForegroundColor: AppTheme.dynamicTextColor(context),
-                  overlayColor: Colors.black,
-                  overlayOpacity: 0.3,
-                  direction: SpeedDialDirection.down,
-                  spacing: 6,
-                  children: [
-                    SpeedDialChild(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Icon(
-                          PhosphorIcons.trayArrowUp(PhosphorIconsStyle.regular),
-                          color: Colors.white,
-                          size: 32),
-                      backgroundColor: const Color.fromARGB(255, 228, 191, 28),
-                      label: 'Desarquivar',
-                      labelStyle: const TextStyle(fontSize: 12),
-                      onTap: () => onArquivar?.call(false) ?? () {
-                        print('Desarquivar categoria ${category.name}');
-                      }(),
-                    ),
-                  ],
-                )
-              : SpeedDial(
-                  elevation: 0,
-                  animationCurve: Curves.easeInOut,
-                  animationDuration: const Duration(milliseconds: 250),
-                  icon: PhosphorIcons.dotsThreeVertical(
-                      PhosphorIconsStyle.regular),
-                  iconTheme:
-                      IconThemeData(color: AppTheme.dynamicTextColor(context)),
-                  activeIcon: PhosphorIcons.x(PhosphorIconsStyle.regular),
-                  buttonSize: const Size(36, 36),
-                  childrenButtonSize: const Size(50, 60),
-                  backgroundColor: AppTheme.dynamicCardColor(context),
-                  activeBackgroundColor: AppTheme.dynamicCardColor(context),
-                  activeForegroundColor: AppTheme.dynamicTextColor(context),
-                  overlayColor: Colors.black,
-                  overlayOpacity: 0.3,
-                  direction: SpeedDialDirection.down,
-                  spacing: 6,
-                  children: [
-                    SpeedDialChild(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Icon(
-                          PhosphorIcons.trayArrowDown(
-                              PhosphorIconsStyle.regular),
-                          color: Colors.white,
-                          size: 32),
-                      backgroundColor: const Color.fromARGB(255, 228, 191, 28),
-                      label: 'Arquivar',
-                      labelStyle: const TextStyle(fontSize: 12),
-                      onTap: () => onArquivar?.call(true) ?? () {
-                        print('Arquivar categoria ${category.name}');
-                      }(),
-                    ),
-                    SpeedDialChild(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Icon(
-                          PhosphorIcons.notePencil(PhosphorIconsStyle.regular),
-                          color: Colors.white,
-                          size: 32),
-                      backgroundColor: Colors.blue,
-                      label: 'Editar',
-                      labelStyle: const TextStyle(fontSize: 12),
-                      onTap: onEditar ?? () {
-                        print('Editar categoria ${category.name}');
-                      },
-                    ),
-                  ],
-                ),
+          GestureDetector(
+            onTap: () => _showActionSheet(context),
+            child: Icon(
+              PhosphorIcons.dotsThreeVertical(PhosphorIconsStyle.regular),
+              color: AppTheme.dynamicTextColor(context),
+            ),
+          ),
         ],
       ),
     );
   }
 }
+
+Widget _buildOptionButton({
+  required BuildContext context,
+  required String label,
+  required IconData icon,
+  required VoidCallback onTap,
+  required Color color,
+}) {
+  return GestureDetector(
+    onTap: onTap,
+    child: AnimatedContainer(
+      duration: const Duration(milliseconds: 180),
+      curve: Curves.easeInOut,
+      padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 24),
+      width: double.infinity,
+      decoration: BoxDecoration(
+        color: color.withOpacity(0.1),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: color),
+      ),
+      child: Row(
+        children: [
+          Icon(icon, color: color, size: 24),
+          const SizedBox(width: 12),
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: 16,
+              color: color,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
+}
+

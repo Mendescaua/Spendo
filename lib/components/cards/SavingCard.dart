@@ -14,12 +14,6 @@ class MetaCard extends StatelessWidget {
     final value = saving.value ?? 0;
     final goalValue = saving.goalValue ?? 0;
 
-    String _getPercent() {
-      if (goalValue == 0) return '0';
-      final percent = (value / goalValue * 100).clamp(0, 100);
-      return percent.toStringAsFixed(0);
-    }
-
     return GestureDetector(
       onTap: () {
         Navigator.of(context).push(
