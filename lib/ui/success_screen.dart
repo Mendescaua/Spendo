@@ -1,19 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:spendo/components/AnimatedSuccessIcon.dart';
+import 'package:spendo/controllers/bank_controller.dart';
+import 'package:spendo/controllers/transaction_controller.dart';
+import 'package:spendo/controllers/user_controller.dart';
 import 'package:spendo/utils/theme.dart';
 
-class SuccessScreen extends StatefulWidget {
+class SuccessScreen extends ConsumerStatefulWidget {
   const SuccessScreen({super.key});
 
   @override
-  State<SuccessScreen> createState() => _SuccessScreenState();
+  ConsumerState<SuccessScreen> createState() => _SuccessScreenState();
 }
 
-class _SuccessScreenState extends State<SuccessScreen> {
+class _SuccessScreenState extends ConsumerState<SuccessScreen> {
   @override
   void initState() {
     super.initState();
+
+    Future.microtask(() {
+      ref.read(userControllerProvider.notifier).getUser();
+      ref.read(bankControllerProvider.notifier).getBank();
+      ref.read(transactionControllerProvider.notifier).getCategoryTransaction();
+    });
 
     // Após 6 segundos, fecha a tela
     Future.delayed(const Duration(seconds: 6), () {

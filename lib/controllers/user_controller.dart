@@ -27,8 +27,8 @@ class UserController extends StateNotifier<List<UsersModel>> {
     if (userId == null) return 'Usuário não autenticado';
 
     try {
-      final transacoes = await _authUser.getUser(userId);
-      state = transacoes;
+      final users = await _authUser.getUser(userId);
+      state = users;
       return null;
     } catch (e) {
       print('Erro ao obter usúario: $e');

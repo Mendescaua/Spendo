@@ -30,17 +30,12 @@ class AuthService {
 
   //get user for configuration
   Future<List<UsersModel>> getUser(String userId) async {
-    final response = await supabase
-        .from("USERS")
-        .select()
-        .eq('uuid', userId);
+    final response = await supabase.from("USERS").select().eq('uuid', userId);
 
-    return (response as List)
-        .map((item) => UsersModel.fromJson(item))
-        .toList();
+    return (response as List).map((item) => UsersModel.fromJson(item)).toList();
   }
 
-    Future<User?> changePassword(String newPassword) async {
+  Future<User?> changePassword(String newPassword) async {
     final response = await supabase.auth.updateUser(
       UserAttributes(password: newPassword),
     );
@@ -49,14 +44,13 @@ class AuthService {
   }
 
   Future<void> updateUserData({required UsersModel user}) async {
-  final supabase = Supabase.instance.client;
+    await supabase.from('USERS').update({
+      'name': user.name,
+      'picture': user.picture,
+    }).eq('uuid', user.uuid.toString());
+  }
 
-  await supabase
-      .from('USERS')
-      .update({
-        'name': user.name,
-        'picture': user.picture,
-      })
-      .eq('uuid', user.uuid.toString());
-}
+  Future<User?> resetPassword(String email) async {
+    await supabase.auth.resetPasswordForEmail(email);
+  }
 }

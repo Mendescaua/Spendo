@@ -101,6 +101,31 @@ class AuthController {
     }
   }
 
+  Future<String?> resetPassword({
+    required String email,
+  }) async {
+    if (email.isEmpty) {
+      return 'Informe o e-mail';
+    }
+
+    if (email != email.toLowerCase() ||
+        (!email.endsWith(".com") && !email.endsWith(".com.br"))) {
+      return 'Insira um email válido!';
+    }
+
+
+    try {
+      final user = await _authService.resetPassword(email);
+      if (user != null) {
+        return null;
+      }
+    } on AuthException catch (e) {
+      return _traduzirErroSupabase(e.message);
+    } catch (e) {
+      return 'Erro inesperado: $e';
+    }
+  }
+
   // 🔤 Método para traduzir os erros mais comuns
   String _traduzirErroSupabase(String error) {
     final erro = error.toLowerCase();

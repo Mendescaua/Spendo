@@ -44,6 +44,28 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
+  void resetPassword() async {
+    if (isLoading) return; // Impede múltiplos cliques
+
+    setState(() {
+      isLoading = true;
+    });
+
+    final result = await _authController.resetPassword(
+      email: emailController.text,
+    );
+
+    setState(() {
+      isLoading = false;
+    });
+
+    if (result == null) {
+      FloatingMessage(context, "Email de recuperação enviado!", "success", 2);
+    } else {
+      FloatingMessage(context, result.toString(), "error", 2);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -145,7 +167,9 @@ class _LoginScreenState extends State<LoginScreen> {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       TextButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          resetPassword();
+                        },
                         child: Text(
                           'Esqueceu sua senha?',
                           style: TextStyle(
