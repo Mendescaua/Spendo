@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:spendo/components/banksContainer.dart';
 import 'package:spendo/controllers/bank_controller.dart';
@@ -18,7 +19,12 @@ class BankHomeCard extends ConsumerWidget {
     final banks = ref.watch(bankControllerProvider);
 
     if (banks.isEmpty) {
-      return const Center(child: Text("Nenhuma conta cadastrada."));
+      return Center(
+        child: LoadingAnimationWidget.staggeredDotsWave(
+          color: Theme.of(context).primaryColor,
+          size: 40,
+        ),
+      );
     }
 
     return Container(
@@ -110,7 +116,8 @@ class BankHomeCardItem extends ConsumerWidget {
     final bankTotalProvider =
         FutureProvider.family<double, String>((ref, bankName) async {
       final controller = ref.read(bankControllerProvider.notifier);
-      final info = await controller.getBankInfo(bankName: bankName, date: DateTime.now());
+      final info = await controller.getBankInfo(
+          bankName: bankName, date: DateTime.now());
       return info?['total_value']?.toDouble() ?? 0.0;
     });
 
@@ -148,10 +155,15 @@ class BankHomeCardItem extends ConsumerWidget {
                     fontWeight: FontWeight.w500,
                   ),
                 ),
-                loading: () => Text(
-                  isHidden ? '*******' : '...',
-                  style: const TextStyle(fontSize: 14),
-                ),
+                loading: () => isHidden
+                    ? const Text(
+                        '*******',
+                        style: TextStyle(fontSize: 14),
+                      )
+                    : LoadingAnimationWidget.waveDots(
+                        color: Theme.of(context).primaryColor,
+                        size: 30,
+                      ),
                 error: (err, stack) => Text(
                   isHidden ? '*******' : 'Erro',
                   style: const TextStyle(fontSize: 14),

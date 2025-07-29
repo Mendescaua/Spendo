@@ -21,13 +21,7 @@ class BankCard extends ConsumerWidget {
       decoration: BoxDecoration(
         color: AppTheme.dynamicCardColor(context),
         borderRadius: BorderRadius.circular(12),
-        // boxShadow: [
-        //   BoxShadow(
-        //     color: Colors.black.withOpacity(0.08),
-        //     blurRadius: 12,
-        //     offset: Offset(0, 2),
-        //   )
-        // ],
+
       ),
       child: ListView.builder(
         shrinkWrap:

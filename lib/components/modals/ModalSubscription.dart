@@ -24,7 +24,7 @@ class _ModalSubscriptionState extends ConsumerState<ModalSubscription> {
   final List<Map<String, dynamic>> durations = [
     {'label': '1 mês', 'value': 1},
     {'label': '5 meses', 'value': 5},
-    {'label': '1 ano', 'value': 12},
+    {'label': '12 meses', 'value': 12},
   ];
 
   final _valuecontroller = MoneyMaskedTextController(
@@ -176,8 +176,12 @@ class _ModalSubscriptionState extends ConsumerState<ModalSubscription> {
                         selectedDuration = duration['value'];
                       });
                     },
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
                     selectedColor: AppTheme.primaryColor,
                     backgroundColor: AppTheme.whiteColor,
+                    checkmarkColor: AppTheme.whiteColor,
                     labelStyle: TextStyle(
                       color: isSelected ? Colors.white : Colors.black,
                       fontWeight: FontWeight.w600,

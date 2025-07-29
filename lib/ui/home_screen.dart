@@ -28,24 +28,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     super.initState();
     _loadHiddenState();
     Future.microtask(() async {
+      setState(() => _loading = true);
       await ref.read(transactionControllerProvider.notifier).getTransaction();
-      await loadSavings();
+      await ref.read(savingControllerProvider.notifier).getSaving();
+      setState(() => _loading = false);
     });
-  }
-
-  Future<void> loadSavings() async {
-    if (!mounted) return;
-    setState(() => _loading = true);
-
-    final controller = ref.read(savingControllerProvider.notifier);
-    final result = await controller.getSaving();
-
-    if (!mounted) return;
-    setState(() => _loading = false);
-
-    if (result != null) {
-      print('Erro: $result');
-    }
   }
 
   Future<void> _loadHiddenState() async {
@@ -196,7 +183,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                             _loading
                                 ? Column(
                                     children: List.generate(
-                                        3, (_) => SkeletonBigCard(context)),
+                                        2, (_) => SkeletonBigCard(context)),
                                   )
                                 : savings.isEmpty
                                     ? Center(

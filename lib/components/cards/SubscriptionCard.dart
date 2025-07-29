@@ -9,7 +9,7 @@ class SubscriptionCard extends StatelessWidget {
   final SubscriptionModel subscription;
   const SubscriptionCard({Key? key, required this.subscription}) : super(key: key);
 
-  String calculateMonths(String period) {
+String calculateMonths(String period) {
   try {
     final parts = period.split(' até ');
     if (parts.length != 2) return "Sem informação";
@@ -18,27 +18,28 @@ class SubscriptionCard extends StatelessWidget {
     final startDate = format.parse(parts[0]);
     final endDate = format.parse(parts[1]);
 
-    int totalMonths = (endDate.year - startDate.year) * 12 + (endDate.month - startDate.month);
-    if (endDate.day >= startDate.day) {
-      totalMonths += 1;
+    int yearDiff = endDate.year - startDate.year;
+    int monthDiff = endDate.month - startDate.month;
+    int dayDiff = endDate.day - startDate.day;
+
+    int totalMonths = yearDiff * 12 + monthDiff;
+    if (dayDiff < 0) {
+      totalMonths -= 1;
     }
 
-    if (totalMonths <= 0) totalMonths = 1;
+    if (totalMonths < 0) totalMonths = 0;
 
-    int years = totalMonths ~/ 12; // divisão inteira
-    int months = totalMonths % 12; // resto da divisão
+    int years = totalMonths ~/ 12;
+    int months = totalMonths % 12;
 
     String result = "";
-
     if (years > 0) {
-      result += years == 1 ? "1 ano" : "$years anos";
+      result += years == 1 ? "12 meses" : "$years anos";
     }
-
     if (months > 0) {
       if (result.isNotEmpty) result += " e ";
       result += months == 1 ? "1 mês" : "$months meses";
     }
-
     if (result.isEmpty) {
       result = "0 meses";
     }
@@ -60,13 +61,6 @@ class SubscriptionCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppTheme.dynamicCardColor(context),
         borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.1),
-              blurRadius: 4,
-              offset: const Offset(0, 1), // changes position of shadow
-            ),
-          ],
       ),
       child: Row(
         children: [

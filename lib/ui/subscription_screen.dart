@@ -76,7 +76,7 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
             (selYear == startYear && selMonth >= startMonth);
 
         bool beforeOrEqualEnd =
-            (selYear < endYear) || (selYear == endYear && selMonth <= endMonth);
+            (selYear < endYear) || (selYear == endYear && selMonth < endMonth);
 
         return afterOrEqualStart && beforeOrEqualEnd;
       } catch (e) {

@@ -292,17 +292,11 @@ class InfoTile extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppTheme.dynamicCardColor(context),
         borderRadius: BorderRadius.circular(16),
-        boxShadow: const [
-          BoxShadow(
-            color: Colors.black12,
-            blurRadius: 6,
-            offset: Offset(0, 2),
-          ),
-        ],
+        
       ),
       child: ListTile(
         contentPadding: const EdgeInsets.symmetric(horizontal: 12),
-        leading: Icon(icon, color: Colors.white, size: 24),
+        leading: Icon(icon, size: 24),
         title: Text(
           label,
           style: TextStyle(
@@ -318,7 +312,6 @@ class InfoTile extends StatelessWidget {
             style: TextStyle(
               fontSize: fontSize ?? 16,
               fontWeight: FontWeight.bold,
-              color: Colors.white,
             ),
           ),
         ),
