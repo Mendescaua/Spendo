@@ -215,6 +215,20 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           ),
         ],
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.of(context).pushNamed('/chatbot');
+        },
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(30),
+        ),
+        backgroundColor: AppTheme.primaryColor,
+        child: Icon(
+          PhosphorIcons.sparkle(PhosphorIconsStyle.regular),
+          color: Colors.white,
+          size: 32,
+        ),
+      ),
     );
   }
 }

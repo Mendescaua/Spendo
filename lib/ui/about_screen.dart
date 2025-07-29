@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:spendo/utils/theme.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -68,12 +69,21 @@ class AboutScreen extends StatelessWidget {
             },
           ),
           ListTile(
-            leading: const Icon(Iconsax.global),
-            title: const Text("Website"),
+            leading:  Icon(PhosphorIcons.linkedinLogo(PhosphorIconsStyle.regular)),
+            title: const Text("Linkedin"),
             subtitle: const Text("www.linkedin.com/in/cauãmendes"),
             onTap: () {
               // Abrir link com url_launcher
               launchUrl(Uri.parse('https://www.linkedin.com/in/cau%C3%A3mendes'));
+            },
+          ),
+          ListTile(
+            leading: const Icon(Iconsax.global),
+            title: const Text("Website"),
+            subtitle: const Text("www.spendo.com"),
+            onTap: () {
+              // Abrir link com url_launcher
+              launchUrl(Uri.parse('https://spendoapp.netlify.app'));
             },
           ),
           const Divider(),

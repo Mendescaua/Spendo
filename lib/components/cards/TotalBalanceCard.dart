@@ -1,8 +1,10 @@
+import 'package:animations/animations.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:spendo/providers/transactions_provider.dart';
+import 'package:spendo/ui/transaction/transaction_screen.dart';
 import 'package:spendo/utils/customText.dart';
 import 'package:spendo/utils/theme.dart';
 
@@ -23,22 +25,47 @@ class _SaldoGeralCardState extends ConsumerState<SaldoGeralCard> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            GestureDetector(
-              onTap: () =>
-                  Navigator.pushNamed(context, '/transactions_receita'),
-              child: Count(
-                title: 'Receitas',
-                type: 'receita',
-                isHidden: widget.isHidden,
+            OpenContainer(
+              closedElevation: 0, // Remove a sombra no estado fechado
+              openElevation: 4,
+              closedShape: RoundedRectangleBorder(
+                borderRadius:
+                    BorderRadius.circular(12), // mesma borda do seu card
+              ),
+              transitionDuration: const Duration(milliseconds: 500),
+
+              transitionType: ContainerTransitionType.fadeThrough,
+              openBuilder: (context, _) => const TransactionScreen(
+                type: 'r',
+              ),
+              closedBuilder: (context, openContainer) => GestureDetector(
+                onTap: openContainer,
+                child: Count(
+                  title: 'Receitas',
+                  type: 'receita',
+                  isHidden: widget.isHidden,
+                ),
               ),
             ),
-            GestureDetector(
-              onTap: () =>
-                  Navigator.pushNamed(context, '/transactions_despesa'),
-              child: Count(
-                title: 'Despesas',
-                type: 'despesa',
-                isHidden: widget.isHidden,
+            OpenContainer(
+              closedElevation: 0, // Remove a sombra no estado fechado
+              openElevation: 4,
+              closedShape: RoundedRectangleBorder(
+                borderRadius:
+                    BorderRadius.circular(12), // mesma borda do seu card
+              ),
+              transitionDuration: const Duration(milliseconds: 500),
+              transitionType: ContainerTransitionType.fadeThrough,
+              openBuilder: (context, _) => const TransactionScreen(
+                type: 'd',
+              ),
+              closedBuilder: (context, openContainer) => GestureDetector(
+                onTap: openContainer,
+                child: Count(
+                  title: 'Despesas',
+                  type: 'despesa',
+                  isHidden: widget.isHidden,
+                ),
               ),
             ),
           ],
