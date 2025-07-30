@@ -21,6 +21,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
   @override
   void initState() {
     super.initState();
+    
     _textController = TextEditingController();
   }
 
@@ -32,8 +33,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
 
   void _sendMessage(String text) {
     if (text.trim().isEmpty) return;
-    final chatController = ref.read(chatControllerProvider('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').notifier);
-
+    final chatController = ref.read(chatControllerProvider.notifier);
 
     FocusScope.of(context).unfocus();
 
@@ -46,16 +46,14 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
     final picked = await picker.pickImage(source: ImageSource.gallery);
     if (picked == null) return;
 
-    final chatController = ref.read(chatControllerProvider('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').notifier);
+    final chatController = ref.read(chatControllerProvider.notifier);
 
     await chatController.pickImage(File(picked.path), picked.name);
   }
 
   @override
   Widget build(BuildContext context) {
-    final chatState = ref.watch(chatControllerProvider('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'));
-
-
+  final chatState = ref.watch(chatControllerProvider);
     return Scaffold(
       appBar: AppBar(
         title: const Text('SpenAi', style: TextStyle(color: Colors.white)),
@@ -168,7 +166,6 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                         ),
                         onPressed: () => _sendMessage(_textController.text),
                       ),
-                      
                       filled: true,
                       fillColor: AppTheme.dynamicCardColor(context),
                       contentPadding: const EdgeInsets.only(left: 16, right: 4),

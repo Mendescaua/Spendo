@@ -1,9 +1,7 @@
-import 'dart:convert';
 import 'dart:io';
 import 'package:diacritic/diacritic.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
-import 'package:http/http.dart' as http;
 import 'package:spendo/controllers/transaction_controller.dart';
 import 'package:spendo/models/transaction_model.dart';
 
@@ -26,9 +24,8 @@ class ChatState {
 
 class ChatController extends StateNotifier<ChatState> {
   final Ref ref;
-  final String openAIKey;
 
-  ChatController(this.ref, this.openAIKey) : super(ChatState(messages: []));
+  ChatController(this.ref) : super(ChatState(messages: []));
 
   Future<void> sendMessage(String text) async {
     if (text.trim().isEmpty) return;
@@ -77,34 +74,6 @@ class ChatController extends StateNotifier<ChatState> {
     }
   }
 
-  Future<String> fetchOpenAIResponse(String prompt) async {
-  final url = Uri.parse('https://api.openai.com/v1/chat/completions');
-  final headers = {
-    'Content-Type': 'application/json',
-    'Authorization': 'Bearer $openAIKey',
-  };
-  final body = jsonEncode({
-    "model": "gpt-3.5-turbo",
-    "messages": [
-      {"role": "user", "content": prompt}
-    ],
-    "max_tokens": 150,
-    "temperature": 0.7,
-  });
-
-  final response = await http.post(url, headers: headers, body: body);
-
-  if (response.statusCode == 200) {
-    final data = jsonDecode(response.body);
-    return data['choices'][0]['message']['content'].toString().trim();
-  } else if (response.statusCode == 429) {
-    throw Exception('Rate limit exceeded');
-  } else {
-    throw Exception('OpenAI error: ${response.statusCode}');
-  }
-}
-
-
   Future<dynamic> _interpretMessage(String input) async {
     final lowerInput = input.toLowerCase().trim();
 
@@ -144,8 +113,8 @@ class ChatController extends StateNotifier<ChatState> {
           bank: 'Carteira Digital',
         );
 
-        final response =
-            await transactionController.addTransaction(transaction: transaction);
+        final response = await transactionController.addTransaction(
+            transaction: transaction);
 
         state = state.copyWith(pendingTransaction: null);
 
@@ -161,25 +130,12 @@ class ChatController extends StateNotifier<ChatState> {
       ];
     }
 
-    // 2. Chama OpenAI e tenta obter resposta
-    try {
-      final aiResponse = await fetchOpenAIResponse(input);
-      return [aiResponse];
-    } catch (e) {
-      // 3. Se limite excedido, fallback local
-      if (e.toString().contains('Rate limit exceeded')) {
-        final fallbackReply = _getFallbackReply(lowerInput);
-        if (fallbackReply != null) return [fallbackReply];
-        return ['🤖 Limite de requisições atingido. Tente novamente mais tarde.'];
-      }
+    // 2. Usa apenas respostas locais
+    final fallbackReply = _getFallbackReply(lowerInput);
+    if (fallbackReply != null) return [fallbackReply];
 
-      // 4. Outros erros tentam fallback local
-      final fallbackReply = _getFallbackReply(lowerInput);
-      if (fallbackReply != null) return [fallbackReply];
-
-      // 5. Sem resposta local, mensagem de erro genérica
-      return ['🤖 Ocorreu um erro. Tente novamente mais tarde.'];
-    }
+    // 3. Caso nenhuma resposta seja encontrada
+    return ['🤖 Ainda estou aprendendo! Pode tentar reformular sua mensagem.'];
   }
 
   String? _getFallbackReply(String input) {
@@ -193,10 +149,6 @@ class ChatController extends StateNotifier<ChatState> {
       'estou otimo e com voce?'
     ].contains(input)) {
       return '😊 Que bom! Estou aqui para ajudar no que precisar.';
-    }
-
-    if (input == 'cancelar') {
-      return '⚠️ Nenhuma transação pendente para cancelar.';
     }
 
     if (input == 'spendo') {
@@ -318,33 +270,44 @@ String? getStandardReply(String input) {
     RegExp(r'\b(qual seu nome|como se chama|como te chamo|seu nome)\b'):
         '📛 Pode me chamar de SpenAi!',
     RegExp(r'\b(você é real|você é humano|vc é gente)\b'):
-        '🧠 Sou virtual, mas sempre pronto para te ajudar!',
+        '🧠 Sou virtual, mas sempre pronto para te ajudar com suas transações!',
     RegExp(r'\b(adeus|tchau|flw|falou|até mais|fui)\b'):
         '👋 Até mais! Se cuida.',
     RegExp(r'\b(que dia é hoje|qual a data de hoje|data de hoje|hoje é que dia)\b'):
         '📅 Hoje é ${DateTime.now().day}/${DateTime.now().month}/${DateTime.now().year}.',
     RegExp(r'\b(gastei demais|controle de gastos|organizar dinheiro|me ajuda com dinheiro|sem grana)\b'):
         '💰 Posso te ajudar com seu controle financeiro. Quer registrar uma despesa?',
-    RegExp(r'\b(quero ver gastos|mostrar gastos|meus gastos|despesas)\b'):
-        '📊 Aqui estão seus gastos recentes. Deseja ver por categoria?',
     RegExp(r'\b(economia|guardar dinheiro|dicas financeiras|como poupar)\b'):
         '💡 Uma boa dica é definir metas mensais e acompanhar seus gastos por categoria!',
     RegExp(r'\b(o que é o spendo|pra que serve o spendo|o que faz o app|como usar o app)\b'):
         '📲 O Spendo é um app para te ajudar a controlar suas finanças pessoais de forma simples e prática.',
     RegExp(r'\b(tem versão pro|versão premium|pagar pelo app)\b'):
         '💎 Em breve teremos novidades com recursos avançados!',
-    RegExp(r'\b(como funciona|como usar|me ajuda|não entendi|ajuda|o que faço)\b'):
-        '🛠️ Posso te mostrar como usar. Você quer cadastrar uma despesa ou ver os gastos?',
     RegExp(r'\b(aniversário|meus parabéns|feliz aniversário)\b'):
         '🎉 Parabéns! Que seu dia seja incrível!',
     RegExp(r'\b(você aprende|você entende|vc é inteligente|inteligente você)\b'):
         '🤖 Tento melhorar a cada dia para te ajudar melhor!',
-    RegExp(r'\b(cadastrar gasto|nova despesa|registrar compra|anotar gasto|adicionar despesa)\b'):
-        '🧾 Vamos cadastrar uma nova despesa? Me diga o valor e categoria.',
+    RegExp(r'\b(cadastrar gasto|nova despesa|registrar compra|anotar gasto|adicionar despesa|despesa)\b'):
+        '🛒 Vamos cadastrar uma nova despesa? Me diga o valor e o titulo\nEx:(-100 Mercado)',
+    RegExp(r'\b(cadastrar receita|nova receita|registrar receita|anotar receita|adicionar receita|receita)\b'):
+        '🛒 Vamos cadastrar uma nova despesa? Me diga o valor e o titulo\nEx:(+1600 Salário)',
+    RegExp(r'\b(como faço transação|como faço transações|transacao)\b'):
+        '🧾 Vamos cadastrar uma nova transação? Me diga o valor e o titulo.\nEx:(+100 Mercado)',
   };
 
+  // Quebra o input em palavras
+  final inputWords = input.split(RegExp(r'\s+'));
+
   for (final entry in patternMap.entries) {
-    if (entry.key.allMatches(input).isNotEmpty) {
+    final reg = entry.key as RegExp;
+    final patternStr = reg.pattern;
+    final regexInner = RegExp(r'\((.*?)\)');
+    final match = regexInner.firstMatch(patternStr);
+    if (match == null) continue;
+    final keywords = match.group(1)!.split('|').map((k) => removeDiacritics(k.toLowerCase())).toList();
+
+    // Match por palavra exata (exato na lista de palavras do input)
+    if (keywords.any((keyword) => inputWords.contains(keyword))) {
       return entry.value;
     }
   }
@@ -352,6 +315,8 @@ String? getStandardReply(String input) {
   return null;
 }
 
-final chatControllerProvider = StateNotifierProvider.family<ChatController, ChatState, String>(
-  (ref, openAIKey) => ChatController(ref, openAIKey),
+
+
+final chatControllerProvider = StateNotifierProvider<ChatController, ChatState>(
+  (ref) => ChatController(ref),
 );

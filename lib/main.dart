@@ -53,7 +53,7 @@ class MyApp extends ConsumerWidget {
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
-        MonthYearPickerLocalizations.delegate, // <<< importante
+        MonthYearPickerLocalizations.delegate,
       ],
       supportedLocales: const [
         Locale('pt'), // Português
