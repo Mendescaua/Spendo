@@ -5,8 +5,9 @@ import 'package:iconsax/iconsax.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
-import 'package:spendo/controllers/chat_controller.dart'; // Ajuste seu import
-import 'package:spendo/utils/theme.dart'; // Ajuste seu import
+import 'package:spendo/controllers/chat_controller.dart';
+import 'package:spendo/controllers/transaction_controller.dart';
+import 'package:spendo/utils/theme.dart';
 
 class ChatScreen extends ConsumerStatefulWidget {
   const ChatScreen({super.key});
@@ -21,8 +22,10 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
   @override
   void initState() {
     super.initState();
-    
     _textController = TextEditingController();
+    Future.microtask(() async {
+      await ref.read(transactionControllerProvider.notifier).getCategoryTransaction();
+    });
   }
 
   @override
@@ -47,23 +50,20 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
     if (picked == null) return;
 
     final chatController = ref.read(chatControllerProvider.notifier);
-
-    await chatController.pickImage(File(picked.path), picked.name);
+    chatController.pickImage(File(picked.path), picked.name);
   }
 
   @override
   Widget build(BuildContext context) {
-  final chatState = ref.watch(chatControllerProvider);
+    final chatState = ref.watch(chatControllerProvider);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('SpenAi', style: TextStyle(color: Colors.white)),
         elevation: 0,
         centerTitle: true,
         leading: IconButton(
-          icon: const Icon(
-            Iconsax.arrow_left,
-            color: AppTheme.whiteColor,
-          ),
+          icon: const Icon(Iconsax.arrow_left, color: AppTheme.whiteColor),
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),
@@ -76,7 +76,6 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
               itemBuilder: (_, i) {
                 final msg = chatState.messages[i];
 
-                // Se mensagem for do tipo typing indicator
                 if (msg['isTyping'] == true) {
                   return Align(
                     alignment: Alignment.centerLeft,
@@ -102,6 +101,83 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                 final align =
                     isUser ? Alignment.centerRight : Alignment.centerLeft;
 
+                if (!isUser && msg['options'] != null) {
+                  return Align(
+                    alignment: Alignment.centerLeft,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          margin: const EdgeInsets.symmetric(vertical: 6),
+                          padding: const EdgeInsets.all(12),
+                          decoration: BoxDecoration(
+                            color: bgColor,
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          child: Text(
+                            msg['text'],
+                            style: const TextStyle(color: Colors.white),
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Wrap(
+                          spacing: 8,
+                          children: List<Widget>.from(
+                            (msg['options'] as List).map(
+                              (opt) => ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: AppTheme.primaryColor,
+                                  foregroundColor: Colors.white,
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 20, vertical: 12),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(16),
+                                  ),
+                                  elevation: 4,
+                                ),
+                                onPressed: () => ref
+                                    .read(chatControllerProvider.notifier)
+                                    .selectOption(opt),
+                                child: Text(
+                                  opt,
+                                  style: const TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w600),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                }
+
+                if (msg['image'] != null) {
+                  return Align(
+                    alignment: align,
+                    child: Container(
+                      margin: const EdgeInsets.symmetric(vertical: 6),
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: bgColor,
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Image.file(msg['image'], width: 200),
+                          const SizedBox(height: 4),
+                          Text(
+                            msg['text'],
+                            style: const TextStyle(color: Colors.white),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                }
+
                 return Align(
                   alignment: align,
                   child: Container(
@@ -111,22 +187,10 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                       color: bgColor,
                       borderRadius: BorderRadius.circular(16),
                     ),
-                    child: msg['image'] != null
-                        ? Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Image.file(msg['image'], width: 200),
-                              const SizedBox(height: 4),
-                              Text(
-                                msg['text'],
-                                style: const TextStyle(color: Colors.white),
-                              ),
-                            ],
-                          )
-                        : Text(
-                            msg['text'],
-                            style: const TextStyle(color: Colors.white),
-                          ),
+                    child: Text(
+                      msg['text'],
+                      style: const TextStyle(color: Colors.white),
+                    ),
                   ),
                 );
               },
@@ -156,7 +220,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                   child: TextField(
                     controller: _textController,
                     decoration: InputDecoration(
-                      hintText: 'Digite +100 mercado',
+                      hintText: 'Digite oi para comecar a conversa',
                       hintStyle: const TextStyle(color: Colors.grey),
                       suffixIcon: IconButton(
                         icon: Icon(
