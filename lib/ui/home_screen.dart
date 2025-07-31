@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:lottie/lottie.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:spendo/components/cards/BankHomeCard.dart';
@@ -216,19 +217,20 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.of(context).pushNamed('/chatbot');
-        },
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(30),
-        ),
-        backgroundColor: AppTheme.primaryColor,
-        child: Icon(
-          PhosphorIcons.sparkle(PhosphorIconsStyle.regular),
-          color: Colors.white,
-          size: 32,
-        ),
-      ),
+  onPressed: () {
+    Navigator.of(context).pushNamed('/chatbot');
+  },
+  shape: RoundedRectangleBorder(
+    borderRadius: BorderRadius.circular(30),
+  ),
+  backgroundColor: AppTheme.primaryColor,
+  child: Lottie.asset(
+    'assets/animation/spenai.json',
+    height: 120,
+    width: 120,
+
+  ),
+),
     );
   }
 }
