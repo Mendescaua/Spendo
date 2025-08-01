@@ -23,7 +23,7 @@ class _ModalSubscriptionState extends ConsumerState<ModalSubscription> {
 
   final List<Map<String, dynamic>> durations = [
     {'label': '1 mês', 'value': 1},
-    {'label': '5 meses', 'value': 5},
+    {'label': '6 meses', 'value': 6},
     {'label': '12 meses', 'value': 12},
   ];
 
@@ -208,7 +208,7 @@ class _ModalSubscriptionState extends ConsumerState<ModalSubscription> {
                     backgroundColor: AppTheme.dynamicTextFieldColor(context),
                     checkmarkColor: AppTheme.whiteColor,
                     labelStyle: TextStyle(
-                      color: Colors.white,
+                      color: isSelected ? AppTheme.whiteColor : AppTheme.dynamicTextColor(context),
                       fontWeight: FontWeight.w600,
                     ),
                   );
