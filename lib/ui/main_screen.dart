@@ -40,7 +40,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
     List<Widget> screens = [
       const HomeScreen(),
       TransactionScreen(type: 'all'),
-      TransactionChartTab(),     
+      TransactionChartTab(),
       const SavingScreen(),
       const SubscriptionScreen(),
       const ConfiguracoesScreen(),
@@ -65,6 +65,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
     }
 
     return Scaffold(
+      extendBody: true,
       appBar: currentTab == 0
           ? Homebar(
               onItemSelected: (index) {
@@ -79,7 +80,6 @@ class _MainScreenState extends ConsumerState<MainScreen> {
           ? null
           : Container(
               height: 90,
-              padding: EdgeInsets.only(bottom: 20),
               decoration: BoxDecoration(
                 color: AppTheme.dynamicNavBarColor(context),
                 borderRadius: const BorderRadius.only(

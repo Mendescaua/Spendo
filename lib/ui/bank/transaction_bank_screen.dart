@@ -122,7 +122,6 @@ class _TransactionBankScreenState extends ConsumerState<TransactionBankScreen> {
               ],
             ),
           ),
-          const SizedBox(height: 16),
           Expanded(
             child: Container(
               width: double.infinity,

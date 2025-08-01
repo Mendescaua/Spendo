@@ -83,13 +83,28 @@ void _openAccountModal() {
                   padding: const EdgeInsets.all(16),
                   child: TextField(
                     controller: searchController,
+                    
                     decoration: InputDecoration(
-                      hintText: 'Buscar conta...',
-                      prefixIcon: const Icon(Icons.search),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                    ),
+                  hintText: 'Buscar conta...',
+                  hintStyle: const TextStyle(
+                    fontWeight: FontWeight.w600,
+                  ),
+                  filled: true,
+                  fillColor: AppTheme.dynamicTextFieldColor(context),
+                  prefixIcon: Icon(
+                    Iconsax.search_normal,
+                    size: 24,
+                  ),
+                  contentPadding: const EdgeInsets.symmetric(vertical: 18),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(16),
+                    borderSide: BorderSide.none,
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(16),
+                    borderSide: BorderSide.none,
+                  ),
+                ),
                     onChanged: (value) {
                       setModalState(() {
                         filteredAccounts = accounts
@@ -148,58 +163,76 @@ void _openAccountModal() {
 
 
   @override
-  Widget build(BuildContext context) {
-    final selected = widget.selected;
+Widget build(BuildContext context) {
+  final selected = widget.selected;
 
-    return GestureDetector(
-      onTap: _openAccountModal,
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-        decoration: BoxDecoration(
-          border: Border.all(color: AppTheme.dynamicTextColor(context),),
-          borderRadius: BorderRadius.circular(16),
+  return GestureDetector(
+    onTap: _openAccountModal,
+    child: InputDecorator(
+      isEmpty: selected == null,
+      decoration: InputDecoration(
+        hintText: 'Selecione uma conta',
+        hintStyle: TextStyle(
+          color: AppTheme.dynamicTextColor(context),
+          fontWeight: FontWeight.w600,
+          fontSize: 14,
         ),
-        child: Row(
-          children: [
-            if (selected != null)
-              Container(
-                width: 32,
-                height: 32,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12),
-                  color: const Color(0xFFE5E7EB), // fundo cinza claro
-                  image: selected['icon']!.isNotEmpty
-                      ? DecorationImage(
-                          image: AssetImage(selected['icon']!),
-                        )
+        filled: true,
+        fillColor: AppTheme.dynamicTextFieldColor(context),
+        prefixIcon: selected != null
+            ? Padding(
+                padding: const EdgeInsets.all(12),
+                child: Container(
+                  width: 36,
+                  height: 36,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12),
+                    color: const Color(0xFFE5E7EB),
+                    image: selected['icon']!.isNotEmpty
+                        ? DecorationImage(
+                            image: AssetImage(selected['icon']!),
+                          )
+                        : null,
+                  ),
+                  child: selected['icon']!.isEmpty
+                      ? const Icon(Iconsax.bank, color: Color(0xFF4678C0))
                       : null,
                 ),
-                child: selected['icon']!.isEmpty
-                    ? const Icon(Iconsax.bank,
-                        color: Color(0xFF4678C0)) // cor primária
-                    : null,
               )
-            else
-              Container(
-                width: 36,
-                height: 36,
-                decoration: BoxDecoration(
-                  color: Color(0xFFE5E7EB),
-                  borderRadius: BorderRadius.circular(12),
+            : Padding(
+                padding: const EdgeInsets.all(12),
+                child: Container(
+                  width: 36,
+                  height: 36,
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFE5E7EB),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Icon(Iconsax.bank, color: AppTheme.primaryColor),
                 ),
-                child: Icon(Iconsax.bank, color: AppTheme.primaryColor),
               ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Text(
-                selected?['name'] ?? 'Selecione uma conta',
-                style: const TextStyle(fontSize: 16),
-              ),
-            ),
-            const Icon(Icons.arrow_drop_down),
-          ],
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(16),
+          borderSide: BorderSide.none,
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(16),
+          borderSide: BorderSide.none,
         ),
       ),
-    );
-  }
+      child: Row(
+        children: [
+          Expanded(
+            child: Text(
+              selected?['name'] ?? '',
+              style: const TextStyle(fontSize: 16),
+            ),
+          ),
+          const Icon(Icons.arrow_drop_down),
+        ],
+      ),
+    ),
+  );
+}
+
 }

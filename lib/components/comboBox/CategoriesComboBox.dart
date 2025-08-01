@@ -185,12 +185,26 @@ class _CategoriaComboBoxState extends ConsumerState<CategoriaComboBox> {
                     child: TextField(
                       controller: searchController,
                       decoration: InputDecoration(
-                        hintText: 'Buscar categoria...',
-                        prefixIcon: const Icon(Icons.search),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                      ),
+                  hintText: 'Buscar categoria...',
+                  hintStyle: const TextStyle(
+                    fontWeight: FontWeight.w600,
+                  ),
+                  filled: true,
+                  fillColor: AppTheme.dynamicTextFieldColor(context),
+                  prefixIcon: Icon(
+                    Iconsax.search_normal,
+                    size: 24,
+                  ),
+                  contentPadding: const EdgeInsets.symmetric(vertical: 18),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(16),
+                    borderSide: BorderSide.none,
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(16),
+                    borderSide: BorderSide.none,
+                  ),
+                ),
                       onChanged: filtrar,
                     ),
                   ),

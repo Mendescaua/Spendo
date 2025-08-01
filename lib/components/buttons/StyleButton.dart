@@ -45,7 +45,7 @@ Widget StyleButton({
                 Text(
                   text,
                   style: TextStyle(
-                    fontSize: textSize != null ? textSize.toDouble() : 22,
+                    fontSize: textSize != null ? textSize.toDouble() : 18,
                     fontWeight: FontWeight.w600,
                     color: AppTheme.whiteColor,
                   ),

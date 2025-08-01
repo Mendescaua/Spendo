@@ -133,7 +133,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       ),
                       elevation: 0,
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 8),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -216,20 +217,22 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         ],
       ),
       floatingActionButton: FloatingActionButton(
-  onPressed: () {
-    Navigator.of(context).pushNamed('/chatbot');
-  },
-  shape: RoundedRectangleBorder(
-    borderRadius: BorderRadius.circular(30),
-  ),
-  backgroundColor: AppTheme.primaryColor,
-  child: Lottie.asset(
-    'assets/animation/spenai.json',
-    height: 120,
-    width: 120,
-
-  ),
-),
+        onPressed: () {
+          Navigator.of(context).pushNamed('/chatbot');
+        },
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(30),
+        ),
+        backgroundColor: AppTheme.primaryColor,
+        child: SizedBox(
+          width: 120,
+          height: 120,
+          child: Lottie.asset(
+            'assets/animation/spenai.json',
+            fit: BoxFit.contain,
+          ),
+        ),
+      ),
     );
   }
 }

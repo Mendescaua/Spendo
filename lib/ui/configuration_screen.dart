@@ -239,8 +239,9 @@ class _ConfiguracoesScreenState extends ConsumerState<ConfiguracoesScreen> {
                           Navigator.of(context).pushNamed('/about');
                         }),
                         _buildTile(Iconsax.logout, 'Sair', () {
-                          logout();
-                        }, color: Colors.red),
+  _confirmarLogout(context);
+}, color: Colors.red),
+
                       ],
                     ),
                   ],
@@ -252,6 +253,34 @@ class _ConfiguracoesScreenState extends ConsumerState<ConfiguracoesScreen> {
       ),
     );
   }
+
+  void _confirmarLogout(BuildContext context) {
+  showDialog(
+    context: context,
+    builder: (context) => AlertDialog(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      title: const Text('Sair do aplicativo'),
+      content: const Text('Tem certeza que deseja sair da sua conta?'),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(),
+          child: const Text('Cancelar'),
+        ),
+        TextButton(
+          onPressed: () {
+            Navigator.of(context).pop(); // fecha o dialog
+            logout(); // chama o método de logout
+          },
+          child: const Text(
+            'Sair',
+            style: TextStyle(color: Colors.red),
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
 
   Widget _buildCard({required String title, required List<Widget> children}) {
     return Container(

@@ -111,13 +111,24 @@ class _ModalEditPerfilState extends ConsumerState<ModalEditPerfil> {
               TextField(
                 controller: _usercontroller,
                 decoration: InputDecoration(
-                  prefixIcon: const Icon(Iconsax.user),
                   hintText: 'Usuário',
-                  border: OutlineInputBorder(
+                  hintStyle: const TextStyle(
+                    fontWeight: FontWeight.w600,
+                  ),
+                  filled: true,
+                  fillColor: AppTheme.dynamicTextFieldColor(context),
+                  prefixIcon: Icon(
+                    Iconsax.user,
+                    size: 24,
+                  ),
+                  contentPadding: const EdgeInsets.symmetric(vertical: 18),
+                  enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(16),
-                    borderSide: const BorderSide(
-                      color: Color(0xFF4678c0),
-                    ),
+                    borderSide: BorderSide.none,
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(16),
+                    borderSide: BorderSide.none,
                   ),
                 ),
               ),
@@ -133,13 +144,24 @@ class _ModalEditPerfilState extends ConsumerState<ModalEditPerfil> {
                 readOnly: true,
                 controller: TextEditingController(text: users?.email ?? ''),
                 decoration: InputDecoration(
-                  prefixIcon: const Icon(Iconsax.sms),
                   hintText: 'Email',
-                  border: OutlineInputBorder(
+                  hintStyle: const TextStyle(
+                    fontWeight: FontWeight.w600,
+                  ),
+                  filled: true,
+                  fillColor: AppTheme.dynamicTextFieldColor(context),
+                  prefixIcon: Icon(
+                    Iconsax.lock,
+                    size: 24,
+                  ),
+                  contentPadding: const EdgeInsets.symmetric(vertical: 18),
+                  enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(16),
-                    borderSide: const BorderSide(
-                      color: Color(0xFF4678c0),
-                    ),
+                    borderSide: BorderSide.none,
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(16),
+                    borderSide: BorderSide.none,
                   ),
                 ),
               ),

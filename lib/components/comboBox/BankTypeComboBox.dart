@@ -18,78 +18,77 @@ class BankTypeComboBox extends StatefulWidget {
 
 class _BankTypeComboBoxState extends State<BankTypeComboBox> {
   final List<Map<String, dynamic>> typeAccount = [
-    { 'name': 'Conta corrente', 'icon': Iconsax.bank },
-    { 'name': 'Carteira', 'icon': Iconsax.wallet },
-    { 'name': 'Poupança', 'icon': Icons.savings_outlined },
-    { 'name': 'Conta salário', 'icon': Iconsax.wallet_money },
-    { 'name': 'Investimentos', 'icon': Iconsax.chart_2 },
-    { 'name': 'VR/VA', 'icon': Iconsax.ticket },
-    { 'name': 'Transporte', 'icon': Iconsax.bus },
-    { 'name': 'Outros...', 'icon': Iconsax.more },
+    {'name': 'Conta corrente', 'icon': Iconsax.bank},
+    {'name': 'Carteira', 'icon': Iconsax.wallet},
+    {'name': 'Poupança', 'icon': Icons.savings_outlined},
+    {'name': 'Conta salário', 'icon': Iconsax.wallet_money},
+    {'name': 'Investimentos', 'icon': Iconsax.chart_2},
+    {'name': 'VR/VA', 'icon': Iconsax.ticket},
+    {'name': 'Transporte', 'icon': Iconsax.bus},
+    {'name': 'Outros...', 'icon': Iconsax.more},
   ];
 
   void _openAccountModal() {
-  showModalBottomSheet(
-    context: context,
-    isScrollControlled: true,
-    backgroundColor: AppTheme.dynamicBackgroundColor(context),
-    shape: const RoundedRectangleBorder(
-      borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-    ),
-    builder: (_) => Padding(
-      padding: EdgeInsets.only(
-        bottom: MediaQuery.of(context).viewInsets.bottom,
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: AppTheme.dynamicBackgroundColor(context),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
-      child: ConstrainedBox(
-        constraints: const BoxConstraints(maxHeight: 360),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const Padding(
-              padding: EdgeInsets.symmetric(vertical: 16),
-              child: Text(
-                'Selecione o tipo de conta',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
+      builder: (_) => Padding(
+        padding: EdgeInsets.only(
+          bottom: MediaQuery.of(context).viewInsets.bottom,
+        ),
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxHeight: 400),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Padding(
+                padding: EdgeInsets.symmetric(vertical: 16),
+                child: Text(
+                  'Selecione o tipo de conta',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
               ),
-            ),
-            const Divider(height: 1),
-            Expanded(
-              child: ListView.separated(
-                shrinkWrap: true,
-                padding: const EdgeInsets.symmetric(vertical: 8),
-                itemCount: typeAccount.length,
-                separatorBuilder: (_, __) => const Divider(),
-                itemBuilder: (_, index) {
-                  final account = typeAccount[index];
-                  return ListTile(
-                    leading: Container(
-                      width: 32,
-                      height: 32,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(12),
-                        color: const Color(0xFFE5E7EB),
+              const Divider(height: 1),
+              Expanded(
+                child: ListView.separated(
+                  padding: const EdgeInsets.symmetric(vertical: 8),
+                  itemCount: typeAccount.length,
+                  separatorBuilder: (_, __) => const Divider(),
+                  itemBuilder: (_, index) {
+                    final account = typeAccount[index];
+                    return ListTile(
+                      leading: Container(
+                        width: 32,
+                        height: 32,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12),
+                          color: const Color(0xFFE5E7EB),
+                        ),
+                        child: Icon(account['icon'],
+                            color: const Color(0xFF4678C0)),
                       ),
-                      child: Icon(account['icon'], color: const Color(0xFF4678C0)),
-                    ),
-                    title: Text(account['name']),
-                    onTap: () {
-                      widget.onSelect(account);
-                      Navigator.of(context).pop();
-                    },
-                  );
-                },
+                      title: Text(account['name']),
+                      onTap: () {
+                        widget.onSelect(account);
+                        Navigator.of(context).pop();
+                      },
+                    );
+                  },
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
-    ),
-  );
-}
-
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -97,15 +96,20 @@ class _BankTypeComboBoxState extends State<BankTypeComboBox> {
 
     return GestureDetector(
       onTap: _openAccountModal,
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-        decoration: BoxDecoration(
-          border: Border.all(color: AppTheme.dynamicTextColor(context),),
-          borderRadius: BorderRadius.circular(16),
-        ),
-        child: Row(
-          children: [
-            Container(
+      child: InputDecorator(
+        isEmpty: selected == null,
+        decoration: InputDecoration(
+          hintText: 'Selecione o tipo de conta',
+          hintStyle: TextStyle(
+            color: AppTheme.dynamicTextColor(context),
+            fontWeight: FontWeight.w600,
+            fontSize: 14,
+          ),
+          filled: true,
+          fillColor: AppTheme.dynamicTextFieldColor(context),
+          prefixIcon: Padding(
+            padding: const EdgeInsets.all(12),
+            child: Container(
               width: 36,
               height: 36,
               decoration: BoxDecoration(
@@ -113,14 +117,25 @@ class _BankTypeComboBoxState extends State<BankTypeComboBox> {
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Icon(
-                selected?['icon'] ?? Iconsax.wallet_3,
+                selected != null ? selected['icon'] : Iconsax.wallet_3,
                 color: AppTheme.primaryColor,
               ),
             ),
-            const SizedBox(width: 12),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(16),
+            borderSide: BorderSide.none,
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(16),
+            borderSide: BorderSide.none,
+          ),
+        ),
+        child: Row(
+          children: [
             Expanded(
               child: Text(
-                selected?['name'] ?? 'Selecione um tipo',
+                selected?['name'] ?? '',
                 style: const TextStyle(fontSize: 16),
               ),
             ),

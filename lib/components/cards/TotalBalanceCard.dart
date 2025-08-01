@@ -25,52 +25,47 @@ class _SaldoGeralCardState extends ConsumerState<SaldoGeralCard> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            OpenContainer(
-              closedElevation: 0, // Remove a sombra no estado fechado
-              openElevation: 4,
-              closedShape: RoundedRectangleBorder(
-                borderRadius:
-                    BorderRadius.circular(12), // mesma borda do seu card
-              ),
-              transitionDuration: const Duration(milliseconds: 500),
-
-              transitionType: ContainerTransitionType.fadeThrough,
-              openBuilder: (context, _) => const TransactionScreen(
-                type: 'r',
-              ),
-              closedBuilder: (context, openContainer) => GestureDetector(
-                onTap: openContainer,
-                child: Count(
-                  title: 'Receitas',
-                  type: 'receita',
-                  isHidden: widget.isHidden,
-                ),
-              ),
+            _buildAnimatedCard(
+              context,
+              type: 'r',
+              title: 'Receitas',
+              isHidden: widget.isHidden,
             ),
-            OpenContainer(
-              closedElevation: 0, // Remove a sombra no estado fechado
-              openElevation: 4,
-              closedShape: RoundedRectangleBorder(
-                borderRadius:
-                    BorderRadius.circular(12), // mesma borda do seu card
-              ),
-              transitionDuration: const Duration(milliseconds: 500),
-              transitionType: ContainerTransitionType.fadeThrough,
-              openBuilder: (context, _) => const TransactionScreen(
-                type: 'd',
-              ),
-              closedBuilder: (context, openContainer) => GestureDetector(
-                onTap: openContainer,
-                child: Count(
-                  title: 'Despesas',
-                  type: 'despesa',
-                  isHidden: widget.isHidden,
-                ),
-              ),
+            _buildAnimatedCard(
+              context,
+              type: 'd',
+              title: 'Despesas',
+              isHidden: widget.isHidden,
             ),
           ],
         ),
       ],
+    );
+  }
+
+  Widget _buildAnimatedCard(BuildContext context,
+      {required String type,
+      required String title,
+      required bool isHidden}) {
+    return OpenContainer(
+      closedElevation: 0,
+      openElevation: 4,
+      closedColor: AppTheme.dynamicCardColor(context),
+      openColor: Theme.of(context).scaffoldBackgroundColor,
+      closedShape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
+      transitionDuration: const Duration(milliseconds: 600),
+      transitionType: ContainerTransitionType.fade, // alterado
+      openBuilder: (context, _) => TransactionScreen(type: type),
+      closedBuilder: (context, openContainer) => GestureDetector(
+        onTap: openContainer,
+        child: Count(
+          title: title,
+          type: type == 'r' ? 'receita' : 'despesa',
+          isHidden: isHidden,
+        ),
+      ),
     );
   }
 }
@@ -78,7 +73,7 @@ class _SaldoGeralCardState extends ConsumerState<SaldoGeralCard> {
 class Count extends ConsumerWidget {
   final String title;
   final String type;
-  final bool isHidden; // novo parâmetro para controlar ocultar números
+  final bool isHidden;
 
   const Count({
     super.key,
@@ -95,15 +90,18 @@ class Count extends ConsumerWidget {
 
     String displayValue() {
       if (isHidden) return '*******';
-      if (type == 'receita')
+      if (type == 'receita') {
         return Customtext.formatMoeda(receitas) ?? 'R\$ 0,00';
+      }
       return Customtext.formatMoeda(despesas) ?? 'R\$ 0,00';
     }
 
-    Color iconBgColor =
-        type == 'receita' ? AppTheme.dynamicReceitaSoftColor(context) : AppTheme.dynamicDespesaSoftColor(context);
-    Color iconColor =
-        type == 'receita' ? AppTheme.dynamicReceitaTotalColor(context) : AppTheme.dynamicDespesaTotalColor(context);
+    Color iconBgColor = type == 'receita'
+        ? AppTheme.dynamicReceitaSoftColor(context)
+        : AppTheme.dynamicDespesaSoftColor(context);
+    Color iconColor = type == 'receita'
+        ? AppTheme.dynamicReceitaTotalColor(context)
+        : AppTheme.dynamicDespesaTotalColor(context);
 
     return Container(
       width: size.width * 0.42,
@@ -134,14 +132,12 @@ class Count extends ConsumerWidget {
               children: [
                 Text(
                   title,
-                  style: TextStyle(
-                    fontSize: 14,
-                  ),
+                  style: const TextStyle(fontSize: 14),
                 ),
                 const SizedBox(height: 4),
                 AutoSizeText(
                   displayValue(),
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.bold,
                   ),

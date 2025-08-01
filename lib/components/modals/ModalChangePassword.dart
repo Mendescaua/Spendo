@@ -106,12 +106,26 @@ class _ModalChangePasswordState extends State<ModalChangePassword> {
               controller: _passwordController,
               obscureText: true,
               decoration: InputDecoration(
-                prefixIcon: const Icon(Iconsax.lock),
-                hintText: 'Digite a nova senha',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(16),
+                  hintText: 'Digite a nova senha',
+                  hintStyle: const TextStyle(
+                    fontWeight: FontWeight.w600,
+                  ),
+                  filled: true,
+                  fillColor: AppTheme.dynamicTextFieldColor(context),
+                  prefixIcon: Icon(
+                    Iconsax.lock,
+                    size: 24,
+                  ),
+                  contentPadding: const EdgeInsets.symmetric(vertical: 18),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(16),
+                    borderSide: BorderSide.none,
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(16),
+                    borderSide: BorderSide.none,
+                  ),
                 ),
-              ),
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return 'Digite a nova senha';
@@ -131,12 +145,26 @@ class _ModalChangePasswordState extends State<ModalChangePassword> {
               controller: _confirmPasswordController,
               obscureText: true,
               decoration: InputDecoration(
-                prefixIcon: const Icon(Iconsax.lock),
-                hintText: 'Confirme a nova senha',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(16),
+                  hintText: 'Confirme a nova senha',
+                  hintStyle: const TextStyle(
+                    fontWeight: FontWeight.w600,
+                  ),
+                  filled: true,
+                  fillColor: AppTheme.dynamicTextFieldColor(context),
+                  prefixIcon: Icon(
+                    Iconsax.lock,
+                    size: 24,
+                  ),
+                  contentPadding: const EdgeInsets.symmetric(vertical: 18),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(16),
+                    borderSide: BorderSide.none,
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(16),
+                    borderSide: BorderSide.none,
+                  ),
                 ),
-              ),
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return 'Confirme a senha';

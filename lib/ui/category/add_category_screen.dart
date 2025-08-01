@@ -235,39 +235,38 @@ class _CriarCategoriaScreenState extends ConsumerState<CriarCategoriaScreen> {
   }
 
   Widget _iconeCarouselItem(Map<String, dynamic> item) {
-  final icone = item['icone'] as IconData;
-  final tipo = item['tipo'] as String;
-  final isSelected = iconeSelecionado == icone;
+    final icone = item['icone'] as IconData;
+    final tipo = item['tipo'] as String;
+    final isSelected = iconeSelecionado == icone;
 
-  final iconColor = isSelected
-      ? AppTheme.dynamicIconColor(corSelecionadaDialog)
-      : Colors.grey[700];
+    final iconColor = isSelected
+        ? AppTheme.dynamicIconColor(corSelecionadaDialog)
+        : Colors.grey[700];
 
-  return GestureDetector(
-    onTap: () {
-      setState(() {
-        iconeSelecionado = icone;
-        tipoSelecionadoDialog = tipo;
-      });
-    },
-    child: Container(
-      decoration: BoxDecoration(
-        color: isSelected ? corSelecionadaDialog : Colors.grey.shade100,
-        borderRadius: BorderRadius.circular(14),
-        border: Border.all(
-          color: isSelected ? Colors.black : Colors.grey.shade300,
-          width: 2,
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          iconeSelecionado = icone;
+          tipoSelecionadoDialog = tipo;
+        });
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          color: isSelected ? corSelecionadaDialog : Colors.grey.shade100,
+          borderRadius: BorderRadius.circular(14),
+          border: Border.all(
+            color: isSelected ? Colors.black : Colors.grey.shade300,
+            width: 2,
+          ),
+        ),
+        child: Icon(
+          icone,
+          size: 30,
+          color: iconColor,
         ),
       ),
-      child: Icon(
-        icone,
-        size: 30,
-        color: iconColor,
-      ),
-    ),
-  );
-}
-
+    );
+  }
 
   Widget _corCarouselItem(Color cor) {
     final isSelected = corSelecionadaDialog == cor;
@@ -325,9 +324,24 @@ class _CriarCategoriaScreenState extends ConsumerState<CriarCategoriaScreen> {
                       onChanged: (value) => nomeNovaCategoria = value.trim(),
                       decoration: InputDecoration(
                         hintText: 'Nome da categoria',
-                        prefixIcon: const Icon(Iconsax.edit),
-                        border: OutlineInputBorder(
+                        hintStyle: const TextStyle(
+                          fontWeight: FontWeight.w600,
+                        ),
+                        filled: true,
+                        fillColor: AppTheme.dynamicCardColor(context),
+                        prefixIcon: Icon(
+                          Iconsax.edit,
+                          size: 24,
+                        ),
+                        contentPadding:
+                            const EdgeInsets.symmetric(vertical: 18),
+                        enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(16),
+                          borderSide: BorderSide.none,
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(16),
+                          borderSide: BorderSide.none,
                         ),
                       ),
                     ),

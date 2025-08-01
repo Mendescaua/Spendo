@@ -37,10 +37,16 @@ class AppTheme {
         : Color(0xFFFFFFFF); // branco real para light
   }
 
+  static Color dynamicTextFieldColor(BuildContext context) {
+    return Theme.of(context).brightness == Brightness.dark
+        ? Color.fromARGB(255, 54, 54, 54) // white adaptado para dark
+        : Color(0xFFFFFFFF); // branco real para light
+  }
+
   static Color dynamicModalColor(BuildContext context) {
     return Theme.of(context).brightness == Brightness.dark
         ? Color(0xFF2E2E2E) // Modal mais claro no dark
-        : Color(0xFFFFFFFF); // Normal no light
+        : Color(0xFFF6F7F8); // Normal no light
   }
 
   /// Exemplo: dynamic text color
@@ -64,7 +70,7 @@ class AppTheme {
 
   static Color dynamicDespesaSoftColor(BuildContext context) {
     return Theme.of(context).brightness == Brightness.dark
-        ? const Color(0xFF381e27)// AppTheme.softRedColor const Color(0xFFf23654)
+        ? const Color.fromARGB(255, 56, 30, 30)// AppTheme.softRedColor const Color(0xFFf23654)
         : AppTheme.softRedColor ;
   }
 

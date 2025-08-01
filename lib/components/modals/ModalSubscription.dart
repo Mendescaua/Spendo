@@ -87,7 +87,7 @@ class _ModalSubscriptionState extends ConsumerState<ModalSubscription> {
           ),
           padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 24),
           width: double.infinity,
-          height: size.height * 0.60,
+          height: size.height * 0.62,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
@@ -122,14 +122,26 @@ class _ModalSubscriptionState extends ConsumerState<ModalSubscription> {
               ),
               TextField(
                 controller: _titlecontroller,
-                decoration: InputDecoration(
-                  prefixIcon: const Icon(Iconsax.text_block),
-                  hintText: 'Título',
-                  border: OutlineInputBorder(
+                
+               decoration: InputDecoration(
+                  hintText: 'Valor',
+                  hintStyle: const TextStyle(
+                    fontWeight: FontWeight.w600,
+                  ),
+                  filled: true,
+                  fillColor: AppTheme.dynamicTextFieldColor(context),
+                  prefixIcon: Icon(
+                    Iconsax.text_block,
+                    size: 24,
+                  ),
+                  contentPadding: const EdgeInsets.symmetric(vertical: 18),
+                  enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(16),
-                    borderSide: const BorderSide(
-                      color: Color(0xFF4678c0),
-                    ),
+                    borderSide: BorderSide.none,
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(16),
+                    borderSide: BorderSide.none,
                   ),
                 ),
               ),
@@ -145,13 +157,24 @@ class _ModalSubscriptionState extends ConsumerState<ModalSubscription> {
                 controller: _valuecontroller,
                 keyboardType: TextInputType.number,
                 decoration: InputDecoration(
-                  prefixIcon: const Icon(Iconsax.dollar_circle),
                   hintText: 'Valor',
-                  border: OutlineInputBorder(
+                  hintStyle: const TextStyle(
+                    fontWeight: FontWeight.w600,
+                  ),
+                  filled: true,
+                  fillColor: AppTheme.dynamicTextFieldColor(context),
+                  prefixIcon: Icon(
+                    Iconsax.dollar_circle,
+                    size: 24,
+                  ),
+                  contentPadding: const EdgeInsets.symmetric(vertical: 18),
+                  enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(16),
-                    borderSide: const BorderSide(
-                      color: Color(0xFF4678c0),
-                    ),
+                    borderSide: BorderSide.none,
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(16),
+                    borderSide: BorderSide.none,
                   ),
                 ),
               ),
@@ -165,7 +188,7 @@ class _ModalSubscriptionState extends ConsumerState<ModalSubscription> {
               ),
               const SizedBox(height: 8),
               Wrap(
-                spacing: 12,
+                spacing: 6,
                 children: durations.map((duration) {
                   final isSelected = selectedDuration == duration['value'];
                   return ChoiceChip(
@@ -179,11 +202,13 @@ class _ModalSubscriptionState extends ConsumerState<ModalSubscription> {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
+                    padding: EdgeInsets.all(8),
+                    side: BorderSide.none,
                     selectedColor: AppTheme.primaryColor,
-                    backgroundColor: AppTheme.whiteColor,
+                    backgroundColor: AppTheme.dynamicTextFieldColor(context),
                     checkmarkColor: AppTheme.whiteColor,
                     labelStyle: TextStyle(
-                      color: isSelected ? Colors.white : Colors.black,
+                      color: Colors.white,
                       fontWeight: FontWeight.w600,
                     ),
                   );
