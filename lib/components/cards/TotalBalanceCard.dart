@@ -104,7 +104,7 @@ class Count extends ConsumerWidget {
         : AppTheme.dynamicDespesaTotalColor(context);
 
     return Container(
-      width: size.width * 0.42,
+      width: size.width * 0.44,
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: AppTheme.dynamicCardColor(context),

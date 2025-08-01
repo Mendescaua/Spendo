@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:spendo/components/FloatingMessage.dart';
 import 'package:spendo/components/cards/BankLoadedCard.dart';
 import 'package:spendo/components/modals/ModalBank.dart';
@@ -21,6 +22,7 @@ class _BankScreenState extends ConsumerState<BankScreen> {
   @override
   void initState() {
     super.initState();
+    _loadBanks();
   }
 
   Future<void> _loadBanks() async {
@@ -88,6 +90,14 @@ class _BankScreenState extends ConsumerState<BankScreen> {
           onPressed: () => Navigator.of(context).pop(),
           tooltip: 'Voltar',
         ),
+        actions: [
+          IconButton(
+            icon: Icon(PhosphorIcons.question(PhosphorIconsStyle.regular), size: 28,),
+            onPressed: () {
+              FloatingMessage(context, "Segure e arraste para reordenar ou arraste para esquerda para excluir", 'info', 6);
+            },
+          )
+        ],
       ),
       backgroundColor: AppTheme.primaryColor,
       body: Column(
@@ -114,13 +124,14 @@ class _BankScreenState extends ConsumerState<BankScreen> {
                         );
                       },
                       onReorder: (oldIndex, newIndex) async {
-                        HapticFeedback.mediumImpact();
                         if (newIndex > oldIndex) newIndex -= 1;
                         final newBanks = List.of(banks);
                         final item = newBanks.removeAt(oldIndex);
                         newBanks.insert(newIndex, item);
 
-                        // Atualiza o estado e salva a ordem local
+                        // Vibration ao reordenar
+                        HapticFeedback.mediumImpact();
+
                         await ref
                             .read(bankControllerProvider.notifier)
                             .updateOrder(newBanks);
@@ -129,8 +140,7 @@ class _BankScreenState extends ConsumerState<BankScreen> {
                       itemBuilder: (context, index) {
                         final bank = banks[index];
                         return Dismissible(
-                          key: ValueKey(
-                              bank.id), // importante manter a mesma key
+                          key: ValueKey(bank.id),
                           direction: DismissDirection.endToStart,
                           confirmDismiss: (direction) async {
                             return await showDialog<bool>(

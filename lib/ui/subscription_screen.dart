@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:spendo/components/BackToHomeWrapper.dart';
 import 'package:spendo/components/ConfirmAlertDialog.dart';
 import 'package:spendo/components/FloatingMessage.dart';
@@ -160,6 +161,14 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
             ),
             onPressed: () => Navigator.of(context).pushReplacementNamed('/menu'),
           ),
+           actions: [
+          IconButton(
+            icon: Icon(PhosphorIcons.question(PhosphorIconsStyle.regular), size: 28,),
+            onPressed: () {
+              FloatingMessage(context, "Arraste para esquerda para excluir", 'info', 6);
+            },
+          )
+        ],
         ),
         backgroundColor: AppTheme.primaryColor,
         body: Column(

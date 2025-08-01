@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:spendo/components/BackToHomeWrapper.dart';
 import 'package:spendo/components/ConfirmAlertDialog.dart';
 import 'package:spendo/components/FloatingMessage.dart';
@@ -87,6 +88,14 @@ class _SavingScreenState extends ConsumerState<SavingScreen> {
             icon: const Icon(Iconsax.arrow_left, color: Colors.white),
             onPressed: () => Navigator.of(context).pushReplacementNamed('/menu'),
           ),
+          actions: [
+          IconButton(
+            icon: Icon(PhosphorIcons.question(PhosphorIconsStyle.regular), size: 28,),
+            onPressed: () {
+              FloatingMessage(context, "Arraste para esquerda para excluir", 'info', 6);
+            },
+          )
+        ],
         ),
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -130,7 +139,7 @@ class _SavingScreenState extends ConsumerState<SavingScreen> {
                                   bool? confirmed = await showDialog<bool>(
                                     context: context,
                                     builder: (_) => ConfirmDeleteDialog(
-                                      label: 'meta',
+                                      label: 'Meta',
                                       onConfirm: () {
                                         Navigator.of(context).pop(
                                             true); // Retorna true para o Dismissible

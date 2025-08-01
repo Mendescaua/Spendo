@@ -42,6 +42,25 @@ class _AuthGateState extends State<AuthGate> {
     }
   }
 
+  Widget telaEsperandoBiometria() {
+    return Scaffold(
+      body: Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            LoadingAnimationWidget.staggeredDotsWave(
+                color: AppTheme.primaryColor, size: 80),
+            const SizedBox(height: 20),
+            const Text(
+              'Aguardando autenticação biométrica...',
+              style: TextStyle(fontSize: 18),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<AuthState>(
@@ -70,13 +89,9 @@ class _AuthGateState extends State<AuthGate> {
                 _tentandoAutenticar = false;
               });
             });
-            // Enquanto autentica, pode mostrar loading
-            return Scaffold(
-              body: Center(
-                child: LoadingAnimationWidget.staggeredDotsWave(
-                    color: AppTheme.primaryColor, size: 100),
-              ),
-            );
+          }
+          if (_tentandoAutenticar) {
+            return telaEsperandoBiometria();
           }
           if (_autenticado) {
             return MainScreen();

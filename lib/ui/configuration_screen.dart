@@ -254,10 +254,12 @@ class _ConfiguracoesScreenState extends ConsumerState<ConfiguracoesScreen> {
     );
   }
 
+
   void _confirmarLogout(BuildContext context) {
   showDialog(
     context: context,
     builder: (context) => AlertDialog(
+      backgroundColor: AppTheme.dynamicCardColor(context),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       title: const Text('Sair do aplicativo'),
       content: const Text('Tem certeza que deseja sair da sua conta?'),
