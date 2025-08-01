@@ -62,6 +62,30 @@ class AppTheme {
         : const Color(0xFFAC1934);
   }
 
+  static Color dynamicDespesaSoftColor(BuildContext context) {
+    return Theme.of(context).brightness == Brightness.dark
+        ? const Color(0xFF381e27)// AppTheme.softRedColor const Color(0xFFf23654)
+        : AppTheme.softRedColor ;
+  }
+
+  static Color dynamicDespesaTotalColor(BuildContext context) {
+    return Theme.of(context).brightness == Brightness.dark
+        ? const Color(0xFFf23654)
+        : redColor ;
+  }
+
+  static Color dynamicReceitaSoftColor(BuildContext context) {
+    return Theme.of(context).brightness == Brightness.dark
+        ? const Color(0xFF16352d)// AppTheme.softRedColor const Color(0xFFf23654)
+        : AppTheme.softGreenColor  ;
+  }
+
+  static Color dynamicReceitaTotalColor(BuildContext context) {
+    return Theme.of(context).brightness == Brightness.dark
+        ? const Color(0xFF2bc279)
+        : AppTheme.greenColor ;
+  }
+
   static Color dynamicReceitaColor(BuildContext context) {
     return Theme.of(context).brightness == Brightness.dark
         ? const Color(0xFF029456)

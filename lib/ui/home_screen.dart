@@ -133,7 +133,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       ),
                       elevation: 0,
                       child: Padding(
-                        padding: const EdgeInsets.all(16),
+                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -154,14 +154,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                       Text(
                                         "Minhas ",
                                         style: TextStyle(
-                                          fontSize: 18,
+                                          fontSize: 16,
                                           fontWeight: FontWeight.w400,
                                         ),
                                       ),
                                       Text(
                                         "metas",
                                         style: TextStyle(
-                                          fontSize: 18,
+                                          fontSize: 16,
                                           fontWeight: FontWeight.bold,
                                         ),
                                       ),
@@ -175,12 +175,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                   icon: Icon(
                                     PhosphorIcons.dotsThreeOutline(
                                         PhosphorIconsStyle.regular),
-                                    size: 26,
+                                    size: 22,
                                   ),
                                 ),
                               ],
                             ),
-                            const SizedBox(height: 12),
                             _loading
                                 ? Column(
                                     children: List.generate(

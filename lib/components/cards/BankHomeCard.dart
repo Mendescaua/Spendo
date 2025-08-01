@@ -50,7 +50,7 @@ class BankHomeCard extends ConsumerWidget {
                     Text(
                       "Contas",
                       style: TextStyle(
-                        fontSize: 18,
+                        fontSize: 16,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -63,7 +63,7 @@ class BankHomeCard extends ConsumerWidget {
                 },
                 icon: Icon(
                   PhosphorIcons.dotsThreeOutline(PhosphorIconsStyle.regular),
-                  size: 26,
+                  size: 22,
                 ),
               ),
             ],
@@ -122,7 +122,7 @@ class BankHomeCardItem extends ConsumerWidget {
     });
 
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 12),
+      padding: const EdgeInsets.symmetric(vertical: 6),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
@@ -135,11 +135,11 @@ class BankHomeCardItem extends ConsumerWidget {
                 Text(
                   title,
                   style: const TextStyle(
-                      fontSize: 14, fontWeight: FontWeight.w600),
+                      fontSize: 14, fontWeight: FontWeight.bold),
                 ),
                 Text(
                   type,
-                  style: const TextStyle(fontSize: 12),
+                  style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
                 ),
               ],
             ),

@@ -39,7 +39,7 @@ class MyApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-  final themeMode = ref.watch(themeModeProvider);
+    final themeMode = ref.watch(themeModeProvider);
 
     return MaterialApp(
       title: 'Spendo',
@@ -65,9 +65,15 @@ class MyApp extends ConsumerWidget {
         '/register': (context) => const RegisterScreen(),
         '/home': (context) => const HomeScreen(),
         '/menu': (context) => const MainScreen(),
-        '/transactions': (context) => const TransactionScreen(type: 'all',),
-        '/transactions_despesa': (context) => const TransactionScreen(type: 'd',),
-        '/transactions_receita': (context) => const TransactionScreen(type: 'r',),
+        '/transactions': (context) => const TransactionScreen(
+              type: 'all',
+            ),
+        '/transactions_despesa': (context) => const TransactionScreen(
+              type: 'd',
+            ),
+        '/transactions_receita': (context) => const TransactionScreen(
+              type: 'r',
+            ),
         '/saving_picker_image': (context) => const ImagePickerScreen(),
         '/category_chart': (context) => const CategoryChart(),
         '/money_card': (context) => const MoneyCardScreen(),
@@ -79,6 +85,10 @@ class MyApp extends ConsumerWidget {
         '/about': (context) => const AboutScreen(),
         '/onboarding': (context) => const OnboardingSetupScreen(),
         '/chatbot': (context) => const ChatScreen(),
+      },
+      onGenerateRoute: (settings) {
+        // fallback: redireciona para home se rota não for encontrada
+        return MaterialPageRoute(builder: (_) => const HomeScreen());
       },
     );
   }

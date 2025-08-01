@@ -68,7 +68,7 @@ class _IncomeExpenseBarChartState extends ConsumerState<IncomeExpenseBarChart> {
               const Text(
                 'Transações',
                 style: TextStyle(
-                  fontSize: 20,
+                  fontSize: 18,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -147,7 +147,7 @@ class _IncomeExpenseBarChartState extends ConsumerState<IncomeExpenseBarChart> {
                         BarChartRodData(
                           toY: totalReceita,
                           color:
-                              AppTheme.greenColor, // azul forte, como na imagem
+                              AppTheme.dynamicReceitaColor(context), // azul forte, como na imagem
                           width: 32,
                           borderRadius: BorderRadius.circular(6),
                           backDrawRodData: BackgroundBarChartRodData(

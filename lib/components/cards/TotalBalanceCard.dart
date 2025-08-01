@@ -101,9 +101,9 @@ class Count extends ConsumerWidget {
     }
 
     Color iconBgColor =
-        type == 'receita' ? AppTheme.softGreenColor : AppTheme.softRedColor;
+        type == 'receita' ? AppTheme.dynamicReceitaSoftColor(context) : AppTheme.dynamicDespesaSoftColor(context);
     Color iconColor =
-        type == 'receita' ? AppTheme.greenColor : AppTheme.redColor;
+        type == 'receita' ? AppTheme.dynamicReceitaTotalColor(context) : AppTheme.dynamicDespesaTotalColor(context);
 
     return Container(
       width: size.width * 0.42,

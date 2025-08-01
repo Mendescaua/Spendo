@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:spendo/components/BackToHomeWrapper.dart';
 import 'package:spendo/ui/transactionChart/category_chart.dart';
 import 'package:spendo/ui/transactionChart/transaction_chart.dart';
 import 'package:spendo/utils/theme.dart';
@@ -31,45 +32,47 @@ class _TransactionChartTabState extends ConsumerState<TransactionChartTab> {
       )),
     ];
 
-    return Scaffold(
-      backgroundColor: AppTheme.primaryColor,
-      appBar: AppBar(
-        title: const Text(
-          'Relatórios',
-          style: TextStyle(color: AppTheme.whiteColor),
-        ),
-        automaticallyImplyLeading: false,
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        iconTheme: const IconThemeData(color: AppTheme.whiteColor),
-      ),
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: TabNavigation(
-              selectedIndex: _currentIndex,
-              onTabSelected: _onTabSelected,
-            ),
+    return BackToHomeWrapper(
+      child: Scaffold(
+        backgroundColor: AppTheme.primaryColor,
+        appBar: AppBar(
+          title: const Text(
+            'Relatórios',
+            style: TextStyle(color: AppTheme.whiteColor),
           ),
-          SizedBox(height: 14),
-          Expanded(
-            child: Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: AppTheme.dynamicBackgroundColor(context),
-                borderRadius: BorderRadius.vertical(
-                  top: Radius.circular(24),
+          automaticallyImplyLeading: false,
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          iconTheme: const IconThemeData(color: AppTheme.whiteColor),
+        ),
+        body: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: TabNavigation(
+                selectedIndex: _currentIndex,
+                onTabSelected: _onTabSelected,
+              ),
+            ),
+            SizedBox(height: 14),
+            Expanded(
+              child: Container(
+                width: double.infinity,
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                decoration: BoxDecoration(
+                  color: AppTheme.dynamicBackgroundColor(context),
+                  borderRadius: BorderRadius.vertical(
+                    top: Radius.circular(24),
+                  ),
+                ),
+                child: IndexedStack(
+                  index: _currentIndex,
+                  children: tabContents,
                 ),
               ),
-              child: IndexedStack(
-                index: _currentIndex,
-                children: tabContents,
-              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

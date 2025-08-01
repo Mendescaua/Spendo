@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:spendo/components/BackToHomeWrapper.dart';
 import 'package:spendo/components/ConfirmAlertDialog.dart';
 import 'package:spendo/components/FloatingMessage.dart';
 import 'package:spendo/components/MonthPicker2.dart';
@@ -145,146 +146,148 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
     // Use o total calculado para as assinaturas filtradas
     final totalValue = _filteredTotalValue;
 
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'Assinaturas',
-          style: TextStyle(color: AppTheme.whiteColor),
-        ),
-        leading: IconButton(
-          icon: const Icon(
-            Iconsax.arrow_left,
-            color: AppTheme.whiteColor,
+    return BackToHomeWrapper(
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text(
+            'Assinaturas',
+            style: TextStyle(color: AppTheme.whiteColor),
           ),
-          onPressed: () => Navigator.of(context).pushReplacementNamed('/menu'),
-        ),
-      ),
-      backgroundColor: AppTheme.primaryColor,
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Total',
-                  style: TextStyle(color: Colors.white70),
-                ),
-                SizedBox(height: 8),
-              ],
+          leading: IconButton(
+            icon: const Icon(
+              Iconsax.arrow_left,
+              color: AppTheme.whiteColor,
             ),
+            onPressed: () => Navigator.of(context).pushReplacementNamed('/menu'),
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Text(
-              Customtext.formatMoeda(totalValue),
-              style: const TextStyle(
-                color: AppTheme.whiteColor,
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-          SizedBox(height: 16),
-          Expanded(
-            child: Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: AppTheme.dynamicBackgroundColor(context),
-                borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
-              ),
+        ),
+        backgroundColor: AppTheme.primaryColor,
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Monthpicker2(
-                    selectedMonth: _selectedMonth,
-                    onMonthSelected: (mes) {
-                      setState(() {
-                        _selectedMonth = mes ?? DateTime.now();
-                        _applyFilter();
-                      });
-                    },
-                    textColor: AppTheme.dynamicTextColor(context),
+                  Text(
+                    'Total',
+                    style: TextStyle(color: Colors.white70),
                   ),
-                  const SizedBox(height: 16),
-                  Expanded(
-                    child: _loading
-                        ? Center(
-                            child: LoadingAnimationWidget.staggeredDotsWave(
-                              color: AppTheme.primaryColor,
-                              size: 64,
-                            ),
-                          )
-                        : filteredSubscriptions.isEmpty
-                            ? const Center(
-                                child: Text(
-                                  "Nenhuma assinatura encontrada",
-                                  style: TextStyle(fontSize: 16),
-                                ),
-                              )
-                            : ListView.builder(
-                                itemCount: filteredSubscriptions.length,
-                                itemBuilder: (context, index) {
-                                  final sub = filteredSubscriptions[index];
-                                  return Dismissible(
-                                    key: Key(sub.id.toString()),
-                                    direction: DismissDirection.endToStart,
-                                    confirmDismiss: (direction) async {
-                                      bool? confirmed = await showDialog<bool>(
-                                        context: context,
-                                        builder: (_) => ConfirmDeleteDialog(
-                                          label: 'Assinatura',
-                                          onConfirm: () {
-                                            Navigator.of(context).pop(
-                                                true); // Retorna true para o Dismissible
-                                          },
-                                        ),
-                                      );
-                                      return confirmed ?? false;
-                                    },
-                                    onDismissed: (direction) {
-                                      onDelete(sub.id!);
-                                    },
-                                    background: Container(
-                                      margin: const EdgeInsets.only(
-                                          bottom: 14, right: 16, top: 2),
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 10),
-                                      decoration: BoxDecoration(
-                                        color: Colors.red,
-                                        borderRadius: BorderRadius.circular(16),
-                                      ),
-                                      alignment: Alignment.centerRight,
-                                      child: const Icon(Iconsax.trash,
-                                          color: Colors.white),
-                                    ),
-                                    child: SubscriptionCard(subscription: sub),
-                                  );
-                                },
-                              ),
-                  ),
-                  SizedBox(height: 50),
+                  SizedBox(height: 8),
                 ],
               ),
             ),
-          )
-        ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          _openAddTransactionModal(context);
-        },
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(30),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Text(
+                Customtext.formatMoeda(totalValue),
+                style: const TextStyle(
+                  color: AppTheme.whiteColor,
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            SizedBox(height: 16),
+            Expanded(
+              child: Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: AppTheme.dynamicBackgroundColor(context),
+                  borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Monthpicker2(
+                      selectedMonth: _selectedMonth,
+                      onMonthSelected: (mes) {
+                        setState(() {
+                          _selectedMonth = mes ?? DateTime.now();
+                          _applyFilter();
+                        });
+                      },
+                      textColor: AppTheme.dynamicTextColor(context),
+                    ),
+                    const SizedBox(height: 16),
+                    Expanded(
+                      child: _loading
+                          ? Center(
+                              child: LoadingAnimationWidget.staggeredDotsWave(
+                                color: AppTheme.primaryColor,
+                                size: 64,
+                              ),
+                            )
+                          : filteredSubscriptions.isEmpty
+                              ? const Center(
+                                  child: Text(
+                                    "Nenhuma assinatura encontrada",
+                                    style: TextStyle(fontSize: 16),
+                                  ),
+                                )
+                              : ListView.builder(
+                                  itemCount: filteredSubscriptions.length,
+                                  itemBuilder: (context, index) {
+                                    final sub = filteredSubscriptions[index];
+                                    return Dismissible(
+                                      key: Key(sub.id.toString()),
+                                      direction: DismissDirection.endToStart,
+                                      confirmDismiss: (direction) async {
+                                        bool? confirmed = await showDialog<bool>(
+                                          context: context,
+                                          builder: (_) => ConfirmDeleteDialog(
+                                            label: 'Assinatura',
+                                            onConfirm: () {
+                                              Navigator.of(context).pop(
+                                                  true); // Retorna true para o Dismissible
+                                            },
+                                          ),
+                                        );
+                                        return confirmed ?? false;
+                                      },
+                                      onDismissed: (direction) {
+                                        onDelete(sub.id!);
+                                      },
+                                      background: Container(
+                                        margin: const EdgeInsets.only(
+                                            bottom: 14, right: 16, top: 2),
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 10),
+                                        decoration: BoxDecoration(
+                                          color: Colors.red,
+                                          borderRadius: BorderRadius.circular(16),
+                                        ),
+                                        alignment: Alignment.centerRight,
+                                        child: const Icon(Iconsax.trash,
+                                            color: Colors.white),
+                                      ),
+                                      child: SubscriptionCard(subscription: sub),
+                                    );
+                                  },
+                                ),
+                    ),
+                    SizedBox(height: 50),
+                  ],
+                ),
+              ),
+            )
+          ],
         ),
-        backgroundColor: AppTheme.primaryColor,
-        child: const Icon(
-          Iconsax.add,
-          color: Colors.white,
-          size: 32,
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            _openAddTransactionModal(context);
+          },
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(30),
+          ),
+          backgroundColor: AppTheme.primaryColor,
+          child: const Icon(
+            Iconsax.add,
+            color: Colors.white,
+            size: 32,
+          ),
         ),
       ),
     );

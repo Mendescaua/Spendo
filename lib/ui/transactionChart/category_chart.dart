@@ -70,7 +70,7 @@ class _CategoryChartState extends ConsumerState<CategoryChart> {
               const Text(
                 "Gastos por categoria",
                 style: TextStyle(
-                  fontSize: 20,
+                  fontSize: 18,
                   fontWeight: FontWeight.bold,
                 ),
               ),

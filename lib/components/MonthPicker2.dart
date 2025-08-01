@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:month_picker_dialog/month_picker_dialog.dart';
+import 'package:spendo/utils/theme.dart';
 
 class Monthpicker2 extends StatelessWidget {
   final DateTime? selectedMonth;
@@ -30,7 +31,37 @@ class Monthpicker2 extends StatelessWidget {
       initialDate: selectedMonth ?? DateTime.now(),
       firstDate: DateTime(2000),
       lastDate: DateTime(DateTime.now().year + 5),
+      monthPickerDialogSettings: MonthPickerDialogSettings(
+        dialogSettings: PickerDialogSettings(dialogRoundedCornersRadius: 20),
+        dateButtonsSettings: PickerDateButtonsSettings(
+          monthTextStyle: const TextStyle(
+            color: Colors.black, // Texto dos meses
+            fontSize: 16,
+          ),
+          currentMonthTextColor: AppTheme.dynamicTextColor(context),
+          selectedMonthTextColor: Colors.white,
+          unselectedMonthsTextColor: AppTheme.dynamicTextColor(context),
+        ),
+        actionBarSettings: PickerActionBarSettings(
+          cancelWidget: Text('Cancelar', style: TextStyle(color: AppTheme.dynamicTextColor(context))),
+          confirmWidget: Container(
+            decoration: BoxDecoration(
+              color: AppTheme.primaryColor,
+              borderRadius: BorderRadius.circular(24),
+            ),
+            padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 10),
+            child: const Text(
+              'Filtrar',
+              style: TextStyle(
+                color: AppTheme.whiteColor,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ),
+      ),
     );
+
     if (picked != null) {
       onMonthSelected(picked);
     }
@@ -45,7 +76,7 @@ class Monthpicker2 extends StatelessWidget {
           Text(
             displayText,
             style: TextStyle(
-              fontSize: 18,
+              fontSize: 16,
               fontWeight: FontWeight.bold,
               color: textColor,
             ),

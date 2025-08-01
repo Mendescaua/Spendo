@@ -105,7 +105,7 @@ class _SavingInfoScreenState extends ConsumerState<SavingInfoScreen> {
               backgroundColor: Colors.transparent,
               elevation: 0,
               title: Text(
-                widget.saving.title ?? 'Cofrinho',
+                widget.saving.title ?? 'Meta',
                 style: const TextStyle(color: Colors.white),
               ),
               leading: IconButton(
@@ -141,7 +141,7 @@ class _SavingInfoScreenState extends ConsumerState<SavingInfoScreen> {
                   Customtext.formatMoeda(widget.saving.goalValue ?? 0),
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: 28,
+                    fontSize: 26,
                     fontWeight: FontWeight.bold,
                     shadows: [
                       Shadow(
@@ -184,7 +184,7 @@ class _SavingInfoScreenState extends ConsumerState<SavingInfoScreen> {
                           Text(
                             currentSaving.title ?? '',
                             style: const TextStyle(
-                              fontSize: 26,
+                              fontSize: 18,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
@@ -205,7 +205,7 @@ class _SavingInfoScreenState extends ConsumerState<SavingInfoScreen> {
                                   Text(
                                     '${((currentSaving.value ?? 0) / (currentSaving.goalValue == 0 ? 1 : currentSaving.goalValue!) * 100).toStringAsFixed(0)}%',
                                     style: const TextStyle(
-                                      fontSize: 24.0,
+                                      fontSize: 18.0,
                                       fontWeight: FontWeight.w900,
                                       color: AppTheme.primaryColor,
                                     ),
@@ -318,7 +318,7 @@ class _InfoColumn extends StatelessWidget {
               value,
               style: TextStyle(
                 fontWeight: FontWeight.bold,
-                fontSize: 18,
+                fontSize: 16,
               ),
             ),
           ],
