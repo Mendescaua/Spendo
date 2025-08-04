@@ -163,7 +163,7 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
           ),
            actions: [
           IconButton(
-            icon: Icon(PhosphorIcons.question(PhosphorIconsStyle.regular), size: 28,),
+            icon: Icon(PhosphorIcons.question(PhosphorIconsStyle.regular), size: 28, color: AppTheme.whiteColor,),
             onPressed: () {
               FloatingMessage(context, "Arraste para esquerda para excluir", 'info', 6);
             },

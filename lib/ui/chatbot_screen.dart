@@ -225,7 +225,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                     child: TextField(
                       controller: _textController,
                       decoration: InputDecoration(
-                        hintText: 'Digite oi para comecar a conversa',
+                        hintText: 'Digite oi para começar a conversa',
                         hintStyle: const TextStyle(color: Colors.grey),
                         suffixIcon: IconButton(
                           icon: Icon(

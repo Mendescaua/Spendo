@@ -169,50 +169,40 @@ class _CriarCategoriaScreenState extends ConsumerState<CriarCategoriaScreen> {
   ];
 
   final List<Color> _coresDisponiveis = [
-    // Azuis
-    Color(0xFF4678C0), Color(0xFF63A4FF), Color(0xFF1976D2), Color(0xFF2196F3),
-    Color(0xFF1E88E5),
-    Color(0xFF42A5F5), Color(0xFF90CAF9), Color(0xFFBBDEFB), Color(0xFF0D47A1),
-    Color(0xFF1565C0),
+    // Pasteis
+    Color(0xFFd0e1f1), Color(0xFFc9d9fa), Color(0xFFd1e0e5), Color(0xFFd7ebd0),
+    Color(0xFFfff2cf),
+    Color(0xFFfbe6cb), Color(0xFFf5cbcc), Color(0xFFe5b9b0), Color(0xFFe8d3dc),
+    Color(0xFFdad3e5),
 
-    // Verdes
-    Color(0xFF4CAF50), Color(0xFF81C784), Color(0xFF2E7D32), Color(0xFF66BB6A),
-    Color(0xFF00C853),
-    Color(0xFF1B5E20), Color(0xFFA5D6A7), Color(0xFFC8E6C9), Color(0xFF388E3C),
-    Color(0xFF43A047),
+    // Pasteis escuros
+    Color(0xFFa2c5e3), Color(0xFFa4c2f4), Color(0xFFa5c2c6), Color(0xFFb1d6a0),
+    Color(0xFFffe49b),
+    Color(0xFFf7cd93), Color(0xFFde9e94), Color(0xFFe07d6a), Color(0xFFcfa9c0),
+    Color(0xFFb4a7d5),
 
-    // Vermelhos / Rosas
-    Color(0xFFE53935), Color(0xFFFF5252), Color(0xFFEF5350), Color(0xFFFF8A80),
-    Color(0xFFD32F2F),
-    Color(0xFFF44336), Color(0xFFB71C1C), Color(0xFFE57373), Color(0xFFFFCDD2),
-    Color(0xFFC62828),
+    // Normais
+    Color(0xFF6ca9df), Color(0xFF6c9dec), Color(0xFF75a7a8), Color(0xFF91c481),
+    Color(0xFFfadc64),
+    Color(0xFFf9b36e), Color(0xFFdd6763), Color(0xFFcf3e2b), Color(0xFFc57ba0),
+    Color(0xFF8f7cbe),
 
-    // Roxos / Violetas
-    Color(0xFF9C27B0), Color(0xFFBA68C8), Color(0xFF7B1FA2), Color(0xFF9575CD),
-    Color(0xFFB39DDB),
-    Color(0xFF8E24AA), Color(0xFFCE93D8), Color(0xFFE1BEE7), Color(0xFF4A148C),
-    Color(0xFF6A1B9A),
+    // Normais escuras
+    Color(0xFF3d85c6), Color(0xFF3c78d8), Color(0xFF45818e), Color(0xFF6aa84f),
+    Color(0xFFf1c232),
+    Color(0xFFe69138), Color(0xFFcc0000), Color(0xFF85200c), Color(0xFFa64d79),
+    Color(0xFF351c75),
 
     // Marrons / Terrosos
-    Color(0xFF795548), Color(0xFFA1887F), Color(0xFF5D4037), Color(0xFF8D6E63),
-    Color(0xFFD7CCC8),
-    Color(0xFF3E2723), Color(0xFF6D4C41), Color(0xFFBCAAA4), Color(0xFF4E342E),
+    Color(0xFF0b5394), Color(0xFF1155cc), Color(0xFF134f5c), Color(0xFF38761d),
+    Color(0xFFbf9000),
+    Color(0xFFb45f06), Color(0xFF990000), Color(0xFF85200c), Color(0xFF741b47),
+    Color(0xFF741b47),
 
     // Cinzas / Neutros
-    Color(0xFF607D8B), Color(0xFF90A4AE), Color(0xFF455A64), Color(0xFFB0BEC5),
-    Color(0xFF78909C), Color(0xFF37474F), Color(0xFF212121),
-
-    // Pastéis criativos
-    Color(0xFFFFECB3), // Antes: 0xFFFFF8E1
-    Color(0xFFFFE0B2), // Antes: 0xFFFFF3E0
-    Color(0xFFFFF9C4), // Antes: 0xFFFFFDE7
-    Color(0xFFC8E6C9), // Antes: 0xFFE8F5E9
-    Color(0xFFBBDEFB), // Antes: 0xFFE3F2FD
-    Color(0xFFFFCCBC), // Antes: 0xFFFBE9E7
-    Color(0xFFF0F4C3), // Antes: 0xFFF9FBE7
-    Color(0xFFE1BEE7), // Antes: 0xFFF3E5F5
-    Color(0xFFB3E5FC), // Antes: 0xFFE1F5FE
-    Color(0xFFB2DFDB), // Antes: 0xFFE0F2F1
+    Color(0xFF073763), Color(0xFF1c4587), Color(0xFF0c343d), Color(0xFF274e13),
+    Color(0xFF7f6000), Color(0xFF783f04), Color(0xFF660000), Color(0xFF5b0f00),
+    Color(0xFF4c1130), Color(0xFF20124d),
   ];
 
   Future<void> onSave(
@@ -267,29 +257,31 @@ class _CriarCategoriaScreenState extends ConsumerState<CriarCategoriaScreen> {
       ),
     );
   }
+Widget _corCarouselItem(Color cor) {
+  final isSelected = corSelecionadaDialog == cor;
 
-  Widget _corCarouselItem(Color cor) {
-    final isSelected = corSelecionadaDialog == cor;
-
-    return GestureDetector(
-      onTap: () {
-        setState(() {
-          corSelecionadaDialog = cor;
-        });
-      },
-      child: Container(
-        margin: const EdgeInsets.only(right: 12),
-        decoration: BoxDecoration(
-          color: cor,
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(
-            color: isSelected ? Colors.black : Colors.white,
-            width: 2,
-          ),
+  return GestureDetector(
+    onTap: () {
+      setState(() {
+        corSelecionadaDialog = cor;
+      });
+    },
+    child: Container(
+      width: 40,
+      height: 40,
+      margin: const EdgeInsets.only(right: 12),
+      decoration: BoxDecoration(
+        color: cor,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: isSelected ? Colors.black : Colors.white,
+          width: 2,
         ),
       ),
-    );
-  }
+    ),
+  );
+}
+
 
   @override
   Widget build(BuildContext context) {
@@ -352,13 +344,27 @@ class _CriarCategoriaScreenState extends ConsumerState<CriarCategoriaScreen> {
                     const SizedBox(height: 12),
                     SizedBox(
                       height: 100,
-                      child: GridView.count(
-                        crossAxisCount: 2,
+                      child: SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
-                        crossAxisSpacing: 10,
-                        childAspectRatio: 0.8,
-                        children:
-                            _coresDisponiveis.map(_corCarouselItem).toList(),
+                        child: Column(
+                          children: [
+                            Row(
+                              children: _coresDisponiveis
+                                  .sublist(
+                                      0, (_coresDisponiveis.length / 2).ceil())
+                                  .map(_corCarouselItem)
+                                  .toList(),
+                            ),
+                            const SizedBox(height: 10),
+                            Row(
+                              children: _coresDisponiveis
+                                  .sublist(
+                                      (_coresDisponiveis.length / 2).ceil())
+                                  .map(_corCarouselItem)
+                                  .toList(),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                     const SizedBox(height: 24),

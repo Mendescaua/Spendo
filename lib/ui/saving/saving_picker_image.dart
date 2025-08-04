@@ -69,6 +69,7 @@ class _ImagePickerScreenState extends ConsumerState<ImagePickerScreen> {
         leading: IconButton(
           onPressed: () => Navigator.pop(context),
           icon: const Icon(Iconsax.arrow_left),
+          color: Colors.white,
         ),
       ),
       body: Padding(

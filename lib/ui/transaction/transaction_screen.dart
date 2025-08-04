@@ -243,25 +243,32 @@ class _TransactionScreenState extends ConsumerState<TransactionScreen> {
         : scaffold;
   }
 
-  Map<DateTime, List<TransactionModel>> _agruparPorData(
-      List<TransactionModel> transacoes) {
-    final Map<DateTime, List<TransactionModel>> agrupadas = {};
+Map<DateTime, List<TransactionModel>> _agruparPorData(
+    List<TransactionModel> transacoes) {
+  final Map<DateTime, List<TransactionModel>> agrupadas = {};
 
-    for (var transacao in transacoes) {
-      final data = DateTime(
-        transacao.date.year,
-        transacao.date.month,
-        transacao.date.day,
-      );
-      if (agrupadas.containsKey(data)) {
-        agrupadas[data]!.add(transacao);
-      } else {
-        agrupadas[data] = [transacao];
-      }
+  for (var transacao in transacoes) {
+    final data = DateTime(
+      transacao.date.year,
+      transacao.date.month,
+      transacao.date.day,
+    );
+    if (agrupadas.containsKey(data)) {
+      agrupadas[data]!.add(transacao);
+    } else {
+      agrupadas[data] = [transacao];
     }
-
-    return agrupadas;
   }
+
+  // Ordena as transações de cada dia da mais recente para a mais antiga
+  agrupadas.updateAll((_, lista) {
+    lista.sort((a, b) => b.date.compareTo(a.date));
+    return lista;
+  });
+
+  return agrupadas;
+}
+
 
   String _diaSemana(int weekday) {
     const dias = [

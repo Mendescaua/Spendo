@@ -92,7 +92,7 @@ class _BankScreenState extends ConsumerState<BankScreen> {
         ),
         actions: [
           IconButton(
-            icon: Icon(PhosphorIcons.question(PhosphorIconsStyle.regular), size: 28,),
+            icon: Icon(PhosphorIcons.question(PhosphorIconsStyle.regular), size: 28, color: AppTheme.whiteColor,),
             onPressed: () {
               FloatingMessage(context, "Segure e arraste para reordenar ou arraste para esquerda para excluir", 'info', 6);
             },
