@@ -36,7 +36,8 @@ class _BankInfoScreenState extends ConsumerState<BankInfoScreen> {
     setState(() => _loading = true);
 
     final controller = ref.read(bankControllerProvider.notifier);
-    final info = await controller.getBankInfo(bankName: widget.banks.name, date: DateTime.now());
+    final info = await controller.getBankInfo(
+        bankName: widget.banks.name, date: DateTime.now());
 
     if (!mounted) return;
     setState(() => _loading = false);
@@ -64,7 +65,12 @@ class _BankInfoScreenState extends ConsumerState<BankInfoScreen> {
     return Scaffold(
       backgroundColor: AppTheme.primaryColor,
       appBar: AppBar(
-        title: Text(widget.banks.name),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        title: Text(
+          widget.banks.name,
+          style: const TextStyle(color: Colors.white),
+        ),
         leading: IconButton(
           icon: const Icon(Iconsax.arrow_left),
           onPressed: () => Navigator.of(context).pop(),
@@ -74,13 +80,13 @@ class _BankInfoScreenState extends ConsumerState<BankInfoScreen> {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Topo com saldo — mostra valor ou placeholder
+          // Topo com saldo
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
+                const Text(
                   'Total',
                   style: TextStyle(color: Colors.white70, fontSize: 16),
                 ),
@@ -91,14 +97,14 @@ class _BankInfoScreenState extends ConsumerState<BankInfoScreen> {
                       : '--',
                   style: const TextStyle(
                     color: AppTheme.whiteColor,
-                    fontSize: 28,
+                    fontSize: 26,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
               ],
             ),
           ),
-          // Container branco com detalhes ou loading
+          // Conteúdo com detalhes
           Expanded(
             child: Container(
               width: double.infinity,
@@ -106,12 +112,12 @@ class _BankInfoScreenState extends ConsumerState<BankInfoScreen> {
               decoration: BoxDecoration(
                 color: AppTheme.dynamicBackgroundColor(context),
                 borderRadius:
-                    const BorderRadius.vertical(top: Radius.circular(24)),
+                    const BorderRadius.vertical(top: Radius.circular(32)),
                 boxShadow: [
                   BoxShadow(
                     color: Colors.black.withOpacity(0.05),
                     blurRadius: 8,
-                    offset: const Offset(0, -3),
+                    offset: const Offset(0, -4),
                   ),
                 ],
               ),
@@ -130,77 +136,74 @@ class _BankInfoScreenState extends ConsumerState<BankInfoScreen> {
                             ),
                           ),
                         )
-                      : Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Detalhes da Conta',
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                                color: AppTheme.dynamicTextColor(context),
-                              ),
-                            ),
-                            const SizedBox(height: 16),
-                            _infoItem(
-                              icon: Iconsax.bank,
-                              iconColor: AppTheme.primaryColor,
-                              label: 'Instituição bancária',
-                              value: widget.banks.name,
-                            ),
-                            _divider(),
-                            _infoItem(
-                              icon: Iconsax.card,
-                              iconColor: AppTheme.primaryColor,
-                              label: 'Tipo da conta',
-                              value: widget.banks.type,
-                            ),
-                            _divider(),
-                            GestureDetector(
-                              onTap: () =>
-                                  Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => TransactionBankScreen(
-                                  bankName: widget.banks.name,
-                                  type: 'd',
+                      : SingleChildScrollView(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Detalhes da Conta',
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                  color: AppTheme.dynamicTextColor(context),
                                 ),
-                              )),
-                              child: _infoItem(
-                                icon: Iconsax.money,
-                                iconColor:
-                                    AppTheme.dynamicDespesaColor(context),
-                                label: 'Despesas',
-                                value: '${stats['despesa_count']}',
-                                valueColor:
-                                    AppTheme.dynamicDespesaColor(context),
                               ),
-                            ),
-                            _divider(),
-                            GestureDetector(
-                              onTap: () =>
-                                  Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => TransactionBankScreen(
-                                  bankName: widget.banks.name,
-                                  type: 'r',
+                              const SizedBox(height: 16),
+                              InfoTile(
+                                icon: Iconsax.bank,
+                                label: 'Instituição bancária',
+                                content: widget.banks.name,
+                              ),
+                              InfoTile(
+                                icon: Iconsax.card,
+                                label: 'Tipo da conta',
+                                content: widget.banks.type,
+                              ),
+                              GestureDetector(
+                                onTap: () => Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) => TransactionBankScreen(
+                                      bankName: widget.banks.name,
+                                      type: 'd',
+                                    ),
+                                  ),
                                 ),
-                              )),
-                              child: _infoItem(
-                                icon: Iconsax.money,
-                                iconColor:
-                                    AppTheme.dynamicReceitaColor(context),
-                                label: 'Receitas',
-                                value: '${stats['receita_count']}',
-                                valueColor:
-                                    AppTheme.dynamicReceitaColor(context),
+                                child: InfoTile(
+                                  icon: Iconsax.money,
+                                  label: 'Despesas',
+                                  content: '${stats['despesa_count']}',
+                                  iconColor:
+                                      AppTheme.dynamicDespesaColor(context),
+                                  contentColor:
+                                      AppTheme.dynamicDespesaColor(context),
+                                ),
                               ),
-                            ),
-                            _divider(),
-                            _infoItem(
-                              icon: Iconsax.repeat,
-                              iconColor: AppTheme.primaryColor,
-                              label: 'Total de transações',
-                              value: '${stats['transaction_count']}',
-                            ),
-                          ],
+                              GestureDetector(
+                                onTap: () => Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) => TransactionBankScreen(
+                                      bankName: widget.banks.name,
+                                      type: 'r',
+                                    ),
+                                  ),
+                                ),
+                                child: InfoTile(
+                                  icon: Iconsax.money,
+                                  label: 'Receitas',
+                                  content: '${stats['receita_count']}',
+                                  iconColor:
+                                      AppTheme.dynamicReceitaColor(context),
+                                  contentColor:
+                                      AppTheme.dynamicReceitaColor(context),
+                                ),
+                              ),
+                              InfoTile(
+                                icon: Iconsax.repeat,
+                                label: 'Total de transações',
+                                content: '${stats['transaction_count']}',
+                              ),
+                            ],
+                          ),
                         ),
             ),
           ),
@@ -208,55 +211,55 @@ class _BankInfoScreenState extends ConsumerState<BankInfoScreen> {
       ),
     );
   }
+}
 
-  Widget _infoItem({
-    required IconData icon,
-    required Color iconColor,
-    required String label,
-    required String value,
-    Color? valueColor,
-  }) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 12),
-      child: Row(
-        children: [
-          Container(
-            padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              color: iconColor.withOpacity(0.15),
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Icon(icon, color: iconColor, size: 24),
+class InfoTile extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final String content;
+  final Color? iconColor;
+  final Color? contentColor;
+
+  const InfoTile({
+    super.key,
+    required this.icon,
+    required this.label,
+    required this.content,
+    this.iconColor,
+    this.contentColor,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 12),
+      decoration: BoxDecoration(
+        color: AppTheme.dynamicCardColor(context),
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: ListTile(
+        contentPadding: const EdgeInsets.symmetric(horizontal: 12),
+        leading: Icon(icon, size: 24, color: iconColor),
+        title: Text(
+          label,
+          style: TextStyle(
+            fontSize: 14,
+            color: Colors.grey.shade400,
+            fontWeight: FontWeight.w500,
           ),
-          const SizedBox(width: 16),
-          Expanded(
-            child: Text(
-              label,
-              style: TextStyle(
-                fontSize: 16,
-                color: AppTheme.dynamicTextColor(context).withOpacity(0.8),
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-          ),
-          Text(
-            value,
+        ),
+        subtitle: Padding(
+          padding: const EdgeInsets.only(top: 4),
+          child: Text(
+            content,
             style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.bold,
-              color: valueColor ?? AppTheme.dynamicTextColor(context),
+              color: contentColor ?? AppTheme.dynamicTextColor(context),
             ),
           ),
-        ],
+        ),
       ),
-    );
-  }
-
-  Widget _divider() {
-    return Divider(
-      color: Colors.grey.withOpacity(0.3),
-      thickness: 1,
-      height: 0,
     );
   }
 }
