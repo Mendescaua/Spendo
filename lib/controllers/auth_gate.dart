@@ -51,9 +51,11 @@ class _AuthGateState extends State<AuthGate> {
             LoadingAnimationWidget.staggeredDotsWave(
                 color: AppTheme.primaryColor, size: 80),
             const SizedBox(height: 20),
-            const Text(
-              'Aguardando autenticação biométrica...',
-              style: TextStyle(fontSize: 18),
+            Center(
+              child: const Text(
+                'Aguardando autenticação biométrica...',
+                style: TextStyle(fontSize: 16),
+              ),
             ),
           ],
         ),

@@ -57,7 +57,7 @@ class MyApp extends ConsumerWidget {
       ],
       supportedLocales: const [
         Locale('pt'), // Português
-        Locale('en'), // Inglês (ou outras línguas que você queira)
+        Locale('en'), // Inglês
       ],
       routes: {
         '/splash': (context) => const SplashScreen(),

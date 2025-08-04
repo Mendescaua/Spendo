@@ -63,9 +63,6 @@ class _ConfiguracoesScreenState extends ConsumerState<ConfiguracoesScreen> {
     if (!mounted) return;
 
     Navigator.of(context).pop();
-    Navigator.of(context).pushReplacement(
-      MaterialPageRoute(builder: (context) => AuthGate()),
-    );
   }
 
   @override
