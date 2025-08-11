@@ -8,6 +8,7 @@ import 'package:spendo/ui/chatbot_screen.dart';
 import 'package:spendo/ui/onBoarding/onboarding_screen.dart';
 import 'package:spendo/ui/bank/bank_screen.dart';
 import 'package:spendo/ui/category/add_category_screen.dart';
+import 'package:spendo/ui/success_screen.dart';
 import 'package:spendo/ui/wallet/add_money_card_screen.dart';
 import 'package:spendo/controllers/auth_gate.dart';
 import 'package:spendo/core/supabse_client.dart';

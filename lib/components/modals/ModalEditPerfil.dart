@@ -5,7 +5,6 @@ import 'package:spendo/components/CircleImage.dart';
 import 'package:spendo/components/FloatingMessage.dart';
 import 'package:spendo/components/buttons/StyleButton.dart';
 import 'package:spendo/controllers/user_controller.dart';
-import 'package:spendo/models/users_model.dart';
 import 'package:spendo/utils/theme.dart';
 
 class ModalEditPerfil extends ConsumerStatefulWidget {
@@ -39,7 +38,7 @@ class _ModalEditPerfilState extends ConsumerState<ModalEditPerfil> {
       name: _usercontroller.text,
       picture: picture,
     );
-    FloatingMessage(context, 'Valor adicionado com sucesso', 'success', 2);
+    FloatingMessage(context, 'Editado com sucesso', 'success', 2);
     Navigator.of(context).pop();
   }
 

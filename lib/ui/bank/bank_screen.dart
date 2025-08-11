@@ -33,6 +33,18 @@ class _BankScreenState extends ConsumerState<BankScreen> {
   }
 
   void onDelete(int id) async {
+    final banks = ref.read(bankControllerProvider);
+    final bank =
+        banks.firstWhere((b) => b.id == id, orElse: () => null as dynamic);
+    if (bank == null) {
+      FloatingMessage(context, 'Conta não encontrada.', 'error', 2);
+      return;
+    }
+    if (bank.name.toLowerCase() == 'carteira digital') {
+      FloatingMessage(
+          context, 'Não é possível excluir a Carteira Digital.', 'error', 2);
+      return;
+    }
     final controller = ref.read(bankControllerProvider.notifier);
     final response = await controller.deleteBank(id: id);
 
@@ -92,9 +104,17 @@ class _BankScreenState extends ConsumerState<BankScreen> {
         ),
         actions: [
           IconButton(
-            icon: Icon(PhosphorIcons.question(PhosphorIconsStyle.regular), size: 28, color: AppTheme.whiteColor,),
+            icon: Icon(
+              PhosphorIcons.question(PhosphorIconsStyle.regular),
+              size: 28,
+              color: AppTheme.whiteColor,
+            ),
             onPressed: () {
-              FloatingMessage(context, "Segure e arraste para reordenar ou arraste para esquerda para excluir", 'info', 6);
+              FloatingMessage(
+                  context,
+                  "Segure e arraste para reordenar ou arraste para esquerda para excluir",
+                  'info',
+                  6);
             },
           )
         ],
@@ -142,29 +162,10 @@ class _BankScreenState extends ConsumerState<BankScreen> {
                         return Dismissible(
                           key: ValueKey(bank.id),
                           direction: DismissDirection.endToStart,
-                          confirmDismiss: (direction) async {
-                            return await showDialog<bool>(
-                              context: context,
-                              builder: (context) => AlertDialog(
-                                title: const Text('Confirmar exclusão'),
-                                content: const Text(
-                                    'Você realmente deseja excluir essa conta?'),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () =>
-                                        Navigator.of(context).pop(false),
-                                    child: const Text('Cancelar'),
-                                  ),
-                                  TextButton(
-                                    onPressed: () =>
-                                        Navigator.of(context).pop(true),
-                                    child: const Text('Excluir',
-                                        style: TextStyle(color: Colors.red)),
-                                  ),
-                                ],
-                              ),
-                            );
-                          },
+                          movementDuration:
+                              bank.name.toLowerCase() == 'carteira digital'
+                                  ? Duration.zero
+                                  : const Duration(milliseconds: 300),
                           background: Container(
                             margin: const EdgeInsets.only(
                                 bottom: 16, right: 16, top: 2),
@@ -177,8 +178,41 @@ class _BankScreenState extends ConsumerState<BankScreen> {
                             child:
                                 const Icon(Icons.delete, color: Colors.white),
                           ),
+                          confirmDismiss: bank.name.toLowerCase() ==
+                                  'carteira digital'
+                              ? (direction) async {
+                                FloatingMessage(context, 'Não é possível excluir a Carteira Digital.', "error", 4);
+                                  return false;
+                                }
+                              : (direction) async {
+                                  return await showDialog<bool>(
+                                    context: context,
+                                    builder: (context) => AlertDialog(
+                                      title: const Text('Confirmar exclusão'),
+                                      content: const Text(
+                                          'Você realmente deseja excluir essa conta?'),
+                                      actions: [
+                                        TextButton(
+                                          onPressed: () =>
+                                              Navigator.of(context).pop(false),
+                                          child: const Text('Cancelar'),
+                                        ),
+                                        TextButton(
+                                          onPressed: () =>
+                                              Navigator.of(context).pop(true),
+                                          child: const Text(
+                                            'Excluir',
+                                            style: TextStyle(color: Colors.red),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                },
                           onDismissed: (direction) {
-                            onDelete(bank.id!);
+                            if (bank.name.toLowerCase() != 'carteira digital') {
+                              onDelete(bank.id!);
+                            }
                           },
                           child: BankLoadedCard(banks: bank),
                         );
