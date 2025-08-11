@@ -51,6 +51,6 @@ class AuthService {
   }
 
   Future<User?> resetPassword(String email) async {
-    await supabase.auth.resetPasswordForEmail(email);
+    await supabase.auth.resetPasswordForEmail(email, redirectTo: 'spendorpw.netlify.app');
   }
 }

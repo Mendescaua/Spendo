@@ -163,23 +163,26 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      TextButton(
-                        onPressed: () {
-                          resetPassword();
-                        },
-                        child: Text(
-                          'Esqueceu sua senha?',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                            color: AppTheme.dynamicTextColor(context),
-                          ),
-                        ),
-                      ),
-                    ],
+                  // Row(
+                  //   mainAxisAlignment: MainAxisAlignment.end,
+                  //   children: [
+                  //     TextButton(
+                  //       onPressed: () {
+                  //         resetPassword();
+                  //       },
+                  //       child: Text(
+                  //         'Esqueceu sua senha?',
+                  //         style: TextStyle(
+                  //           fontSize: 16,
+                  //           fontWeight: FontWeight.w600,
+                  //           color: AppTheme.dynamicTextColor(context),
+                  //         ),
+                  //       ),
+                  //     ),
+                  //   ],
+                  // ),
+                  SizedBox(
+                    height: 16,
                   ),
                   StyleButton(
                     isLoading: isLoading,
