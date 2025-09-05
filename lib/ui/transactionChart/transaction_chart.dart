@@ -6,7 +6,6 @@ import 'package:spendo/components/modals/ModalRelatorioCategories.dart';
 import 'package:spendo/controllers/transaction_controller.dart';
 import 'package:spendo/services/relatorios/exportToExcelTransactions.dart';
 import 'package:spendo/services/relatorios/exportToPdfTransactions.dart';
-import 'package:spendo/utils/customText.dart';
 import 'package:spendo/utils/theme.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
@@ -108,10 +107,15 @@ class _IncomeExpenseBarChartState extends ConsumerState<IncomeExpenseBarChart> {
           },
           textColor: AppTheme.dynamicTextColor(context),
         ),
-        const SizedBox(height: 24),
         Expanded(
           child: chartData.every((d) => d.valor == 0)
-              ? const Center(child: Text('Nenhuma transação encontrada.'))
+              ? const Center(
+                  child: Text(
+                  'Nenhuma transação encontrada.',
+                  style: TextStyle(
+                    fontSize: 16,
+                  ),
+                ))
               : SfCartesianChart(
                   primaryXAxis: CategoryAxis(),
                   tooltipBehavior: TooltipBehavior(enable: true),

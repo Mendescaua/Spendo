@@ -33,7 +33,7 @@ class _SavingScreenState extends ConsumerState<SavingScreen> {
     if (response != null) {
       FloatingMessage(context, response, 'error', 2);
     } else {
-      FloatingMessage(context, 'Cofrinho deletada com sucesso', 'success', 2);
+      FloatingMessage(context, 'Meta deletada com sucesso', 'success', 2);
     }
   }
 

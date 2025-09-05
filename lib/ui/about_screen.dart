@@ -69,12 +69,14 @@ class AboutScreen extends StatelessWidget {
             },
           ),
           ListTile(
-            leading:  Icon(PhosphorIcons.linkedinLogo(PhosphorIconsStyle.regular)),
+            leading:
+                Icon(PhosphorIcons.linkedinLogo(PhosphorIconsStyle.regular)),
             title: const Text("Linkedin"),
             subtitle: const Text("www.linkedin.com/in/cauãmendes"),
             onTap: () {
               // Abrir link com url_launcher
-              launchUrl(Uri.parse('https://www.linkedin.com/in/cau%C3%A3mendes'));
+              launchUrl(
+                  Uri.parse('https://www.linkedin.com/in/cau%C3%A3mendes'));
             },
           ),
           ListTile(
@@ -93,6 +95,7 @@ class AboutScreen extends StatelessWidget {
             style: Theme.of(context).textTheme.bodySmall,
             textAlign: TextAlign.justify,
           ),
+          SizedBox(height: 100),
         ],
       ),
     );

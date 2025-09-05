@@ -33,7 +33,6 @@ class _ModalsavingState extends ConsumerState<Modalsaving> {
     leftSymbol: 'R\$ ',
   );
 
-
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -74,18 +73,19 @@ class _ModalsavingState extends ConsumerState<Modalsaving> {
     return SafeArea(
       child: widget.type == 'retirar' || widget.type == 'adicionar'
           ? SingleChildScrollView(
-            padding: EdgeInsets.only(
-            bottom: MediaQuery.of(context).viewInsets.bottom + 24,
-          ),
-            child: Container(
-              decoration: BoxDecoration(
-          color: AppTheme.dynamicModalColor(context),
-          borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(24),
-            topRight: Radius.circular(24),
-          ),
-        ),
-                padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 24),
+              padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom + 24,
+              ),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: AppTheme.dynamicModalColor(context),
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(24),
+                    topRight: Radius.circular(24),
+                  ),
+                ),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 30, vertical: 24),
                 width: double.infinity,
                 height: size.height * 0.40,
                 child: Column(
@@ -134,17 +134,19 @@ class _ModalsavingState extends ConsumerState<Modalsaving> {
                     ),
                     SizedBox(height: 4),
                     StyleButton(
-                        text: widget.type == 'retirar' ? 'Retirar' : 'Adicionar',
+                        text:
+                            widget.type == 'retirar' ? 'Retirar' : 'Adicionar',
                         onClick: () {
                           onUpdateValue();
                         }),
                   ],
                 ),
               ),
-          )
+            )
           : SingleChildScrollView(
-            child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 24),
+              child: Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 30, vertical: 24),
                 width: double.infinity,
                 height: size.height * 0.66,
                 child: Column(
@@ -164,7 +166,7 @@ class _ModalsavingState extends ConsumerState<Modalsaving> {
                     SizedBox(height: 16),
                     Center(
                       child: const Text(
-                        'Adicionar novo cofrinho',
+                        'Adicionar nova meta',
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
@@ -176,7 +178,7 @@ class _ModalsavingState extends ConsumerState<Modalsaving> {
                       onTap: () async {
                         final selectedImage = await Navigator.of(context)
                             .pushNamed('/saving_picker_image');
-            
+
                         if (selectedImage != null && selectedImage is String) {
                           setState(() {
                             selectedImageUrl = selectedImage;
@@ -252,7 +254,7 @@ class _ModalsavingState extends ConsumerState<Modalsaving> {
                   ],
                 ),
               ),
-          ),
+            ),
     );
   }
 }

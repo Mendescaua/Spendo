@@ -244,7 +244,6 @@ class InfoTile extends StatelessWidget {
           label,
           style: TextStyle(
             fontSize: 14,
-            color: Colors.grey.shade400,
             fontWeight: FontWeight.w500,
           ),
         ),

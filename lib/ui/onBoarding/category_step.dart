@@ -86,102 +86,108 @@ class _CategoryStepState extends ConsumerState<CategoryStep> {
     final podeSelecionarMais = selecionadasCount < 5;
     final botaoAtivo = selecionadasCount >= 3;
 
-    return Scaffold(
-      body: Container(
-        width: double.infinity,
-        decoration: BoxDecoration(
-          color: AppTheme.dynamicBackgroundColor(context),
-          borderRadius: const BorderRadius.vertical(top: Radius.circular(30)),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              'Escolha 3 ou mais categorias de gastos para começar',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 24),
-            Expanded(
-              child: ListView.separated(
-                itemCount: categoriasPreDefinidas.length,
-                separatorBuilder: (_, __) => const SizedBox(height: 12),
-                itemBuilder: (context, index) {
-                  final categoria = categoriasPreDefinidas[index];
-                  final selecionado = selecionadas.contains(categoria['tipo']);
+    return SafeArea(
+      top: false,
+      left: false,
+      right: false,
+      child: Scaffold(
+        body: Container(
+          width: double.infinity,
+          decoration: BoxDecoration(
+            color: AppTheme.dynamicBackgroundColor(context),
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(30)),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'Escolha 3 ou mais categorias de gastos para começar',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 24),
+              Expanded(
+                child: ListView.separated(
+                  itemCount: categoriasPreDefinidas.length,
+                  separatorBuilder: (_, __) => const SizedBox(height: 12),
+                  itemBuilder: (context, index) {
+                    final categoria = categoriasPreDefinidas[index];
+                    final selecionado =
+                        selecionadas.contains(categoria['tipo']);
 
-                  return GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        if (selecionado) {
-                          selecionadas.remove(categoria['tipo']);
-                        } else {
-                          if (podeSelecionarMais) {
-                            selecionadas.add(categoria['tipo']);
+                    return GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          if (selecionado) {
+                            selecionadas.remove(categoria['tipo']);
                           } else {
-                            FloatingMessage(
-                              context,
-                              'Você só pode selecionar até 5 categorias',
-                              'error',
-                              2,
-                            );
+                            if (podeSelecionarMais) {
+                              selecionadas.add(categoria['tipo']);
+                            } else {
+                              FloatingMessage(
+                                context,
+                                'Você só pode selecionar até 5 categorias',
+                                'error',
+                                2,
+                              );
+                            }
                           }
-                        }
-                      });
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 14, horizontal: 16),
-                      decoration: BoxDecoration(
-                        color: selecionado
-                            ? (categoria['cor'] as Color).withOpacity(0.9)
-                            : AppTheme.dynamicCardColor(context),
-                        borderRadius: BorderRadius.circular(16),
-                        border: Border.all(
-                          color:
-                              selecionado ? AppTheme.primaryColor : AppTheme.dynamicBorderSavingColor(context),
-                          width: 2,
+                        });
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 14, horizontal: 16),
+                        decoration: BoxDecoration(
+                          color: selecionado
+                              ? (categoria['cor'] as Color).withOpacity(0.9)
+                              : AppTheme.dynamicCardColor(context),
+                          borderRadius: BorderRadius.circular(16),
+                          border: Border.all(
+                            color: selecionado
+                                ? AppTheme.primaryColor
+                                : AppTheme.dynamicBorderSavingColor(context),
+                            width: 2,
+                          ),
+                        ),
+                        child: Row(
+                          children: [
+                            Icon(
+                              categoria['icone'],
+                              size: 28,
+                              color: AppTheme.dynamicTextColor(context),
+                            ),
+                            const SizedBox(width: 16),
+                            Text(
+                              categoria['nome'],
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: selecionado
+                                    ? Colors.white
+                                    : AppTheme.dynamicTextColor(context),
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            const Spacer(),
+                            if (selecionado)
+                              const Icon(Icons.check, color: Colors.white),
+                          ],
                         ),
                       ),
-                      child: Row(
-                        children: [
-                          Icon(
-                            categoria['icone'],
-                            size: 28,
-                            color: AppTheme.dynamicTextColor(context)
-                                ,
-                          ),
-                          const SizedBox(width: 16),
-                          Text(
-                            categoria['nome'],
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: selecionado
-                                  ? Colors.white
-                                  : AppTheme.dynamicTextColor(context),
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          const Spacer(),
-                          if (selecionado)
-                            const Icon(Icons.check, color: Colors.white),
-                        ],
-                      ),
-                    ),
-                  );
-                },
+                    );
+                  },
+                ),
               ),
-            ),
-            const SizedBox(height: 24),
-            StyleButton(
-              text: 'Próximo',
-              onClick: botaoAtivo
-                  ? () async {
-                      await onSalvarCategorias();
-                    }
-                  : null,
-            ),
-            const SizedBox(height: 24),
-          ],
+              const SizedBox(height: 24),
+              StyleButton(
+                text: 'Próximo',
+                onClick: botaoAtivo
+                    ? () async {
+                        await onSalvarCategorias();
+                      }
+                    : null,
+              ),
+              const SizedBox(height: 24),
+            ],
+          ),
         ),
       ),
     );

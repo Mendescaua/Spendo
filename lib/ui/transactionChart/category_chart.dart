@@ -125,7 +125,13 @@ class _CategoryChartState extends ConsumerState<CategoryChart> {
           ),
           if (categoriaGastos.isEmpty)
             Expanded(
-              child: Center(child: Text("Nenhuma despesa encontrada.")),
+              child: Center(
+                  child: Text(
+                "Nenhuma despesa encontrada.",
+                style: TextStyle(
+                  fontSize: 16,
+                ),
+              )),
             )
           else
             Expanded(

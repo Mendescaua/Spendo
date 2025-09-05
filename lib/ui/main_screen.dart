@@ -40,7 +40,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
     List<Widget> screens = [
       const HomeScreen(),
       TransactionScreen(type: 'all'),
-      TransactionChartTab(),     
+      TransactionChartTab(),
       const SavingScreen(),
       const SubscriptionScreen(),
       const ConfiguracoesScreen(),
@@ -77,51 +77,55 @@ class _MainScreenState extends ConsumerState<MainScreen> {
       body: screens[currentTab],
       bottomNavigationBar: currentTab == 3 || currentTab == 4
           ? null
-          : Container(
-              height: 90,
-              padding: EdgeInsets.only(bottom: 20),
-              decoration: BoxDecoration(
-                color: AppTheme.dynamicNavBarColor(context),
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(40),
-                  topRight: Radius.circular(40),
-                ),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
-                    blurRadius: 10,
-                    offset: const Offset(0, -2),
+          : SafeArea(
+              top: false, // não aplica no topo
+              left: false, // opcional
+              right: false,
+              child: Container(
+                height: 80,
+                decoration: BoxDecoration(
+                  color: AppTheme.dynamicNavBarColor(context),
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(40),
+                    topRight: Radius.circular(40),
                   ),
-                ],
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  _buildNavIcon(index: 0, icon: items[0]),
-                  _buildNavIcon(index: 1, icon: items[1]),
-                  GestureDetector(
-                    onTap: () => _openAddTransactionModal(context),
-                    child: Container(
-                      height: 55,
-                      width: 55,
-                      decoration: const BoxDecoration(
-                        color: AppTheme.primaryColor,
-                        shape: BoxShape.circle,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black26,
-                            blurRadius: 10,
-                            offset: Offset(0, 4),
-                          ),
-                        ],
-                      ),
-                      child: const Icon(Iconsax.add,
-                          color: AppTheme.whiteColor, size: 30),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.05),
+                      blurRadius: 10,
+                      offset: const Offset(0, -2),
                     ),
-                  ),
-                  _buildNavIcon(index: 2, icon: items[2]),
-                  _buildNavIcon(index: 5, icon: items[3]),
-                ],
+                  ],
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    _buildNavIcon(index: 0, icon: items[0]),
+                    _buildNavIcon(index: 1, icon: items[1]),
+                    GestureDetector(
+                      onTap: () => _openAddTransactionModal(context),
+                      child: Container(
+                        height: 55,
+                        width: 55,
+                        decoration: const BoxDecoration(
+                          color: AppTheme.primaryColor,
+                          shape: BoxShape.circle,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black26,
+                              blurRadius: 10,
+                              offset: Offset(0, 4),
+                            ),
+                          ],
+                        ),
+                        child: const Icon(Iconsax.add,
+                            color: AppTheme.whiteColor, size: 30),
+                      ),
+                    ),
+                    _buildNavIcon(index: 2, icon: items[2]),
+                    _buildNavIcon(index: 5, icon: items[3]),
+                  ],
+                ),
               ),
             ),
     );

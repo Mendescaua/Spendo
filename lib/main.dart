@@ -5,10 +5,10 @@ import 'package:month_year_picker/month_year_picker.dart';
 import 'package:spendo/providers/theme_provider.dart';
 import 'package:spendo/ui/about_screen.dart';
 import 'package:spendo/ui/chatbot_screen.dart';
+import 'package:spendo/ui/check_updated.dart';
 import 'package:spendo/ui/onBoarding/onboarding_screen.dart';
 import 'package:spendo/ui/bank/bank_screen.dart';
 import 'package:spendo/ui/category/add_category_screen.dart';
-import 'package:spendo/ui/success_screen.dart';
 import 'package:spendo/ui/wallet/add_money_card_screen.dart';
 import 'package:spendo/controllers/auth_gate.dart';
 import 'package:spendo/core/supabse_client.dart';
@@ -48,7 +48,7 @@ class MyApp extends ConsumerWidget {
       darkTheme: AppTheme.darkTheme,
       themeMode: themeMode,
       debugShowCheckedModeBanner: false,
-      home: AuthGate(),
+      home: CheckForUpdate(child: AuthGate()),
       locale: const Locale('pt', 'BR'), // para funcionar a localização
       localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,
@@ -66,9 +66,15 @@ class MyApp extends ConsumerWidget {
         '/register': (context) => const RegisterScreen(),
         '/home': (context) => const HomeScreen(),
         '/menu': (context) => const MainScreen(),
-        '/transactions': (context) => const TransactionScreen(type: 'all',),
-        '/transactions_despesa': (context) => const TransactionScreen(type: 'd',),
-        '/transactions_receita': (context) => const TransactionScreen(type: 'r',),
+        '/transactions': (context) => const TransactionScreen(
+              type: 'all',
+            ),
+        '/transactions_despesa': (context) => const TransactionScreen(
+              type: 'd',
+            ),
+        '/transactions_receita': (context) => const TransactionScreen(
+              type: 'r',
+            ),
         '/saving_picker_image': (context) => const ImagePickerScreen(),
         '/category_chart': (context) => const CategoryChart(),
         '/money_card': (context) => const MoneyCardScreen(),
@@ -84,6 +90,14 @@ class MyApp extends ConsumerWidget {
       onGenerateRoute: (settings) {
         // fallback: redireciona para home se rota não for encontrada
         return MaterialPageRoute(builder: (_) => const MainScreen());
+      },
+      // 👇 FORÇA o tamanho da fonte do app
+      builder: (context, child) {
+        final mediaQuery = MediaQuery.of(context);
+        return MediaQuery(
+          data: mediaQuery.copyWith(textScaleFactor: 1.0), // trava em 1.0
+          child: child!,
+        );
       },
     );
   }
