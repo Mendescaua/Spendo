@@ -1,16 +1,14 @@
-# spendo
+**Spendo – Organize seus gastos e cuide melhor do seu dinheiro!**
 
-An app where you can control your spends.
+Gerencie suas finanças de forma simples, rápida e eficiente. O Controle Financeiro é o app ideal para quem quer acompanhar despesas, manter o orçamento em dia e ter mais controle sobre a vida financeira.
 
-## Getting Started
+📌 **Principais Recursos:**  
+✅ Registre suas entradas e saídas com facilidade  
+✅ Acompanhe seus gastos e visualize seu saldo atual  
+✅ Edite ou exclua lançamentos a qualquer momento  
+✅ Interface simples e intuitiva para uso diário  
 
-This project is a starting point for a Flutter application.
+Tenha mais clareza sobre seu dinheiro e tome decisões melhores no dia a dia. Comece agora com o Controle Financeiro! 💰📊📱
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+![Prioritize MVP](assets/images/SpendoMvp.png)
+![Prioritize MVP](assets/images/SpendoMvpDesign.png)
